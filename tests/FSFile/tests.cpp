@@ -12,8 +12,8 @@
 namespace TestSeekForward{
 void Run(){
 	papki::FSFile f("test.file.txt");
-	ASSERT_ALWAYS(!f.IsDir())
-	ASSERT_ALWAYS(!f.IsOpened())
+	ASSERT_ALWAYS(!f.isDir())
+	ASSERT_ALWAYS(!f.isOpened())
 	
 	for(unsigned numToSeek = 0; numToSeek < 0x1000; numToSeek += (0x1000 / 4)){
 		std::array<std::uint8_t, 1> testByte;
@@ -22,10 +22,10 @@ void Run(){
 			
 			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 			
-			unsigned res = f.Read(buf);
+			unsigned res = f.read(buf);
 			ASSERT_ALWAYS(res == buf.size())
 			
-			res = f.Read(testByte);
+			res = f.read(testByte);
 			ASSERT_ALWAYS(res == testByte.size())
 			
 //			TRACE_ALWAYS(<< "testByte = " << unsigned(testByte[0]) << std::endl)
@@ -34,11 +34,11 @@ void Run(){
 		{
 			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 
-			f.File::SeekForward(numToSeek);
+			f.File::seekForward(numToSeek);
 
 			std::array<std::uint8_t, 1> buf;
 
-			unsigned res = f.Read(buf);
+			unsigned res = f.read(buf);
 			ASSERT_ALWAYS(res == 1)
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])
@@ -47,11 +47,11 @@ void Run(){
 		{
 			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 
-			f.SeekForward(numToSeek);
+			f.seekForward(numToSeek);
 
 			std::array<std::uint8_t, 1> buf;
 
-			unsigned res = f.Read(buf);
+			unsigned res = f.read(buf);
 			ASSERT_ALWAYS(res == 1)
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])
@@ -67,15 +67,15 @@ void Run(){
 	papki::FSFile curDir("./");
 	papki::File& f = curDir;
 	
-	std::vector<std::string> r = f.ListDirContents();
+	std::vector<std::string> r = f.listDirContents();
 	ASSERT_ALWAYS(r.size() >= 3)
 //	TRACE_ALWAYS(<< "list = " << r << std::endl)
 	
-	std::vector<std::string> r1 = f.ListDirContents(1);
+	std::vector<std::string> r1 = f.listDirContents(1);
 	ASSERT_ALWAYS(r1.size() == 1)
 	ASSERT_ALWAYS(r[0] == r1[0])
 	
-	std::vector<std::string> r2 = f.ListDirContents(2);
+	std::vector<std::string> r2 = f.listDirContents(2);
 	ASSERT_ALWAYS(r2.size() == 2)
 	ASSERT_ALWAYS(r[0] == r2[0])
 	ASSERT_ALWAYS(r[1] == r2[1])
@@ -100,32 +100,32 @@ void Run(){
 namespace TestLoadWholeFileToMemory{
 void Run(){
 	papki::RootDirFile f(papki::FSFile::New(), "");
-	f.SetPath("test.file.txt");
-	ASSERT_ALWAYS(!f.IsDir())
-	ASSERT_ALWAYS(!f.IsOpened())
+	f.setPath("test.file.txt");
+	ASSERT_ALWAYS(!f.isDir())
+	ASSERT_ALWAYS(!f.isOpened())
 	
 	{
-		std::vector<std::uint8_t> r = f.LoadWholeFileIntoMemory();
+		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory();
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.LoadWholeFileIntoMemory(66874);
+		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(66874);
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.LoadWholeFileIntoMemory(4096);
+		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(4096);
 		ASSERT_ALWAYS(r.size() == 4096)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.LoadWholeFileIntoMemory(35);
+		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(35);
 		ASSERT_ALWAYS(r.size() == 35)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.LoadWholeFileIntoMemory(1000000);
+		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(1000000);
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 }

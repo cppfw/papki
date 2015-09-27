@@ -26,8 +26,8 @@ public:
 		if(!this->baseFile){
 			throw papki::Exc("RootDirFile(): passed in base file pointer is null");
 		}
-		this->File::SetPathInternal(this->baseFile->Path());
-		this->baseFile->SetPath(this->rootDir + this->Path());
+		this->File::setPathInternal(this->baseFile->path());
+		this->baseFile->setPath(this->rootDir + this->path());
 	}
 	
 	static std::unique_ptr<RootDirFile> New(std::unique_ptr<File> baseFile, const std::string& rootDir){
@@ -42,53 +42,53 @@ public:
 	RootDirFile& operator=(const RootDirFile&) = delete;
 	
 private:
-	void SetPathInternal(const std::string& pathName)const override{
-		this->File::SetPathInternal(pathName);
-		this->baseFile->SetPath(this->rootDir + pathName);
+	void setPathInternal(const std::string& pathName)const override{
+		this->File::setPathInternal(pathName);
+		this->baseFile->setPath(this->rootDir + pathName);
 	}
 	
 	void OpenInternal(E_Mode mode)override{
-		this->baseFile->Open(mode);
+		this->baseFile->open(mode);
 	}
 	
 	void CloseInternal()const noexcept override{
-		this->baseFile->Close();
+		this->baseFile->close();
 	}
 	
-	std::vector<std::string> ListDirContents(size_t maxEntries = 0)const override{
-		return this->baseFile->ListDirContents(maxEntries);
+	std::vector<std::string> listDirContents(size_t maxEntries = 0)const override{
+		return this->baseFile->listDirContents(maxEntries);
 	}
 	
-	size_t ReadInternal(utki::Buf<std::uint8_t> buf)const override{
-		return this->baseFile->Read(buf);
+	size_t readInternal(utki::Buf<std::uint8_t> buf)const override{
+		return this->baseFile->read(buf);
 	}
 	
-	size_t WriteInternal(utki::Buf<const std::uint8_t> buf)override{
-		return this->baseFile->Write(buf);
+	size_t writeInternal(utki::Buf<const std::uint8_t> buf)override{
+		return this->baseFile->write(buf);
 	}
 	
-	size_t SeekForwardInternal(size_t numBytesToSeek)const override{
-		return this->baseFile->SeekForward(numBytesToSeek);
+	size_t seekForwardInternal(size_t numBytesToSeek)const override{
+		return this->baseFile->seekForward(numBytesToSeek);
 	}
 	
-	size_t SeekBackwardInternal(size_t numBytesToSeek)const override{
-		return this->baseFile->SeekBackward(numBytesToSeek);
+	size_t seekBackwardInternal(size_t numBytesToSeek)const override{
+		return this->baseFile->seekBackward(numBytesToSeek);
 	}
 	
-	void RewindInternal()const override{
-		this->baseFile->Rewind();
+	void rewindInternal()const override{
+		this->baseFile->rewind();
 	}
 	
-	void MakeDir()override{
-		this->baseFile->MakeDir();
+	void makeDir()override{
+		this->baseFile->makeDir();
 	}
 	
-	bool Exists()const override{
-		return this->baseFile->Exists();
+	bool exists()const override{
+		return this->baseFile->exists();
 	}
 	
-	std::unique_ptr<File> Spawn()override{
-		return New(this->baseFile->Spawn(), this->rootDir);
+	std::unique_ptr<File> spawn()override{
+		return New(this->baseFile->spawn(), this->rootDir);
 	}
 };
 

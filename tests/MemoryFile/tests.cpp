@@ -9,8 +9,8 @@
 namespace TestBasicMemoryFile{
 void Run(){
 	papki::MemoryFile f;
-	ASSERT_ALWAYS(!f.IsDir())
-	ASSERT_ALWAYS(!f.IsOpened())
+	ASSERT_ALWAYS(!f.isDir())
+	ASSERT_ALWAYS(!f.isOpened())
 	ASSERT_ALWAYS(f.Size() == 0)
 
 	{
@@ -19,7 +19,7 @@ void Run(){
 		
 		papki::File::Guard fileGuard(f, papki::File::E_Mode::CREATE);
 		
-		f.Write(b);
+		f.write(b);
 	}
 	
 	{
@@ -27,7 +27,7 @@ void Run(){
 		
 		papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 		
-		f.Read(b);
+		f.read(b);
 		
 		ASSERT_ALWAYS(b[0] == 1)
 		ASSERT_ALWAYS(b[1] == 2)

@@ -29,16 +29,16 @@ protected:
 
 	void CloseInternal()const noexcept override;
 
-	size_t ReadInternal(utki::Buf<std::uint8_t> buf)const override;
+	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
 
-	size_t WriteInternal(utki::Buf<const std::uint8_t> buf)override;
+	size_t writeInternal(utki::Buf<const std::uint8_t> buf)override;
 
 	//NOTE: use default implementation of SeekForward() because of the problems with
 	//      fseek() as it can set file pointer beyond the end of file.
 	
-	size_t SeekBackwardInternal(size_t numBytesToSeek)const override;
+	size_t seekBackwardInternal(size_t numBytesToSeek)const override;
 	
-	void RewindInternal()const override;
+	void rewindInternal()const override;
 	
 public:
 	/**
@@ -59,12 +59,12 @@ public:
 	 * This destructor calls the Close() method.
 	 */
 	virtual ~FSFile()noexcept{
-		this->Close();
+		this->close();
 	}	
 	
-	bool Exists()const override;
+	bool exists()const override;
 	
-	void MakeDir()override;
+	void makeDir()override;
 
 	/**
 	 * @brief Get user home directory.
@@ -76,9 +76,9 @@ public:
 
 
 
-	virtual std::vector<std::string> ListDirContents(size_t maxEntries = 0)const override;
+	virtual std::vector<std::string> listDirContents(size_t maxEntries = 0)const override;
 	
-	virtual std::unique_ptr<File> Spawn()override;
+	virtual std::unique_ptr<File> spawn()override;
 	
 	/**
 	 * @brief Create new instance managed by auto-pointer.

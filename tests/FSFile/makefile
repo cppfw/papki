@@ -27,9 +27,8 @@ $(eval $(prorab-build-app))
 
 include $(prorab_this_dir)../test_target.mk
 
-
-#add dependency on libpapki
-this_target_name := $(prorab_this_name): $(abspath $(prorab_this_dir)../../src/libpapki$(prorab_lib_extension))
+#add dependency on libpapki.so
+$(abspath $(prorab_this_dir)tests): $(abspath $(prorab_this_dir)../../src/libpapki$(prorab_lib_extension))
 
 
 #include makefile for building papki

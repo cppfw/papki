@@ -67,7 +67,7 @@ public:
 	
 	~BufferFile()noexcept override{}
 
-	virtual std::unique_ptr<File> Spawn()override{
+	virtual std::unique_ptr<File> spawn()override{
 		throw papki::Exc("BufferFile::Spawn(): spawning is not supported.");
 	}
 
@@ -77,15 +77,15 @@ protected:
 	
 	void CloseInternal()const noexcept override{}
 	
-	size_t ReadInternal(utki::Buf<std::uint8_t> buf)const override;
+	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
 
-	size_t WriteInternal(utki::Buf<const std::uint8_t> buf)override;
+	size_t writeInternal(utki::Buf<const std::uint8_t> buf)override;
 	
-	size_t SeekForwardInternal(size_t numBytesToSeek)const override;
+	size_t seekForwardInternal(size_t numBytesToSeek)const override;
 	
-	size_t SeekBackwardInternal(size_t numBytesToSeek)const override;
+	size_t seekBackwardInternal(size_t numBytesToSeek)const override;
 	
-	void RewindInternal()const override;
+	void rewindInternal()const override;
 };
 
 }//~namespace

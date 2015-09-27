@@ -24,9 +24,9 @@ namespace papki{
  * This class represents an abstract interface to a file system.
  */
 class File{
-	mutable std::string path;
+	mutable std::string path_var;
 
-	mutable bool isOpened = false;
+	mutable bool isOpened_var = false;
 	
 	mutable size_t curPos = 0;//holds current position from file beginning
 	
@@ -49,7 +49,7 @@ protected:
 	 * @param pathName - initial path to set to the newly created File instance.
 	 */
 	File(const std::string& pathName = std::string()) :
-			path(pathName)
+			path_var(pathName)
 	{}
 
 public:
@@ -64,24 +64,24 @@ public:
 	 * assure that.
 	 */
 	virtual ~File()noexcept{
-		ASSERT(!this->IsOpened())
+		ASSERT(!this->isOpened())
 	}
 
 	/**
 	 * @brief Set the path for this File instance.
 	 * @param pathName - the path to a file or directory.
 	 */
-	void SetPath(const std::string& pathName)const{
-		if(this->IsOpened()){
+	void setPath(const std::string& pathName)const{
+		if(this->isOpened()){
 			throw papki::IllegalStateExc("Cannot set path when file is opened");
 		}
 
-		this->SetPathInternal(pathName);
+		this->setPathInternal(pathName);
 	}
 
 protected:
-	virtual void SetPathInternal(const std::string& pathName)const{
-		this->path = pathName;
+	virtual void setPathInternal(const std::string& pathName)const{
+		this->path_var = pathName;
 	}
 	
 public:
@@ -90,8 +90,8 @@ public:
 	 * @brief Get the current path being held by this File instance.
 	 * @return The path this File instance holds.
 	 */
-	const std::string& Path()const noexcept{
-		return this->path;
+	const std::string& path()const noexcept{
+		return this->path_var;
 	}
 
 	/**
@@ -139,8 +139,8 @@ public:
 	 * @param mode - file opening mode (reading/writing/create).
 	 * @throw IllegalStateExc - if file is already opened.
 	 */
-	void Open(E_Mode mode){
-		if(this->IsOpened()){
+	void open(E_Mode mode){
+		if(this->isOpened()){
 			throw IllegalStateExc();
 		}
 		this->OpenInternal(mode);
@@ -152,7 +152,7 @@ public:
 			this->ioMode = mode;
 		}
 
-		this->isOpened = true;
+		this->isOpened_var = true;
 		
 		this->curPos = 0;
 	};
@@ -163,7 +163,7 @@ public:
 	 * @throw IllegalStateExc - if file is already opened.
      */
 	void Open()const{
-		const_cast<File*>(this)->Open(E_Mode::READ);
+		const_cast<File*>(this)->open(E_Mode::READ);
 	}
 	
 protected:
@@ -178,12 +178,12 @@ public:
 	/**
 	 * @brief Close file.
 	 */
-	void Close()const noexcept{
-		if(!this->IsOpened()){
+	void close()const noexcept{
+		if(!this->isOpened()){
 			return;
 		}
 		this->CloseInternal();
-		this->isOpened = false;
+		this->isOpened_var = false;
 	}
 	
 protected:
@@ -199,8 +199,8 @@ public:
 	 * @return true - if the file is opened.
 	 * @return false - otherwise.
 	 */
-	bool IsOpened()const noexcept{
-		return this->isOpened;
+	bool isOpened()const noexcept{
+		return this->isOpened_var;
 	}
 
 	/**
@@ -212,7 +212,7 @@ public:
 	 * @return true - if current path points to a directory.
 	 * @return false - otherwise.
 	 */
-	bool IsDir()const noexcept;
+	bool isDir()const noexcept;
 
 	/**
 	 * @brief Get list of files and subdirectories of a directory.
@@ -221,7 +221,7 @@ public:
 	 * @param maxEntries - maximum number of entries in the returned list. 0 means no limit.
 	 * @return The array of string objects representing the directory entries.
 	 */
-	virtual std::vector<std::string> ListDirContents(size_t maxEntries = 0)const;
+	virtual std::vector<std::string> listDirContents(size_t maxEntries = 0)const;
 
 	/**
 	 * @brief Read data from file.
@@ -234,7 +234,7 @@ public:
 	 *         except the case when end of file reached.
 	 * @throw IllegalStateExc - if file is not opened.
 	 */
-	size_t Read(utki::Buf<std::uint8_t> buf)const;
+	size_t read(utki::Buf<std::uint8_t> buf)const;
 
 protected:
 	/**
@@ -245,8 +245,8 @@ protected:
      * @param buf - buffer to fill with read data.
      * @return number of bytes actually read.
      */
-	virtual size_t ReadInternal(utki::Buf<std::uint8_t> buf)const{
-		throw utki::Exc("ReadInternal(): unsupported");
+	virtual size_t readInternal(utki::Buf<std::uint8_t> buf)const{
+		throw utki::Exc("readInternal(): unsupported");
 	}
 	
 public:
@@ -259,7 +259,7 @@ public:
 	 *         in the file system.
 	 * @throw IllegalStateExc - if file is not opened or opened for reading only.
 	 */
-	size_t Write(utki::Buf<const std::uint8_t> buf);
+	size_t write(utki::Buf<const std::uint8_t> buf);
 
 protected:
 	/**
@@ -270,8 +270,8 @@ protected:
      * @param buf - buffer containing the data to write.
      * @return number of bytes actually written.
      */
-	virtual size_t WriteInternal(utki::Buf<const std::uint8_t> buf){
-		throw utki::Exc("WriteInternal(): unsupported");
+	virtual size_t writeInternal(utki::Buf<const std::uint8_t> buf){
+		throw utki::Exc("writeInternal(): unsupported");
 	}
 	
 public:
@@ -285,11 +285,11 @@ public:
 	 * @return number of bytes actually skipped.
 	 * @throw IllegalStateExc - if file is not opened.
 	 */
-	size_t SeekForward(size_t numBytesToSeek)const{
-		if(!this->IsOpened()){
-			throw papki::IllegalStateExc("SeekForward(): file is not opened");
+	size_t seekForward(size_t numBytesToSeek)const{
+		if(!this->isOpened()){
+			throw papki::IllegalStateExc("seekForward(): file is not opened");
 		}
-		size_t ret = this->SeekForwardInternal(numBytesToSeek);
+		size_t ret = this->seekForwardInternal(numBytesToSeek);
 		this->curPos += ret;
 		return ret;
 	}
@@ -304,7 +304,7 @@ protected:
      * @param numBytesToSeek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
      */
-	virtual size_t SeekForwardInternal(size_t numBytesToSeek)const;
+	virtual size_t seekForwardInternal(size_t numBytesToSeek)const;
 	
 public:
 
@@ -316,11 +316,11 @@ public:
 	 * @return number of bytes actually skipped.
 	 * @throw IllegalStateExc - if file is not opened.
 	 */
-	size_t SeekBackward(size_t numBytesToSeek)const{
-		if(!this->IsOpened()){
-			throw papki::IllegalStateExc("SeekForward(): file is not opened");
+	size_t seekBackward(size_t numBytesToSeek)const{
+		if(!this->isOpened()){
+			throw papki::IllegalStateExc("seekBackward(): file is not opened");
 		}
-		size_t ret = this->SeekBackwardInternal(numBytesToSeek);
+		size_t ret = this->seekBackwardInternal(numBytesToSeek);
 		ASSERT(ret <= this->curPos)
 		this->curPos -= ret;
 		return ret;
@@ -334,7 +334,7 @@ protected:
      * @param numBytesToSeek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
      */
-	virtual size_t SeekBackwardInternal(size_t numBytesToSeek)const{
+	virtual size_t seekBackwardInternal(size_t numBytesToSeek)const{
 		throw utki::Exc("SeekBackward(): unsupported");
 	}
 	
@@ -345,11 +345,11 @@ public:
 	 * There is a default implementation of this operation by just closing and opening the file again.
 	 * @throw IllegalStateExc - if file is not opened.
 	 */
-	void Rewind()const{
-		if(!this->IsOpened()){
+	void rewind()const{
+		if(!this->isOpened()){
 			throw papki::IllegalStateExc("Rewind(): file is not opened");
 		}
-		this->RewindInternal();
+		this->rewindInternal();
 		this->curPos = 0;
 	}
 	
@@ -359,10 +359,10 @@ protected:
 	 * This function is called by Rewind() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
      */
-	virtual void RewindInternal()const{
+	virtual void rewindInternal()const{
 		E_Mode m = this->ioMode;
-		this->Close();
-		const_cast<File*>(this)->Open(m);
+		this->close();
+		const_cast<File*>(this)->open(m);
 	}
 	
 public:
@@ -374,7 +374,7 @@ public:
 	 * directory creation.
 	 * @throw IllegalStateExc - if file is opened.
 	 */
-	virtual void MakeDir();
+	virtual void makeDir();
 
 public:
 	/**
@@ -383,14 +383,14 @@ public:
 	 * @return Array containing loaded file data.
 	 * @throw IllegalStateExc - if file is already opened.
 	 */
-	std::vector<std::uint8_t> LoadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const;
+	std::vector<std::uint8_t> loadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const;
 
 	/**
 	 * @brief Check for file/directory existence.
 	 * @return true - if file/directory exists.
 	 * @return false - otherwise.
 	 */
-	virtual bool Exists()const;
+	virtual bool exists()const;
 
 	
 	/**
@@ -400,10 +400,10 @@ public:
 	 * initial state.
      * @return Newly spawned File object.
      */
-	virtual std::unique_ptr<File> Spawn() = 0;
+	virtual std::unique_ptr<File> spawn() = 0;
 	
-	std::unique_ptr<const File> Spawn()const{
-		return const_cast<File*>(this)->Spawn();
+	std::unique_ptr<const File> spawn()const{
+		return const_cast<File*>(this)->spawn();
 	}
 	
 public:
