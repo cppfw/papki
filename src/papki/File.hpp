@@ -12,6 +12,8 @@
 #include <utki/Buf.hpp>
 #include <utki/Exc.hpp>
 
+#include "Exc.hpp"
+
 
 namespace papki{
 
@@ -29,36 +31,6 @@ class File{
 	mutable size_t curPos = 0;//holds current position from file beginning
 	
 public:
-	/**
-	 * @brief Basic exception class.
-	 */
-	class Exc : public utki::Exc{
-	public:
-		/**
-		 * @brief Constructor.
-		 * @param descr - human readable description of the error.
-		 */
-		Exc(const std::string& descr) :
-				utki::Exc(std::string("[File::Exc]: ") + descr)
-		{}
-	};
-
-	/**
-	 * @brief Illegal state exception.
-	 * This exception is usually thrown when trying to perform some operation on the
-	 * object while the object is in inappropriate state for that operation. For example,
-	 * when trying to read from file while it is not opened.
-	 */
-	class IllegalStateExc : public Exc{
-	public:
-		/**
-		 * @brief Constructor.
-         * @param descr - human readable description of the error.
-         */
-		IllegalStateExc(const std::string& descr = "Illegal opened/closed state") :
-				Exc(descr)
-		{}
-	};
 	
 	/**
 	 * @brief Modes of opening the file.
@@ -101,7 +73,7 @@ public:
 	 */
 	void SetPath(const std::string& pathName)const{
 		if(this->IsOpened()){
-			throw File::IllegalStateExc("Cannot set path when file is opened");
+			throw papki::IllegalStateExc("Cannot set path when file is opened");
 		}
 
 		this->SetPathInternal(pathName);
@@ -315,7 +287,7 @@ public:
 	 */
 	size_t SeekForward(size_t numBytesToSeek)const{
 		if(!this->IsOpened()){
-			throw File::IllegalStateExc("SeekForward(): file is not opened");
+			throw papki::IllegalStateExc("SeekForward(): file is not opened");
 		}
 		size_t ret = this->SeekForwardInternal(numBytesToSeek);
 		this->curPos += ret;
@@ -346,7 +318,7 @@ public:
 	 */
 	size_t SeekBackward(size_t numBytesToSeek)const{
 		if(!this->IsOpened()){
-			throw File::IllegalStateExc("SeekForward(): file is not opened");
+			throw papki::IllegalStateExc("SeekForward(): file is not opened");
 		}
 		size_t ret = this->SeekBackwardInternal(numBytesToSeek);
 		ASSERT(ret <= this->curPos)
@@ -375,7 +347,7 @@ public:
 	 */
 	void Rewind()const{
 		if(!this->IsOpened()){
-			throw File::IllegalStateExc("Rewind(): file is not opened");
+			throw papki::IllegalStateExc("Rewind(): file is not opened");
 		}
 		this->RewindInternal();
 		this->curPos = 0;

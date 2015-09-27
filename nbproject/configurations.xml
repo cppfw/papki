@@ -4,6 +4,7 @@
     <df root="src" name="0">
       <df name="papki">
         <in>BufferFile.cpp</in>
+        <in>Exc.hpp</in>
         <in>FSFile.cpp</in>
         <in>File.cpp</in>
         <in>MemoryFile.cpp</in>
@@ -73,6 +74,8 @@
       <item path="src/papki/BufferFile.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
+      </item>
+      <item path="src/papki/Exc.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/papki/FSFile.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">

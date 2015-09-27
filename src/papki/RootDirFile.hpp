@@ -24,7 +24,7 @@ public:
 			rootDir(rootDir)
 	{
 		if(!this->baseFile){
-			throw File::Exc("RootDirFile(): passed in base file pointer is null");
+			throw papki::Exc("RootDirFile(): passed in base file pointer is null");
 		}
 		this->File::SetPathInternal(this->baseFile->Path());
 		this->baseFile->SetPath(this->rootDir + this->Path());
