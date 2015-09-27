@@ -40,7 +40,7 @@ public:
 	 * @brief Current file size.
      * @return current size of the file.
      */
-	size_t Size(){
+	size_t size(){
 		return this->data.size();
 	}
 	
@@ -55,7 +55,7 @@ public:
 	 * After this operation the file becomes empty.
      * @return Data previously held by this file.
      */
-	decltype(data) ResetData(){
+	decltype(data) resetData(){
 		if(this->isOpened()){
 			throw IllegalStateExc("MemoryFile::ResetData(): could not reset data while file is opened");
 		}
@@ -63,9 +63,9 @@ public:
 	}
 	
 protected:
-	void OpenInternal(E_Mode mode)override;
+	void openInternal(E_Mode mode)override;
 	
-	void CloseInternal()const noexcept override{}
+	void closeInternal()const noexcept override{}
 	
 	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
 	

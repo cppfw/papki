@@ -1,4 +1,5 @@
 #include <utki/config.hpp>
+#include <utki/types.hpp>
 
 #if M_OS == M_OS_WINDOWS
 #	include <utki/windows.hpp>
@@ -24,7 +25,7 @@ using namespace papki;
 
 
 //override
-void FSFile::OpenInternal(E_Mode mode){
+void FSFile::openInternal(E_Mode mode){
 	if(this->isDir()){
 		throw papki::Exc("path refers to a directory, directories can't be opened");
 	}
@@ -63,7 +64,7 @@ void FSFile::OpenInternal(E_Mode mode){
 
 
 //override
-void FSFile::CloseInternal()const noexcept{
+void FSFile::closeInternal()const noexcept{
 	ASSERT(this->handle)
 
 	fclose(this->handle);
@@ -112,7 +113,7 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
 	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
 	
-	utki::clampTop(numBytesToSeek, this->CurPos());
+	utki::clampTop(numBytesToSeek, this->curPos());
 	
 	for(size_t numBytesLeft = numBytesToSeek; numBytesLeft != 0;){
 		ASSERT(numBytesLeft <= numBytesToSeek)
@@ -209,7 +210,7 @@ void FSFile::makeDir(){
 
 
 //static
-std::string FSFile::GetHomeDir(){
+std::string FSFile::getHomeDir(){
 	std::string ret;
 	
 #if M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
@@ -363,5 +364,5 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 
 std::unique_ptr<File> FSFile::spawn(){
-	return FSFile::New();
+	return utki::makeUnique<FSFile>();
 }

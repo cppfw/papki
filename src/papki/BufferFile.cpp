@@ -16,7 +16,7 @@ using namespace papki;
 
 
 //override
-void BufferFile::OpenInternal(E_Mode mode){
+void BufferFile::openInternal(E_Mode mode){
 	this->ptr = this->data.begin();
 }
 

@@ -9,7 +9,7 @@ using namespace papki;
 
 
 
-std::string File::Ext()const{
+std::string File::ext()const{
 	size_t dotPos = this->path().rfind('.');
 	if(dotPos == std::string::npos || dotPos == 0){//NOTE: dotPos is 0 for hidden files in *nix systems
 		return std::string();
@@ -30,7 +30,7 @@ std::string File::Ext()const{
 
 
 
-std::string File::Dir()const{
+std::string File::dir()const{
 	size_t slashPos = this->path().rfind('/');
 	if(slashPos == std::string::npos){//no slash found
 		return std::string();
@@ -45,7 +45,7 @@ std::string File::Dir()const{
 
 
 
-std::string File::NotDir()const{
+std::string File::notDir()const{
 	size_t slashPos = this->path().rfind('/');
 	if(slashPos == std::string::npos){//no slash found
 		return this->path();
@@ -87,7 +87,7 @@ size_t File::read(utki::Buf<std::uint8_t> buf)const{
 	}
 	
 	size_t ret = this->readInternal(buf);
-	this->curPos += ret;
+	this->curPos_var += ret;
 	return ret;
 }
 
@@ -103,7 +103,7 @@ size_t File::write(utki::Buf<const std::uint8_t> buf){
 	}
 	
 	size_t ret = this->writeInternal(buf);
-	this->curPos += ret;
+	this->curPos_var += ret;
 	return ret;
 }
 
@@ -126,7 +126,7 @@ size_t File::seekForwardInternal(size_t numBytesToSeek)const{
 			break;
 		}
 	}
-	this->curPos -= bytesRead;//make correction to curPos, since we were using Read()
+	this->curPos_var -= bytesRead;//make correction to curPos, since we were using Read()
 	return bytesRead;
 }
 
@@ -255,7 +255,7 @@ File::Guard::Guard(const File& file) :
 		throw papki::Exc("File::Guard::Guard(): file is already opened");
 	}
 
-	this->f.Open();
+	this->f.open();
 }
 
 

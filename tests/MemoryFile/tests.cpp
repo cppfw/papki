@@ -11,7 +11,7 @@ void Run(){
 	papki::MemoryFile f;
 	ASSERT_ALWAYS(!f.isDir())
 	ASSERT_ALWAYS(!f.isOpened())
-	ASSERT_ALWAYS(f.Size() == 0)
+	ASSERT_ALWAYS(f.size() == 0)
 
 	{
 		std::uint8_t buf[] = {1, 2, 3, 4};

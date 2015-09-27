@@ -30,13 +30,10 @@ public:
 		this->baseFile->setPath(this->rootDir + this->path());
 	}
 	
-	static std::unique_ptr<RootDirFile> New(std::unique_ptr<File> baseFile, const std::string& rootDir){
-		return std::unique_ptr<RootDirFile>(new RootDirFile(std::move(baseFile), rootDir));
-	}
-	
-	static std::unique_ptr<const RootDirFile> NewConst(std::unique_ptr<const File> baseFile, const std::string& rootDir){
-		return std::unique_ptr<const RootDirFile>(new RootDirFile(std::unique_ptr<File>(const_cast<File*>(baseFile.release())), rootDir));
-	}
+	//TODO:remove?
+//	static std::unique_ptr<const RootDirFile> NewConst(std::unique_ptr<const File> baseFile, const std::string& rootDir){
+//		return std::unique_ptr<const RootDirFile>(new RootDirFile(std::unique_ptr<File>(const_cast<File*>(baseFile.release())), rootDir));
+//	}
 	
 	RootDirFile(const RootDirFile&) = delete;
 	RootDirFile& operator=(const RootDirFile&) = delete;
@@ -47,11 +44,11 @@ private:
 		this->baseFile->setPath(this->rootDir + pathName);
 	}
 	
-	void OpenInternal(E_Mode mode)override{
+	void openInternal(E_Mode mode)override{
 		this->baseFile->open(mode);
 	}
 	
-	void CloseInternal()const noexcept override{
+	void closeInternal()const noexcept override{
 		this->baseFile->close();
 	}
 	
@@ -88,7 +85,7 @@ private:
 	}
 	
 	std::unique_ptr<File> spawn()override{
-		return New(this->baseFile->spawn(), this->rootDir);
+		return utki::makeUnique<RootDirFile>(this->baseFile->spawn(), this->rootDir);
 	}
 };
 

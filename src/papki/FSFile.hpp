@@ -25,9 +25,9 @@ class FSFile : public File{
 	mutable FILE* handle = nullptr;
 
 protected:
-	void OpenInternal(E_Mode mode)override;
+	void openInternal(E_Mode mode)override;
 
-	void CloseInternal()const noexcept override;
+	void closeInternal()const noexcept override;
 
 	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
 
@@ -72,22 +72,13 @@ public:
 	 * On *nix systems it will be something like "/home/user/".
      * @return Absolute path to the user's home directory.
      */
-	static std::string GetHomeDir();
+	static std::string getHomeDir();
 
 
 
 	virtual std::vector<std::string> listDirContents(size_t maxEntries = 0)const override;
 	
 	virtual std::unique_ptr<File> spawn()override;
-	
-	/**
-	 * @brief Create new instance managed by auto-pointer.
-     * @param pathName - path to a file.
-     * @return Auto-pointer holding a new FSFile instance.
-     */
-	static std::unique_ptr<FSFile> New(const std::string& pathName = std::string()){
-		return std::unique_ptr<FSFile>(new FSFile(pathName));
-	}
 };
 
 

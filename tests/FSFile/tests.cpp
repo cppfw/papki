@@ -1,4 +1,5 @@
 #include <utki/debug.hpp>
+#include <utki/types.hpp>
 
 #include "../../src/papki/FSFile.hpp"
 #include "../../src/papki/RootDirFile.hpp"
@@ -86,7 +87,7 @@ void Run(){
 
 namespace TestHomeDir{
 void Run(){
-	std::string hd = papki::FSFile::GetHomeDir();
+	std::string hd = papki::FSFile::getHomeDir();
 	
 	ASSERT_ALWAYS(hd.size() > 1) //There is always a trailing '/' character, so make sure there is something else besides that.
 	ASSERT_ALWAYS(hd[hd.size() - 1] == '/')
@@ -99,7 +100,7 @@ void Run(){
 
 namespace TestLoadWholeFileToMemory{
 void Run(){
-	papki::RootDirFile f(papki::FSFile::New(), "");
+	papki::RootDirFile f(utki::makeUnique<papki::FSFile>(), "");
 	f.setPath("test.file.txt");
 	ASSERT_ALWAYS(!f.isDir())
 	ASSERT_ALWAYS(!f.isOpened())

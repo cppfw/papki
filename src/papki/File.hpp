@@ -28,7 +28,7 @@ class File{
 
 	mutable bool isOpened_var = false;
 	
-	mutable size_t curPos = 0;//holds current position from file beginning
+	mutable size_t curPos_var = 0;//holds current position from file beginning
 	
 public:
 	
@@ -98,8 +98,8 @@ public:
 	 * @brief Get current position from beginning of the file.
      * @return Current position from beginning of the file
      */
-	size_t CurPos()const noexcept{
-		return this->curPos;
+	size_t curPos()const noexcept{
+		return this->curPos_var;
 	}
 
 	/**
@@ -115,7 +115,7 @@ public:
 	 * does have an extension and the function will return 'txt'.
 	 * @return String representing file extension.
 	 */
-	std::string Ext()const;
+	std::string ext()const;
 
 	/**
 	 * @brief Get directory part of the path.
@@ -123,7 +123,7 @@ public:
 	 * will be '/home/user/'.
      * @return String representation of directory part of the path.
      */
-	std::string Dir()const;
+	std::string dir()const;
 	
 	/**
 	 * @brief Get file part of the path.
@@ -131,7 +131,7 @@ public:
 	 * will be 'some.file.txt'.
      * @return String representation of directory part of the path.
      */
-	std::string NotDir()const;
+	std::string notDir()const;
 	
 	/**
 	 * @brief Open file.
@@ -143,7 +143,7 @@ public:
 		if(this->isOpened()){
 			throw IllegalStateExc();
 		}
-		this->OpenInternal(mode);
+		this->openInternal(mode);
 		
 		//set open mode
 		if(mode == E_Mode::CREATE){
@@ -154,7 +154,7 @@ public:
 
 		this->isOpened_var = true;
 		
-		this->curPos = 0;
+		this->curPos_var = 0;
 	};
 	
 	/**
@@ -162,7 +162,7 @@ public:
 	 * This is equivalent to Open(E_Mode::READ);
 	 * @throw IllegalStateExc - if file is already opened.
      */
-	void Open()const{
+	void open()const{
 		const_cast<File*>(this)->open(E_Mode::READ);
 	}
 	
@@ -172,7 +172,7 @@ protected:
 	 * Derived class should override this function with its own implementation.
      * @param mode - opening mode.
      */
-	virtual void OpenInternal(E_Mode mode) = 0;
+	virtual void openInternal(E_Mode mode) = 0;
 	
 public:
 	/**
@@ -182,7 +182,7 @@ public:
 		if(!this->isOpened()){
 			return;
 		}
-		this->CloseInternal();
+		this->closeInternal();
 		this->isOpened_var = false;
 	}
 	
@@ -191,7 +191,7 @@ protected:
 	 * @brief Close file, internal implementation.
 	 * Derived class should override this function with its own implementation.
      */
-	virtual void CloseInternal()const noexcept = 0;
+	virtual void closeInternal()const noexcept = 0;
 	
 public:
 	/**
@@ -290,7 +290,7 @@ public:
 			throw papki::IllegalStateExc("seekForward(): file is not opened");
 		}
 		size_t ret = this->seekForwardInternal(numBytesToSeek);
-		this->curPos += ret;
+		this->curPos_var += ret;
 		return ret;
 	}
 	
@@ -321,8 +321,8 @@ public:
 			throw papki::IllegalStateExc("seekBackward(): file is not opened");
 		}
 		size_t ret = this->seekBackwardInternal(numBytesToSeek);
-		ASSERT(ret <= this->curPos)
-		this->curPos -= ret;
+		ASSERT(ret <= this->curPos_var)
+		this->curPos_var -= ret;
 		return ret;
 	}
 	
@@ -350,7 +350,7 @@ public:
 			throw papki::IllegalStateExc("Rewind(): file is not opened");
 		}
 		this->rewindInternal();
-		this->curPos = 0;
+		this->curPos_var = 0;
 	}
 	
 protected:
