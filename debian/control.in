@@ -16,7 +16,7 @@ Description: cross-platform C++ file system library.
 Package: libpapki$(soname)-dbg
 Section: libdevel
 Architecture: any
-Depends: libting$(soname) (= ${binary:Version}), ${misc:Depends}
+Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for libpapki$(soname) package.
 
 Package: libpapki-dev
