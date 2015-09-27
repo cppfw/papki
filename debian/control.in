@@ -22,7 +22,7 @@ Description: debugging symbols for libpapki$(soname) package.
 Package: libpapki-dev
 Section: devel
 Architecture: all
-Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
+Depends: libutki-dev, libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
 Suggests: libpapki$(soname)-dbg (= ${binary:Version}), libpapki-doc
 Description: cross-platform C++ file system library.
  File system abstraction library.
