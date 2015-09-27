@@ -1,38 +1,11 @@
-/* The MIT License:
-
-Copyright (c) 2009-2014 Ivan Gagis
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://ting.googlecode.com
-
-
-
 #include <list>
+#include <cstring>
 
 #include "File.hpp"
 
-#include "../util.hpp"
 
 
-
-using namespace ting::fs;
+using namespace papki;
 
 
 
@@ -108,7 +81,7 @@ std::vector<std::string> File::ListDirContents(size_t maxEntries)const{
 
 
 
-size_t File::Read(ting::Buffer<std::uint8_t> buf)const{
+size_t File::Read(utki::Buf<std::uint8_t> buf)const{
 	if(!this->IsOpened()){
 		throw File::IllegalStateExc("Cannot read, file is not opened");
 	}
@@ -120,7 +93,7 @@ size_t File::Read(ting::Buffer<std::uint8_t> buf)const{
 
 
 
-size_t File::Write(ting::Buffer<const std::uint8_t> buf){
+size_t File::Write(utki::Buf<const std::uint8_t> buf){
 	if(!this->IsOpened()){
 		throw File::IllegalStateExc("Cannot write, file is not opened");
 	}
@@ -142,8 +115,8 @@ size_t File::SeekForwardInternal(size_t numBytesToSeek)const{
 	size_t bytesRead = 0;
 	for(; bytesRead != numBytesToSeek;){
 		size_t curNumToRead = numBytesToSeek - bytesRead;
-		ting::util::ClampTop(curNumToRead, buf.size());
-		size_t res = this->Read(ting::Buffer<std::uint8_t>(&*buf.begin(), curNumToRead));
+		utki::clampTop(curNumToRead, buf.size());
+		size_t res = this->Read(utki::Buf<std::uint8_t>(&*buf.begin(), curNumToRead));
 		ASSERT(bytesRead < numBytesToSeek)
 		ASSERT(numBytesToSeek >= res)
 		ASSERT(bytesRead <= numBytesToSeek - res)
@@ -201,9 +174,9 @@ std::vector<std::uint8_t> File::LoadWholeFileIntoMemory(size_t maxBytesToLoad)co
 		ASSERT(maxBytesToLoad > bytesRead)
 		
 		size_t numBytesToRead = maxBytesToLoad - bytesRead;
-		ting::util::ClampTop(numBytesToRead, chunks.back().size());
+		utki::clampTop(numBytesToRead, chunks.back().size());
 		
-		res = this->Read(ting::Buffer<std::uint8_t>(&*chunks.back().begin(), numBytesToRead));
+		res = this->Read(utki::Buf<std::uint8_t>(&*chunks.back().begin(), numBytesToRead));
 
 		bytesRead += res;
 		

@@ -1,26 +1,23 @@
-#include "../../src/ting/debug.hpp"
-#include "../../src/ting/fs/MemoryFile.hpp"
+#include <utki/debug.hpp>
+#include "../../src/papki/MemoryFile.hpp"
 
 #include "tests.hpp"
 
 
 
-using namespace ting;
-
-
 
 namespace TestBasicMemoryFile{
 void Run(){
-	ting::fs::MemoryFile f;
+	papki::MemoryFile f;
 	ASSERT_ALWAYS(!f.IsDir())
 	ASSERT_ALWAYS(!f.IsOpened())
 	ASSERT_ALWAYS(f.Size() == 0)
 
 	{
 		std::uint8_t buf[] = {1, 2, 3, 4};
-		ting::Buffer<std::uint8_t> b(buf, sizeof(buf));
+		utki::Buf<std::uint8_t> b(buf, sizeof(buf));
 		
-		ting::fs::File::Guard fileGuard(f, ting::fs::File::E_Mode::CREATE);
+		papki::File::Guard fileGuard(f, papki::File::E_Mode::CREATE);
 		
 		f.Write(b);
 	}
@@ -28,7 +25,7 @@ void Run(){
 	{
 		std::array<std::uint8_t, 4> b;
 		
-		ting::fs::File::Guard fileGuard(f, ting::fs::File::E_Mode::READ);
+		papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 		
 		f.Read(b);
 		

@@ -1,27 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2009-2014 Ivan Gagis
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://ting.googlecode.com
-
 /**
  * @file Ordinary file system File implementation
  * @author Ivan Gagis <igagis@gmail.com>
@@ -32,14 +8,12 @@ THE SOFTWARE. */
 #include <cstdio>
 #include <memory>
 
-#include "../debug.hpp"
+#include <utki/debug.hpp>
 #include "File.hpp"
-#include "../util.hpp"
 
 
 
-namespace ting{
-namespace fs{
+namespace papki{
 
 
 
@@ -55,9 +29,9 @@ protected:
 
 	void CloseInternal()const noexcept override;
 
-	size_t ReadInternal(ting::Buffer<std::uint8_t> buf)const override;
+	size_t ReadInternal(utki::Buf<std::uint8_t> buf)const override;
 
-	size_t WriteInternal(ting::Buffer<const std::uint8_t> buf)override;
+	size_t WriteInternal(utki::Buf<const std::uint8_t> buf)override;
 
 	//NOTE: use default implementation of SeekForward() because of the problems with
 	//      fseek() as it can set file pointer beyond the end of file.
@@ -118,5 +92,4 @@ public:
 
 
 
-}//~namespace
 }//~namespace

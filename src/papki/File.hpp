@@ -1,27 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2009-2014 Ivan Gagis
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://ting.googlecode.com
-
 /**
  * @file File abstract interface
  * @author Ivan Gagis <igagis@gmail.com>
@@ -32,15 +8,12 @@ THE SOFTWARE. */
 #include <string>
 #include <memory>
 
-#include "../debug.hpp"
-#include "../types.hpp"
-#include "../Buffer.hpp"
-
-#include "../Exc.hpp"
+#include <utki/debug.hpp>
+#include <utki/Buf.hpp>
+#include <utki/Exc.hpp>
 
 
-namespace ting{
-namespace fs{
+namespace papki{
 
 
 
@@ -59,14 +32,14 @@ public:
 	/**
 	 * @brief Basic exception class.
 	 */
-	class Exc : public ting::Exc{
+	class Exc : public utki::Exc{
 	public:
 		/**
 		 * @brief Constructor.
 		 * @param descr - human readable description of the error.
 		 */
 		Exc(const std::string& descr) :
-				ting::Exc(std::string("[File::Exc]: ") + descr)
+				utki::Exc(std::string("[File::Exc]: ") + descr)
 		{}
 	};
 
@@ -289,7 +262,7 @@ public:
 	 *         except the case when end of file reached.
 	 * @throw IllegalStateExc - if file is not opened.
 	 */
-	size_t Read(ting::Buffer<std::uint8_t> buf)const;
+	size_t Read(utki::Buf<std::uint8_t> buf)const;
 
 protected:
 	/**
@@ -300,8 +273,8 @@ protected:
      * @param buf - buffer to fill with read data.
      * @return number of bytes actually read.
      */
-	virtual size_t ReadInternal(ting::Buffer<std::uint8_t> buf)const{
-		throw ting::Exc("WriteInternal(): unsupported");
+	virtual size_t ReadInternal(utki::Buf<std::uint8_t> buf)const{
+		throw utki::Exc("ReadInternal(): unsupported");
 	}
 	
 public:
@@ -314,7 +287,7 @@ public:
 	 *         in the file system.
 	 * @throw IllegalStateExc - if file is not opened or opened for reading only.
 	 */
-	size_t Write(ting::Buffer<const std::uint8_t> buf);
+	size_t Write(utki::Buf<const std::uint8_t> buf);
 
 protected:
 	/**
@@ -325,8 +298,8 @@ protected:
      * @param buf - buffer containing the data to write.
      * @return number of bytes actually written.
      */
-	virtual size_t WriteInternal(ting::Buffer<const std::uint8_t> buf){
-		throw ting::Exc("WriteInternal(): unsupported");
+	virtual size_t WriteInternal(utki::Buf<const std::uint8_t> buf){
+		throw utki::Exc("WriteInternal(): unsupported");
 	}
 	
 public:
@@ -390,7 +363,7 @@ protected:
 	 * @return number of bytes actually skipped.
      */
 	virtual size_t SeekBackwardInternal(size_t numBytesToSeek)const{
-		throw ting::Exc("SeekBackward(): unsupported");
+		throw utki::Exc("SeekBackward(): unsupported");
 	}
 	
 public:
@@ -499,5 +472,4 @@ public:
 
 
 
-}//~namespace
 }//~namespace

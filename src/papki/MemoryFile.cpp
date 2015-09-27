@@ -8,9 +8,9 @@
 #include "MemoryFile.hpp"
 
 #include <algorithm>
+#include <cstring>
 
-using namespace ting;
-using namespace fs;
+using namespace papki;
 
 
 
@@ -20,9 +20,9 @@ void MemoryFile::OpenInternal(E_Mode mode){
 
 
 
-size_t MemoryFile::ReadInternal(ting::Buffer<std::uint8_t> buf)const{
+size_t MemoryFile::ReadInternal(utki::Buf<std::uint8_t> buf)const{
 	ASSERT(this->idx <= this->data.size())
-	size_t numBytesRead = std::min(buf.SizeInBytes(), this->data.size() - this->idx);
+	size_t numBytesRead = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
 	memcpy(buf.begin(), &this->data[idx], numBytesRead);
 	this->idx += numBytesRead;
 	ASSERT(this->idx <= this->data.size())
@@ -31,16 +31,16 @@ size_t MemoryFile::ReadInternal(ting::Buffer<std::uint8_t> buf)const{
 
 
 
-size_t MemoryFile::WriteInternal(ting::Buffer<const std::uint8_t> buf){
+size_t MemoryFile::WriteInternal(utki::Buf<const std::uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
 	size_t numBytesTillEOF = this->data.size() - this->idx;
-	if(numBytesTillEOF < buf.SizeInBytes()){
-		size_t numBytesToGrow = buf.SizeInBytes() - numBytesTillEOF;
+	if(numBytesTillEOF < buf.sizeInBytes()){
+		size_t numBytesToGrow = buf.sizeInBytes() - numBytesTillEOF;
 		this->data.resize(this->data.size() + numBytesToGrow);
 	}
 	
-	size_t numBytesWritten = std::min(buf.SizeInBytes(), this->data.size() - this->idx);
+	size_t numBytesWritten = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
 	memcpy(&this->data[this->idx], buf.begin(), numBytesWritten);
 	this->idx += numBytesWritten;
 	ASSERT(this->idx <= this->data.size())

@@ -1,18 +1,17 @@
-#include "../../src/ting/debug.hpp"
-#include "../../src/ting/fs/FSFile.hpp"
-#include "../../src/ting/fs/RootDirFile.hpp"
+#include <utki/debug.hpp>
+
+#include "../../src/papki/FSFile.hpp"
+#include "../../src/papki/RootDirFile.hpp"
 
 #include "tests.hpp"
 
 
 
-using namespace ting;
-
 
 
 namespace TestSeekForward{
 void Run(){
-	ting::fs::FSFile f("test.file.txt");
+	papki::FSFile f("test.file.txt");
 	ASSERT_ALWAYS(!f.IsDir())
 	ASSERT_ALWAYS(!f.IsOpened())
 	
@@ -21,7 +20,7 @@ void Run(){
 		{
 			std::vector<std::uint8_t> buf(numToSeek);
 			
-			ting::fs::File::Guard fileGuard(f, ting::fs::File::E_Mode::READ);
+			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 			
 			unsigned res = f.Read(buf);
 			ASSERT_ALWAYS(res == buf.size())
@@ -33,7 +32,7 @@ void Run(){
 		}
 		
 		{
-			ting::fs::File::Guard fileGuard(f, ting::fs::File::E_Mode::READ);
+			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 
 			f.File::SeekForward(numToSeek);
 
@@ -46,7 +45,7 @@ void Run(){
 		}
 
 		{
-			ting::fs::File::Guard fileGuard(f, ting::fs::File::E_Mode::READ);
+			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 
 			f.SeekForward(numToSeek);
 
@@ -65,8 +64,8 @@ void Run(){
 
 namespace TestListDirContents{
 void Run(){
-	ting::fs::FSFile curDir("./");
-	ting::fs::File& f = curDir;
+	papki::FSFile curDir("./");
+	papki::File& f = curDir;
 	
 	std::vector<std::string> r = f.ListDirContents();
 	ASSERT_ALWAYS(r.size() >= 3)
@@ -87,7 +86,7 @@ void Run(){
 
 namespace TestHomeDir{
 void Run(){
-	std::string hd = ting::fs::FSFile::GetHomeDir();
+	std::string hd = papki::FSFile::GetHomeDir();
 	
 	ASSERT_ALWAYS(hd.size() > 1) //There is always a trailing '/' character, so make sure there is something else besides that.
 	ASSERT_ALWAYS(hd[hd.size() - 1] == '/')
@@ -100,7 +99,7 @@ void Run(){
 
 namespace TestLoadWholeFileToMemory{
 void Run(){
-	ting::fs::RootDirFile f(ting::fs::FSFile::New(), "");
+	papki::RootDirFile f(papki::FSFile::New(), "");
 	f.SetPath("test.file.txt");
 	ASSERT_ALWAYS(!f.IsDir())
 	ASSERT_ALWAYS(!f.IsOpened())

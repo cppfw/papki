@@ -29,10 +29,10 @@ THE SOFTWARE. */
 #pragma once
 
 #include "File.hpp"
-#include "../util.hpp"
 
-namespace ting{
-namespace fs{
+
+namespace papki{
+
  
 /**
  * @brief Memory buffer file.
@@ -50,7 +50,7 @@ private:
 	BufferFile& operator=(BufferFile&&) = delete;
 	
 private:
-	ting::Buffer<std::uint8_t> data;
+	utki::Buf<std::uint8_t> data;
 	mutable decltype(data)::iterator ptr;
 	
 public:
@@ -61,7 +61,7 @@ public:
 	 *               but ownership of the buffer is not taken. Thus, the buffer should remain alive during lifetime of this BufferFile object.
 	 */
 	//NOTE: ownership of the buffer is not taken, buffer must remain alive during this object's lifetime.
-	BufferFile(ting::Buffer<std::uint8_t> data) :
+	BufferFile(utki::Buf<std::uint8_t> data) :
 			data(data)
 	{}
 	
@@ -77,9 +77,9 @@ protected:
 	
 	void CloseInternal()const noexcept override{}
 	
-	size_t ReadInternal(ting::Buffer<std::uint8_t> buf)const override;
+	size_t ReadInternal(utki::Buf<std::uint8_t> buf)const override;
 
-	size_t WriteInternal(ting::Buffer<const std::uint8_t> buf)override;
+	size_t WriteInternal(utki::Buf<const std::uint8_t> buf)override;
 	
 	size_t SeekForwardInternal(size_t numBytesToSeek)const override;
 	
@@ -88,4 +88,4 @@ protected:
 	void RewindInternal()const override;
 };
 
-}}//~namespace
+}//~namespace
