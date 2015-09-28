@@ -69,7 +69,7 @@ protected:
 	
 	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
 	
-	size_t writeInternal(utki::Buf<const std::uint8_t> buf)override;
+	size_t writeInternal(const utki::Buf<std::uint8_t> buf)override;
 	
 	size_t seekForwardInternal(size_t numBytesToSeek)const override;
 	

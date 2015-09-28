@@ -30,10 +30,9 @@ public:
 		this->baseFile->setPath(this->rootDir + this->path());
 	}
 	
-	//TODO:remove?
-//	static std::unique_ptr<const RootDirFile> NewConst(std::unique_ptr<const File> baseFile, const std::string& rootDir){
-//		return std::unique_ptr<const RootDirFile>(new RootDirFile(std::unique_ptr<File>(const_cast<File*>(baseFile.release())), rootDir));
-//	}
+	static std::unique_ptr<const RootDirFile> makeUniqueConst(std::unique_ptr<const File> baseFile, const std::string& rootDir){
+		return utki::makeUnique<const RootDirFile>(std::unique_ptr<File>(const_cast<File*>(baseFile.release())), rootDir);
+	}
 	
 	RootDirFile(const RootDirFile&) = delete;
 	RootDirFile& operator=(const RootDirFile&) = delete;
@@ -60,7 +59,7 @@ private:
 		return this->baseFile->read(buf);
 	}
 	
-	size_t writeInternal(utki::Buf<const std::uint8_t> buf)override{
+	size_t writeInternal(const utki::Buf<std::uint8_t> buf)override{
 		return this->baseFile->write(buf);
 	}
 	

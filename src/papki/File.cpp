@@ -93,7 +93,7 @@ size_t File::read(utki::Buf<std::uint8_t> buf)const{
 
 
 
-size_t File::write(utki::Buf<const std::uint8_t> buf){
+size_t File::write(const utki::Buf<std::uint8_t> buf){
 	if(!this->isOpened()){
 		throw papki::IllegalStateExc("Cannot write, file is not opened");
 	}

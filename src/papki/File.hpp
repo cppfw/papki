@@ -261,7 +261,7 @@ public:
 	 *         in the file system.
 	 * @throw IllegalStateExc - if file is not opened or opened for reading only.
 	 */
-	size_t write(utki::Buf<const std::uint8_t> buf);
+	size_t write(const utki::Buf<std::uint8_t> buf);
 
 protected:
 	/**
@@ -272,7 +272,7 @@ protected:
      * @param buf - buffer containing the data to write.
      * @return number of bytes actually written.
      */
-	virtual size_t writeInternal(utki::Buf<const std::uint8_t> buf){
+	virtual size_t writeInternal(const utki::Buf<std::uint8_t> buf){
 		throw utki::Exc("writeInternal(): unsupported");
 	}
 	

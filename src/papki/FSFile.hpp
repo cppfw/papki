@@ -31,7 +31,7 @@ protected:
 
 	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
 
-	size_t writeInternal(utki::Buf<const std::uint8_t> buf)override;
+	size_t writeInternal(const utki::Buf<std::uint8_t> buf)override;
 
 	//NOTE: use default implementation of SeekForward() because of the problems with
 	//      fseek() as it can set file pointer beyond the end of file.

@@ -31,7 +31,7 @@ size_t MemoryFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 
 
 
-size_t MemoryFile::writeInternal(utki::Buf<const std::uint8_t> buf){
+size_t MemoryFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
 	size_t numBytesTillEOF = this->data.size() - this->idx;

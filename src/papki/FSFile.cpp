@@ -88,7 +88,7 @@ size_t FSFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 
 
 //override
-size_t FSFile::writeInternal(utki::Buf<const std::uint8_t> buf){
+size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
 	if(bytesWritten != buf.size()){//something bad has happened

@@ -27,7 +27,7 @@ void Run(){
 		
 		papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 		
-		f.read(b);
+		f.read(utki::wrapBuf(b));
 		
 		ASSERT_ALWAYS(b[0] == 1)
 		ASSERT_ALWAYS(b[1] == 2)

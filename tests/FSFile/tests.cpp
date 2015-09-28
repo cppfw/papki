@@ -23,10 +23,10 @@ void Run(){
 			
 			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
 			
-			unsigned res = f.read(buf);
+			unsigned res = f.read(utki::wrapBuf(buf));
 			ASSERT_ALWAYS(res == buf.size())
 			
-			res = f.read(testByte);
+			res = f.read(utki::wrapBuf(testByte));
 			ASSERT_ALWAYS(res == testByte.size())
 			
 //			TRACE_ALWAYS(<< "testByte = " << unsigned(testByte[0]) << std::endl)
@@ -39,7 +39,7 @@ void Run(){
 
 			std::array<std::uint8_t, 1> buf;
 
-			unsigned res = f.read(buf);
+			unsigned res = f.read(utki::wrapBuf(buf));
 			ASSERT_ALWAYS(res == 1)
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])
@@ -52,7 +52,7 @@ void Run(){
 
 			std::array<std::uint8_t, 1> buf;
 
-			unsigned res = f.read(buf);
+			unsigned res = f.read(utki::wrapBuf(buf));
 			ASSERT_ALWAYS(res == 1)
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])
