@@ -1,3 +1,9 @@
+libpapki (1.0.1-1) stable; urgency=medium
+
+  * makeUniqueConst
+
+ -- Ivan Gagis <ivan@ivan-desktop-pc>  Tue, 29 Sep 2015 00:41:37 +0300
+
 libpapki (1.0.0-2) stable; urgency=medium
 
   * missing file added
