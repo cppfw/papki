@@ -1,3 +1,9 @@
+libpapki (1.0.0-2) stable; urgency=medium
+
+  * missing file added
+
+ -- Ivan Gagis <ivan@ivan-desktop-pc>  Mon, 28 Sep 2015 21:58:30 +0300
+
 libpapki (1.0.0-1) stable; urgency=low
 
   * Initial release
