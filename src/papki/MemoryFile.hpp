@@ -46,7 +46,7 @@ public:
 	
 
 	virtual std::unique_ptr<File> spawn()override{
-		return std::unique_ptr<File>(new MemoryFile);
+		return utki::makeUnique<MemoryFile>();
 	}
 
 	
