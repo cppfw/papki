@@ -11,6 +11,8 @@
 #include <utki/debug.hpp>
 #include <utki/Buf.hpp>
 #include <utki/Exc.hpp>
+#include <utki/Unique.hpp>
+
 
 #include "Exc.hpp"
 
@@ -23,7 +25,7 @@ namespace papki{
  * @brief Abstract interface to a file system.
  * This class represents an abstract interface to a file system.
  */
-class File{
+class File : public utki::Unique{
 	mutable std::string path_var;
 
 	mutable bool isOpened_var = false;
