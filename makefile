@@ -10,12 +10,20 @@ install::
 	@install pkg-config/*.pc $(DESTDIR)$(PREFIX)/lib/pkgconfig
 
 
-
 $(prorab-clear-this-vars)
 
 this_soname_dependency := $(prorab_this_dir)src/soname.txt
 
 this_soname := $(shell cat $(this_soname_dependency))
 
-
 $(eval $(prorab-build-deb))
+
+
+#Update version rule
+$(prorab-clear-this-vars)
+
+this_version := $(firstword $(subst -, ,$(shell dpkg-parsechangelog --show-field Version)))
+
+this_version_files += doc/doxygen.cfg.in
+
+$(eval $(prorab-apply-version))
