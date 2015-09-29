@@ -1,6 +1,6 @@
 Name: papki   # human-readable name
 Description: C++ file system library # human-readable description
-Version: 1.0.1
+Version: 1.0.2
 URL: https://github.com/igagis/papki
 Requires:
 Conflicts:
