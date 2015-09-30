@@ -2,7 +2,8 @@ Source: libpapki
 Section: misc
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
-Build-Depends: debhelper (>= 9), libc6-dev, prorab, libutki-dev
+Build-Depends: debhelper (>= 9), prorab,
+		libc6-dev, libutki-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -22,8 +23,9 @@ Description: debugging symbols for libpapki$(soname) package.
 Package: libpapki-dev
 Section: devel
 Architecture: all
-Depends: libutki-dev, libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
-Suggests: libpapki$(soname)-dbg (= ${binary:Version}), libpapki-doc
+Depends: libpapki$(soname) (= ${binary:Version}), libpapki$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+		libutki-dev
+Suggests: libpapki-doc
 Description: cross-platform C++ file system library.
  File system abstraction library.
 
