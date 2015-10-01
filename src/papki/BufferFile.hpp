@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <utki/config.hpp>
+
 #include "File.hpp"
 
 
@@ -17,7 +19,7 @@ namespace papki{
  * The size of the file remains constant and is equal to the size of the memory
  * buffer used for storing the file data.
  */
-class BufferFile : public File{
+class DLLEXPORT BufferFile : public File{
 	
 private:
 	BufferFile(const BufferFile&) = delete;

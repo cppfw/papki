@@ -9,6 +9,8 @@
 #include <memory>
 
 #include <utki/debug.hpp>
+#include <utki/config.hpp>
+
 #include "File.hpp"
 
 
@@ -21,7 +23,7 @@ namespace papki{
  * @brief Native OS file system implementation of File interface.
  * Implementation of a ting::File interface for native file system of the OS.
  */
-class FSFile : public File{
+class DLLEXPORT FSFile : public File{
 	mutable FILE* handle = nullptr;
 
 protected:

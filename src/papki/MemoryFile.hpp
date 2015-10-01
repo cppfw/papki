@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <utki/config.hpp>
+
 #include "File.hpp"
 
 #include <vector>
@@ -16,7 +18,7 @@ namespace papki{
  * @brief Memory file.
  * Class representing a file stored in memory. Supports reading, writing, seeking backwards and forward, rewinding.
  */
-class MemoryFile : public File{
+class DLLEXPORT MemoryFile : public File{
 	
 	MemoryFile(const MemoryFile&) = delete;
 	MemoryFile(MemoryFile&&) = delete;

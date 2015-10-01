@@ -5,12 +5,14 @@
 
 #pragma once
 
+#include <utki/config.hpp>
+
 #include "File.hpp"
 
 namespace papki{
 
 //TODO: doxygen
-class RootDirFile : public File{
+class DLLEXPORT RootDirFile : public File{
 	std::unique_ptr<File> baseFile;
 	std::string rootDir;
 	

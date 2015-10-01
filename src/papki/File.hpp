@@ -9,6 +9,7 @@
 #include <memory>
 
 #include <utki/debug.hpp>
+#include <utki/config.hpp>
 #include <utki/Buf.hpp>
 #include <utki/Exc.hpp>
 #include <utki/Unique.hpp>
@@ -25,7 +26,7 @@ namespace papki{
  * @brief Abstract interface to a file system.
  * This class represents an abstract interface to a file system.
  */
-class File : public utki::Unique{
+class DLLEXPORT File : public utki::Unique{
 	mutable std::string path_var;
 
 	mutable bool isOpened_var = false;
