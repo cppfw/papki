@@ -24,7 +24,6 @@ using namespace papki;
 
 
 
-//override
 void FSFile::openInternal(E_Mode mode){
 	if(this->isDir()){
 		throw papki::Exc("path refers to a directory, directories can't be opened");
@@ -241,8 +240,6 @@ std::string FSFile::getHomeDir(){
 }
 
 
-
-//override
 std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 	if(!this->isDir()){
 		throw papki::Exc("FSFile::ListDirContents(): this is not a directory");
@@ -257,42 +254,46 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 		TRACE(<< "FSFile::ListDirContents(): pattern = " << pattern << std::endl)
 
-		WIN32_FIND_DATA wfd;
-		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
-		if(h == INVALID_HANDLE_VALUE)
+		WIN32_FIND_DATAA wfd;
+		HANDLE h = FindFirstFileA(pattern.c_str(), &wfd);
+		if (h == INVALID_HANDLE_VALUE) {
 			throw papki::Exc("ListDirContents(): cannot find first file");
+		}
 
 		//create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
 		{
-			struct FindCloser{
+			struct FindCloser {
 				HANDLE hnd;
 				FindCloser(HANDLE h) :
 					hnd(h)
 				{}
-				~FindCloser(){
+				~FindCloser() {
 					FindClose(this->hnd);
 				}
 			} findCloser(h);
 
-			do{
+			do {
 				std::string s(wfd.cFileName);
 				ASSERT(s.size() > 0)
 
-				//do not add ./ and ../ directories, we are not interested in them
-				if(s == "." || s == "..")
-					continue;
+					//do not add ./ and ../ directories, we are not interested in them
+					if (s == "." || s == "..") {
+						continue;
+					}
 
-				if(((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) && s[s.size() - 1] != '/')
+				if (((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) && s[s.size() - 1] != '/') {
 					s += '/';
+				}
 				files.push_back(s);
-				
-				if(files.size() == maxEntries){
+
+				if (files.size() == maxEntries) {
 					break;
 				}
-			}while(FindNextFile(h, &wfd) != 0);
+			} while (FindNextFileA(h, &wfd) != 0);
 
-			if(GetLastError() != ERROR_NO_MORE_FILES)
+			if (GetLastError() != ERROR_NO_MORE_FILES) {
 				throw papki::Exc("ListDirContents(): find next file failed");
+			}
 		}
 	}
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
