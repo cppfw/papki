@@ -434,7 +434,7 @@ public:
 	 *	}
 	 * @endcode
 	 */
-	class Guard{
+	class DLLEXPORT Guard{
 		const File& f;
 	public:
 		Guard(File &file, E_Mode mode);

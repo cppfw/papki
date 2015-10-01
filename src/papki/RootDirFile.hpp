@@ -12,7 +12,7 @@
 namespace papki{
 
 //TODO: doxygen
-class DLLEXPORT RootDirFile : public File{
+class RootDirFile : public File{
 	std::unique_ptr<File> baseFile;
 	std::string rootDir;
 	
