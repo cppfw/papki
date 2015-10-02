@@ -207,15 +207,29 @@ void FSFile::makeDir(){
 
 
 
-std::string FSFile::getHomeDir(){
+std::string FSFile::getHomeDir() {
 	std::string ret;
-	
-#if M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
-	
+
+#if M_OS == M_OS_WINDOWS && M_COMPILER == M_COMPILER_MSVC
+	{
+		char* buf = nullptr;
+		size_t size = 0;
+
+		utki::ScopeExit scopeExit([&buf](){
+			free(buf);
+		});
+
+		if (_dupenv_s(&buf, &size, "USERPROFILE") != 0) {
+			throw papki::Exc("USERPROFILE  environment virable could not be read");
+		}
+		ret = std::string(buf);
+	}
+#elif M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
+
 #	if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 	char * home = getenv("HOME");
 #	elif M_OS == M_OS_WINDOWS
-	char * home = getenv("USERPROFILE"); //TODO: MS Viual Studio complains about unsafety, consider changing to _dupenv_s() for MSVC compiler
+	char * home = getenv("USERPROFILE");
 #	else
 #		error "unsupported OS"
 #	endif
@@ -283,8 +297,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 				}
 			} while (FindNextFile(h, &wfd) != 0);
 
-			if (GetLastError() != ERROR_NO_MORE_FILES) {
-				TRACE(<< "error = " << GetLastError() << std::endl)
+			if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_NO_MORE_FILES) {
 				throw papki::Exc("ListDirContents(): find next file failed");
 			}
 		}
