@@ -152,6 +152,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libpapki\libpapki.vcxproj">
+      <Project>{4c5a922f-7e84-4843-a371-aec49f1066b9}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\libutki.1.0.8.4\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.0.8.4\build\native\libutki.targets')" />
