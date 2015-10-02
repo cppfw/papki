@@ -99,7 +99,6 @@ size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 
 
 
-//override
 size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	ASSERT(this->handle)
 	
@@ -108,7 +107,7 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	//      Therefore, do several seek operations with smaller offset if necessary.
 	
 	typedef long int T_FSeekOffset;
-	const size_t DMax = ((size_t(T_FSeekOffset(-1))) >> 1);
+	const size_t DMax = size_t((unsigned long int(-1)) >> 1);
 	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
 	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
 	
