@@ -15,14 +15,12 @@ using namespace papki;
 
 
 
-//override
 void BufferFile::openInternal(E_Mode mode){
 	this->ptr = this->data.begin();
 }
 
 
 
-//override
 size_t BufferFile::readInternal(utki::Buf<std::uint8_t> buf)const {
 	ASSERT(this->ptr <= this->data.end())
 	size_t numBytesRead = std::min(buf.sizeInBytes(), size_t(this->data.end() - this->ptr));
@@ -34,7 +32,6 @@ size_t BufferFile::readInternal(utki::Buf<std::uint8_t> buf)const {
 
 
 
-//override
 size_t BufferFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 	ASSERT(this->ptr <= this->data.end())
 	size_t numBytesWritten = std::min(buf.sizeInBytes(), size_t(this->data.end() - this->ptr));
@@ -46,7 +43,6 @@ size_t BufferFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 
 
 
-//override
 size_t BufferFile::seekForwardInternal(size_t numBytesToSeek)const{
 	ASSERT(this->ptr <= this->data.end())
 	numBytesToSeek = std::min(size_t(this->data.end() - this->ptr), numBytesToSeek);
@@ -57,7 +53,6 @@ size_t BufferFile::seekForwardInternal(size_t numBytesToSeek)const{
 
 
 
-//override
 size_t BufferFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	ASSERT(this->ptr >= this->data.begin())
 	numBytesToSeek = std::min(size_t(this->ptr - this->data.begin()), numBytesToSeek);
@@ -68,7 +63,6 @@ size_t BufferFile::seekBackwardInternal(size_t numBytesToSeek)const{
 
 
 
-//override
 void BufferFile::rewindInternal()const{
 	this->ptr = const_cast<decltype(this->data)::value_type*>(&*this->data.begin());
 }

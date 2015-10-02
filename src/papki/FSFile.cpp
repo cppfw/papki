@@ -208,7 +208,6 @@ void FSFile::makeDir(){
 
 
 
-//static
 std::string FSFile::getHomeDir(){
 	std::string ret;
 	
@@ -254,8 +253,8 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 		TRACE(<< "FSFile::ListDirContents(): pattern = " << pattern << std::endl)
 
-		WIN32_FIND_DATAA wfd;
-		HANDLE h = FindFirstFileA(pattern.c_str(), &wfd);
+		WIN32_FIND_DATA wfd;
+		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
 		if (h == INVALID_HANDLE_VALUE) {
 			throw papki::Exc("ListDirContents(): cannot find first file");
 		}
@@ -289,7 +288,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 				if (files.size() == maxEntries) {
 					break;
 				}
-			} while (FindNextFileA(h, &wfd) != 0);
+			} while (FindNextFile(h, &wfd) != 0);
 
 			if (GetLastError() != ERROR_NO_MORE_FILES) {
 				throw papki::Exc("ListDirContents(): find next file failed");
@@ -361,7 +360,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 #endif
 	return std::move(files);
-}//~ListDirContents()
+}
 
 
 std::unique_ptr<File> FSFile::spawn(){
