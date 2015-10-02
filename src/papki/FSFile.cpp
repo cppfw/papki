@@ -268,10 +268,10 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 				std::string s(wfd.cFileName);
 				ASSERT(s.size() > 0)
 
-					//do not add ./ and ../ directories, we are not interested in them
-					if (s == "." || s == "..") {
-						continue;
-					}
+				//do not add ./ and ../ directories, we are not interested in them
+				if (s == "." || s == "..") {
+					continue;
+				}
 
 				if (((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) && s[s.size() - 1] != '/') {
 					s += '/';
