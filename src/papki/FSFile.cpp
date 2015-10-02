@@ -260,15 +260,9 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 		//create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
 		{
-			struct FindCloser {
-				HANDLE hnd;
-				FindCloser(HANDLE h) :
-					hnd(h)
-				{}
-				~FindCloser() {
-					FindClose(this->hnd);
-				}
-			} findCloser(h);
+			utki::ScopeExit scopeExit([h]() {
+				FindClose(h);
+			});
 
 			do {
 				std::string s(wfd.cFileName);
@@ -290,6 +284,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 			} while (FindNextFile(h, &wfd) != 0);
 
 			if (GetLastError() != ERROR_NO_MORE_FILES) {
+				TRACE(<< "error = " << GetLastError() << std::endl)
 				throw papki::Exc("ListDirContents(): find next file failed");
 			}
 		}
