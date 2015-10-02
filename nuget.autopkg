@@ -1,51 +1,51 @@
 nuget{
 	nuspec{
-		id = libpogodi;
-		version : 1.0.1.3;
-		title: C++ event waiting library;
+		id = libpapki;
+		version : 1.0.2.1;
+		title: C++ file system library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/igagis/pogodi/master/LICENSE";
-		projectUrl: "https://github.com/igagis/pogodi";
-		iconUrl: "https://github.com/igagis/pogodi/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/igagis/papki/master/LICENSE";
+		projectUrl: "https://github.com/igagis/papki";
+		iconUrl: "https://github.com/igagis/papki/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
-		summary: C++ event waiting library;
+		summary: C++ file system library;
 
-		description: @"C++ event waiting library";
+		description: @"C++ file system library";
 		releaseNotes: "Initial release";
 		copyright: Copyright 2015 Ivan Gagis;
 		tags: { native};
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.6.1
+			libutki/1.0.8.4
 		};
 	}
 	files {
 		include: { "src\**\*.hpp" };
 		
 		[x86,release] { 
-			lib: msvs_solution\Release\libpogodi.lib;
-			symbols: msvs_solution\Release\libpogodi.pdb;
-			bin: msvs_solution\Release\libpogodi.dll;
+			lib: msvs_solution\Release\libpapki.lib;
+			symbols: msvs_solution\Release\libpapki.pdb;
+			bin: msvs_solution\Release\libpapki.dll;
 		}
 
 		[x86,debug] { 
-			lib: msvs_solution\Debug\libpogodi.lib;
-			symbols: msvs_solution\Debug\libpogodi.pdb;
-			bin: msvs_solution\Debug\libpogodi.dll;
+			lib: msvs_solution\Debug\libpapki.lib;
+			symbols: msvs_solution\Debug\libpapki.pdb;
+			bin: msvs_solution\Debug\libpapki.dll;
 		}
 
 		[x64,release] { 
-			lib: msvs_solution\x64\Release\libpogodi.lib;
-			symbols: msvs_solution\x64\Release\libpogodi.pdb;
-			bin: msvs_solution\x64\Release\libpogodi.dll;
+			lib: msvs_solution\x64\Release\libpapki.lib;
+			symbols: msvs_solution\x64\Release\libpapki.pdb;
+			bin: msvs_solution\x64\Release\libpapki.dll;
 		}
 
 		[x64,debug] { 
-			lib: msvs_solution\x64\Debug\libpogodi.lib;
-			symbols: msvs_solution\x64\Debug\libpogodi.pdb;
-			bin: msvs_solution\x64\Debug\libpogodi.dll;
+			lib: msvs_solution\x64\Debug\libpapki.lib;
+			symbols: msvs_solution\x64\Debug\libpapki.pdb;
+			bin: msvs_solution\x64\Debug\libpapki.dll;
 		}  
 	}
 }
