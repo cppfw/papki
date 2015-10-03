@@ -26,7 +26,7 @@ namespace papki{
  * @brief Abstract interface to a file system.
  * This class represents an abstract interface to a file system.
  */
-class DLLEXPORT File : public utki::Unique{
+class File : public utki::Unique{
 	mutable std::string path_var;
 
 	mutable bool isOpened_var = false;

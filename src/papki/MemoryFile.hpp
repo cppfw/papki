@@ -18,7 +18,7 @@ namespace papki{
  * @brief Memory file.
  * Class representing a file stored in memory. Supports reading, writing, seeking backwards and forward, rewinding.
  */
-class DLLEXPORT MemoryFile : public File{
+class MemoryFile : public File{
 	
 	MemoryFile(const MemoryFile&) = delete;
 	MemoryFile(MemoryFile&&) = delete;

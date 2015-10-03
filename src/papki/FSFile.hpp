@@ -23,7 +23,7 @@ namespace papki{
  * @brief Native OS file system implementation of File interface.
  * Implementation of a ting::File interface for native file system of the OS.
  */
-class DLLEXPORT FSFile : public File{
+class FSFile : public File{
 	mutable FILE* handle = nullptr;
 
 protected:

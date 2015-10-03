@@ -19,7 +19,7 @@ namespace papki{
  * The size of the file remains constant and is equal to the size of the memory
  * buffer used for storing the file data.
  */
-class DLLEXPORT BufferFile : public File{
+class BufferFile : public File{
 	
 private:
 	BufferFile(const BufferFile&) = delete;
