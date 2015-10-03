@@ -26,26 +26,26 @@ nuget{
 		
 		[x86,release] { 
 			lib: msvs_solution\Release\libpapki.lib;
-			symbols: msvs_solution\Release\libpapki.pdb;
-			bin: msvs_solution\Release\libpapki.dll;
+//			symbols: msvs_solution\Release\libpapki.pdb;
+//			bin: msvs_solution\Release\libpapki.dll;
 		}
 
 		[x86,debug] { 
 			lib: msvs_solution\Debug\libpapki.lib;
-			symbols: msvs_solution\Debug\libpapki.pdb;
-			bin: msvs_solution\Debug\libpapki.dll;
+//			symbols: msvs_solution\Debug\libpapki.pdb;
+//			bin: msvs_solution\Debug\libpapki.dll;
 		}
 
 		[x64,release] { 
 			lib: msvs_solution\x64\Release\libpapki.lib;
-			symbols: msvs_solution\x64\Release\libpapki.pdb;
-			bin: msvs_solution\x64\Release\libpapki.dll;
+//			symbols: msvs_solution\x64\Release\libpapki.pdb;
+//			bin: msvs_solution\x64\Release\libpapki.dll;
 		}
 
 		[x64,debug] { 
 			lib: msvs_solution\x64\Debug\libpapki.lib;
-			symbols: msvs_solution\x64\Debug\libpapki.pdb;
-			bin: msvs_solution\x64\Debug\libpapki.dll;
+//			symbols: msvs_solution\x64\Debug\libpapki.pdb;
+//			bin: msvs_solution\x64\Debug\libpapki.dll;
 		}  
 	}
 }
