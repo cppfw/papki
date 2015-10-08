@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utki/config.hpp>
 #include <utki/Exc.hpp>
 
 

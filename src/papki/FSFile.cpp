@@ -24,7 +24,6 @@ using namespace papki;
 
 
 
-//override
 void FSFile::openInternal(E_Mode mode){
 	if(this->isDir()){
 		throw papki::Exc("path refers to a directory, directories can't be opened");
@@ -100,7 +99,6 @@ size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 
 
 
-//override
 size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	ASSERT(this->handle)
 	
@@ -109,7 +107,9 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	//      Therefore, do several seek operations with smaller offset if necessary.
 	
 	typedef long int T_FSeekOffset;
-	const size_t DMax = ((size_t(T_FSeekOffset(-1))) >> 1);
+	const std::size_t DMax = std::size_t(
+			((unsigned long int)(-1)) >> 1
+		);
 	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
 	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
 	
@@ -209,16 +209,29 @@ void FSFile::makeDir(){
 
 
 
-//static
-std::string FSFile::getHomeDir(){
+std::string FSFile::getHomeDir() {
 	std::string ret;
-	
-#if M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
-	
+
+#if M_OS == M_OS_WINDOWS && M_COMPILER == M_COMPILER_MSVC
+	{
+		char* buf = nullptr;
+		size_t size = 0;
+
+		utki::ScopeExit scopeExit([&buf](){
+			free(buf);
+		});
+
+		if (_dupenv_s(&buf, &size, "USERPROFILE") != 0) {
+			throw papki::Exc("USERPROFILE  environment virable could not be read");
+		}
+		ret = std::string(buf);
+	}
+#elif M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
+
 #	if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 	char * home = getenv("HOME");
 #	elif M_OS == M_OS_WINDOWS
-	char * home = getenv("USERPROFILE"); //TODO: MS Viual Studio complains about unsafety, consider changing to _dupenv_s() for MSVC compiler
+	char * home = getenv("USERPROFILE");
 #	else
 #		error "unsupported OS"
 #	endif
@@ -241,8 +254,6 @@ std::string FSFile::getHomeDir(){
 }
 
 
-
-//override
 std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 	if(!this->isDir()){
 		throw papki::Exc("FSFile::ListDirContents(): this is not a directory");
@@ -259,40 +270,38 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 		WIN32_FIND_DATA wfd;
 		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
-		if(h == INVALID_HANDLE_VALUE)
+		if (h == INVALID_HANDLE_VALUE) {
 			throw papki::Exc("ListDirContents(): cannot find first file");
+		}
 
 		//create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
 		{
-			struct FindCloser{
-				HANDLE hnd;
-				FindCloser(HANDLE h) :
-					hnd(h)
-				{}
-				~FindCloser(){
-					FindClose(this->hnd);
-				}
-			} findCloser(h);
+			utki::ScopeExit scopeExit([h]() {
+				FindClose(h);
+			});
 
-			do{
+			do {
 				std::string s(wfd.cFileName);
 				ASSERT(s.size() > 0)
 
 				//do not add ./ and ../ directories, we are not interested in them
-				if(s == "." || s == "..")
+				if (s == "." || s == "..") {
 					continue;
+				}
 
-				if(((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) && s[s.size() - 1] != '/')
+				if (((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) && s[s.size() - 1] != '/') {
 					s += '/';
+				}
 				files.push_back(s);
-				
-				if(files.size() == maxEntries){
+
+				if (files.size() == maxEntries) {
 					break;
 				}
-			}while(FindNextFile(h, &wfd) != 0);
+			} while (FindNextFile(h, &wfd) != 0);
 
-			if(GetLastError() != ERROR_NO_MORE_FILES)
+			if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_NO_MORE_FILES) {
 				throw papki::Exc("ListDirContents(): find next file failed");
+			}
 		}
 	}
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
@@ -360,7 +369,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 #endif
 	return std::move(files);
-}//~ListDirContents()
+}
 
 
 std::unique_ptr<File> FSFile::spawn(){

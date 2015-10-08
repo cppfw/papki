@@ -9,6 +9,8 @@
 #include <memory>
 
 #include <utki/debug.hpp>
+#include <utki/config.hpp>
+
 #include "File.hpp"
 
 
