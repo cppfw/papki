@@ -1,0 +1,58 @@
+language: cpp
+sudo: required
+dist: trusty
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - clang
+  - gcc
+
+env:
+  global:
+  #encrypted HOMEBREW_GITHUB_ACCESS_TOKEN for publishing to homebrew-tap
+  - secure: "YQlVfncCW615TkmdPIng/cP5BQnY7+rclhukOuvpYLoj6d3Swa2eo5N7VKDKFGOVZtEbQGiKBJS6shVVfwNCB8G+GFOuPuFttxIndqY99mD7zsqj+kXHbTuIH1kEf9NbNspzpdX3XgBUi1xfooFTcl3yo2MeHlIJHcE2XNig0aBj8+Krc0CQAZZjHIeh8a0jjl2PIGeOTYEpSZLPtU+IAbSv7QYtx4UWcfcy1tq1TC9olqLlMf2V2a3nwoZT8I7+Q5zra8XZyXncc0n3IveDw6rC/yKOc3Ebcr2+kTOF8u5my29SacOrZilDC+B0DLTIOahdQ/ggH1yV1jrz414lDKk/C2fjDapAWnWlQjAUjUj5s1ChO0Q7+qdZPKaJI19tdkRrObJuUbqmGiEZ51o+bomb96WFx/cAQ8h5CVy3bIXlWz0z30+PrgC9Y79BGVDDFvK9LVYUK/13IOpVHvhGjTePEicLR7QFJARMTpUapXh4sp1EIoHPdXr7YwuJkLloOiJ7keSVgbmpvhKtH8Bi08bdKPs1CgEvozE8T7B8hOXxWp+ZqOM2MTFROmD5JG9E5/5XospsEaH1vloJOWQBjduFnPqh+PHcfTulU9cSci+vtqHBzByZgNSKl4+ebIKir/GB52PtOuLx678jYuP1kUm1Cbyc5KeZK+C3s2SASbY="
+  - HOMEBREW_GITHUB_USERNAME=igagis
+
+before_install:
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    echo "deb https://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null;
+    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61;
+    sudo apt-get update -qq;
+    sudo apt-get install -qq debhelper prorab doxygen libutki-dev;
+  fi
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    brew tap igagis/tap;
+    brew update > /dev/null;
+    brew install prorab libutki;
+  fi
+
+
+script:
+- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    make deb;
+  fi
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    make;
+    make test;
+  fi
+
+deploy:
+- provider: bintray
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = linux
+  file: travis_bintray.json
+  user: igagis
+  key:
+    secure: "Lar4sKMpCwHDA35DYmkAxAFcOMCaEb7pq4P7LoQnn7c9pxH5P3S6bZB0HOtJS8HjsJBb2iQfQf2nUp58SGJDQ3WeqX+b2OUHSQ0ySg9Akf7IWtpqA6HzpJC0otLCz3IqUo7kG9/tRTZkQZ53gqsVQjTA9nfFouwaNMDSezGGm2OJRg1ws9/fWlL2ib+/K55dbKTUUMsScpYSLcW6qoVux7q3Toy/iNdznASWha1ER7kXxQqD05UY6OZrFhPF1XoK/gLHD6ONtF9bMm9dfyk/IubwZ5Xj4ACp/7bK2tT3iEiAuNj31IKR+5uFl6jV9+Z+F6RVYq85fjm9VUqLfphlj12u4g08sWmK1as2elUk8Y/bNJuL6vLQnKywkQKDSKUrYiVxssyPOCNtxFKEmj1qUrAyKCeyVmgGYMFYwsRihCcccehoVVnTv0QfmKu0J2F876olHT8BzbXrlZWxnuD7117hUVGDuHWFI73wVF0gQ6ovq1lfVI8VFGtJG1QuS7kqb+3Gky5TC9j1dcASNWa8/pZwTz5if6d1pOQOqbVY4c1B/ZkBTDYAec/sHdxPlUbcHCPzc9r8ikbK0pl8Nfvpebf8q6xKUVe0iAwmhNXGWb8BD4V3IjdZCaIjVUYqV0ucJWD2oORABmJoZiDtiKcokgC72jU4bS76h5/mjTOMSlU="
+  dry-run: false
+- provider: script
+  skip_cleanup: true
+  script: prorab-deploy-homebrew.sh igagis/tap
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = osx
