@@ -1,3 +1,9 @@
+libpapki (1.0.3-1) stable; urgency=medium
+
+  * updated for ci
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 06 Nov 2015 14:08:01 +0200
+
 libpapki (1.0.2-1) stable; urgency=medium
 
   * bumping up version
