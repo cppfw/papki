@@ -47,7 +47,7 @@ script:
     make;
     make test;
     
-    xcodebuild -workspace ios/tests.xcworkspace CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -list;
+    xcodebuild -workspace ios/tests.xcworkspace -scheme tests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO;
   fi
 
 deploy:

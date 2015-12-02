@@ -1,3 +1,6 @@
+xcodeproj 'tests.xcodeproj'
+
 source 'https://github.com/igagis/cocoapods-repo.git'
 
 pod 'libutki', '>= 1.0.8'
+
