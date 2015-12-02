@@ -1,6 +1,7 @@
 language: cpp
 sudo: required
 dist: trusty
+osx_image: xcode7.2b3
 
 os:
   - linux
