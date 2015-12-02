@@ -44,6 +44,8 @@ script:
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     make;
     make test;
+    
+    xcodebuild -workspace ios/tests.xcworkspace/ -scheme tests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO;
   fi
 
 deploy:
@@ -60,6 +62,12 @@ deploy:
 - provider: script
   skip_cleanup: true
   script: prorab-deploy-homebrew.sh igagis/tap
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = osx && $CC = clang
+- provider: script
+  skip_cleanup: true
+  script: prorab-deploy-cocoapods.sh igagis
   on:
     tags: true
     condition: $TRAVIS_OS_NAME = osx && $CC = clang
