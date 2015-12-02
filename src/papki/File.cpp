@@ -161,7 +161,7 @@ std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 	
 	std::list<Chunk> chunks;
 	
-	size_t res;
+	size_t res = 0;
 	size_t bytesRead = 0;
 	
 	for(;;){
