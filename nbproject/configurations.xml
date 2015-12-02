@@ -24,6 +24,8 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>nbproject/private/launcher.properties</itemPath>
+      <itemPath>cocoapods/libpapki.podspec.in</itemPath>
+      <itemPath>homebrew/libpapki.rb.in</itemPath>
       <itemPath>src/makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
