@@ -211,7 +211,7 @@ std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 	memcpy(&*p, &*chunks.front().begin(), res);
 	ASSERT(p + res == ret.end())
 	
-	return std::move(ret);
+	return ret;
 }
 
 
