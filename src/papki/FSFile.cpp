@@ -368,7 +368,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 #	error "FSFile::ListDirContents(): version is not implemented yet for this os"
 
 #endif
-	return std::move(files);
+	return files;
 }
 
 
