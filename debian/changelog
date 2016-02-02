@@ -1,3 +1,9 @@
+libpapki (1.0.6) stable; urgency=medium
+
+  * homebrew do not install dummy.hpp
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 02 Feb 2016 16:04:32 +0200
+
 libpapki (1.0.5) stable; urgency=medium
 
   * homebrew do not install tests
