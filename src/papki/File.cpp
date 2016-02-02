@@ -193,7 +193,7 @@ std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 	ASSERT(maxBytesToLoad >= bytesRead)
 	
 	if(chunks.size() == 0){
-		return std::move(std::vector<std::uint8_t>());
+		return std::vector<std::uint8_t>();
 	}
 	
 	ASSERT(chunks.size() >= 1)
