@@ -90,12 +90,8 @@
         </ccTool>
       </item>
       <item path="tests/FSFile/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
       </item>
       <item path="tests/FSFile/tests.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
       </item>
       <item path="tests/MemoryFile/main.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
