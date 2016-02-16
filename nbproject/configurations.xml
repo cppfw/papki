@@ -28,6 +28,7 @@
       <itemPath>cocoapods/libpapki.podspec.in</itemPath>
       <itemPath>homebrew/libpapki.rb.in</itemPath>
       <itemPath>src/makefile</itemPath>
+      <itemPath>nuget/nuget.autopkg.in</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
