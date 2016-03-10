@@ -37,8 +37,7 @@ this_cxxflags += -Wfatal-errors # stop on first error encountered
 this_cxxflags += -fstrict-aliasing #strict aliasing (in order to comply with the c++ standard more strictly)
 this_cxxflags += -std=c++11
 this_cxxflags += -g #include debugging symbols
-                #-P -E #-Wreorder
-                #-O3 -funroll-loops -fomit-frame-pointer
+this_cxxflags += -O3
 
 
 
