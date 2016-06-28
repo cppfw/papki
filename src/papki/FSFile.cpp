@@ -45,13 +45,10 @@ void FSFile::openInternal(E_Mode mode){
 			break;
 	}
 
-#if M_COMPILER == M_COMPILER_MSVC
 	if(fopen_s(&this->handle, this->path().c_str(), modeStr) != 0){
 		this->handle = 0;
 	}
-#else
-	this->handle = fopen(this->path().c_str(), modeStr);
-#endif
+
 	if(!this->handle){
 		TRACE(<< "FSFile::Open(): Path() = " << this->path().c_str() << std::endl)
 		std::stringstream ss;
