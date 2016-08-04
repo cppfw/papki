@@ -18,34 +18,34 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.8.6;
+			libutki/1.0.21;
 		};
 	}
 	files {
-		include: { "..\src\**\*.hpp" };
+		//this is needed to put headers in the base folder
+		nestedInclude: {
+			#destination = ${d_include}papki;
+			"..\src\papki\**\*.hpp"
+		};
 		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libpapki.lib;
 			symbols: ..\msvs_solution\libpapki\Release\libpapki.pdb;
-//			bin: ..\msvs_solution\Release\libpapki.dll;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libpapki.lib;
 			symbols: ..\msvs_solution\libpapki\Debug\libpapki.pdb;
-//			bin: ..\msvs_solution\Debug\libpapki.dll;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libpapki.lib;
 			symbols: ..\msvs_solution\libpapki\x64\Release\libpapki.pdb;
-//			bin: ..\msvs_solution\x64\Release\libpapki.dll;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libpapki.lib;
 			symbols: ..\msvs_solution\libpapki\x64\Debug\libpapki.pdb;
-//			bin: ..\msvs_solution\x64\Debug\libpapki.dll;
 		}  
 	}
 }
