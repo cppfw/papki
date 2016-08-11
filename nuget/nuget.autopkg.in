@@ -28,30 +28,24 @@ nuget{
 			"..\src\papki\**\*.hpp"
 		};
 		
-		symbols += {
-			#add-each-file : ::nuget.targets.[${condition}].CopyToOutput;
-			//#add-folder : ::nuget.targets.[${condition}].BuildTimePath;
-			#destination : ${d_bin}; 
-		};
-		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libpapki.lib;
-			symbols: ..\msvs_solution\libpapki\Release\libpapki.pdb;
+//			symbols: ..\msvs_solution\libpapki\Release\libpapki.pdb;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libpapki.lib;
-			symbols: ..\msvs_solution\libpapki\Debug\libpapki.pdb;
+//			symbols: ..\msvs_solution\libpapki\Debug\libpapki.pdb;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libpapki.lib;
-			symbols: ..\msvs_solution\libpapki\x64\Release\libpapki.pdb;
+//			symbols: ..\msvs_solution\libpapki\x64\Release\libpapki.pdb;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libpapki.lib;
-			symbols: ..\msvs_solution\libpapki\x64\Debug\libpapki.pdb;
+//			symbols: ..\msvs_solution\libpapki\x64\Debug\libpapki.pdb;
 		}  
 	}
 }
