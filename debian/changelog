@@ -1,3 +1,9 @@
+libpapki (1.0.13) unstable; urgency=medium
+
+  * nuget test
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 11 Aug 2016 22:43:47 +0300
+
 libpapki (1.0.12) unstable; urgency=medium
 
   * nuget test
