@@ -31,7 +31,7 @@ nuget{
 		symbols += {
 			//#add-each-file : ::nuget.targets.[${condition}].CopyToOutput;
 			#add-folder : ::nuget.targets.[${condition}].BuildTimePath;
-			//#destination : ${d_bin}; 
+			#destination : ${d_bin}; 
 		};
 		
 		[x86,release] { 
