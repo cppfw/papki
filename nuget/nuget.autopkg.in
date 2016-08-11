@@ -29,8 +29,8 @@ nuget{
 		};
 		
 		symbols += {
-			//#add-each-file : ::nuget.targets.[${condition}].CopyToOutput;
-			#add-folder : ::nuget.targets.[${condition}].BuildTimePath;
+			#add-each-file : ::nuget.targets.[${condition}].CopyToOutput;
+			//#add-folder : ::nuget.targets.[${condition}].BuildTimePath;
 			#destination : ${d_bin}; 
 		};
 		
