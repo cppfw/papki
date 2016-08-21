@@ -12,7 +12,7 @@ this_cxxflags += -fstrict-aliasing #strict aliasing!!!
 
 this_srcs += main.cpp tests.cpp
 
-this_ldlibs += -lpapki
+this_ldlibs += -lpapki -lstdc++
 
 this_ldflags += -L$(prorab_this_dir)../../src/
 
