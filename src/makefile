@@ -51,6 +51,7 @@ else ifeq ($(prorab_os),macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
 endif
 
+this_ldlibs += -lstdc++
 
 
 $(eval $(prorab-build-lib))
