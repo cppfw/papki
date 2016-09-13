@@ -12,9 +12,19 @@ compiler:
   - gcc
 
 matrix:
-  exclude:
+  include:
     - os: osx
+      env: BUILD_NAME=macosx
+      compiler: clang
+    - os: linux
+      dist: trusty
+      env: BUILD_NAME=debian
       compiler: gcc
+    - os: linux
+      dist: trusty
+      env: BUILD_NAME=clang
+      compiler: clang
+
 
 env:
   global:
@@ -23,6 +33,12 @@ env:
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
   - linuxDependencies="debhelper prorab doxygen libutki-dev"
+  matrix:
+  - BUILD_NAME=debian
+  - BUILD_NAME=ubuntu
+  - BUILD_NAME=macosx
+  - BUILD_NAME=clang
+
 
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then

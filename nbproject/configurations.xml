@@ -25,6 +25,8 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.travis.yml</itemPath>
       <itemPath>ios/Podfile</itemPath>
+      <itemPath>debian/changelog</itemPath>
+      <itemPath>debian/control.in</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>cocoapods/libpapki.podspec.in</itemPath>
       <itemPath>homebrew/libpapki.rb.in</itemPath>

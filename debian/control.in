@@ -15,7 +15,7 @@ Description: cross-platform C++ file system library.
  File system abstraction library.
 
 Package: libpapki$(soname)-dbg
-Section: libdevel
+Section: debug
 Architecture: any
 Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for libpapki$(soname) package.
