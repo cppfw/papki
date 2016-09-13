@@ -18,7 +18,7 @@ env:
   - secure: "YQlVfncCW615TkmdPIng/cP5BQnY7+rclhukOuvpYLoj6d3Swa2eo5N7VKDKFGOVZtEbQGiKBJS6shVVfwNCB8G+GFOuPuFttxIndqY99mD7zsqj+kXHbTuIH1kEf9NbNspzpdX3XgBUi1xfooFTcl3yo2MeHlIJHcE2XNig0aBj8+Krc0CQAZZjHIeh8a0jjl2PIGeOTYEpSZLPtU+IAbSv7QYtx4UWcfcy1tq1TC9olqLlMf2V2a3nwoZT8I7+Q5zra8XZyXncc0n3IveDw6rC/yKOc3Ebcr2+kTOF8u5my29SacOrZilDC+B0DLTIOahdQ/ggH1yV1jrz414lDKk/C2fjDapAWnWlQjAUjUj5s1ChO0Q7+qdZPKaJI19tdkRrObJuUbqmGiEZ51o+bomb96WFx/cAQ8h5CVy3bIXlWz0z30+PrgC9Y79BGVDDFvK9LVYUK/13IOpVHvhGjTePEicLR7QFJARMTpUapXh4sp1EIoHPdXr7YwuJkLloOiJ7keSVgbmpvhKtH8Bi08bdKPs1CgEvozE8T7B8hOXxWp+ZqOM2MTFROmD5JG9E5/5XospsEaH1vloJOWQBjduFnPqh+PHcfTulU9cSci+vtqHBzByZgNSKl4+ebIKir/GB52PtOuLx678jYuP1kUm1Cbyc5KeZK+C3s2SASbY="
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
-  - linuxDependencies="debhelper prorab doxygen libutki-dev"
+#  - linuxDependencies="debhelper prorab doxygen libutki-dev"
 #  matrix:
 #  - BUILD_NAME=debian
 #  - BUILD_NAME=ubuntu
@@ -31,6 +31,9 @@ matrix:
     - os: osx
       env: BUILD_NAME=macosx
       compiler: clang
+    - os: osx
+      env: BUILD_NAME=ios
+      compiler: clang
     - os: linux
       env: BUILD_NAME=debian
       compiler: gcc
@@ -40,47 +43,57 @@ matrix:
 
 
 before_install:
-- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    echo "deb https://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
-    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
-    sudo apt-get update -qq &&
-    sudo apt-get install -qq $linuxDependencies;
+- if[ "$BUILD_NAME" == "debian" ]; then
+    sudo sbuild-createchroot --include=build-essential unstable /srv/chroot/deb-amd64 http://httpredir.debian.org/debian &&
+    echo "deb [trusted=yes] http://dl.bintray.com/igagis/deb /" | sudo tee /srv/chroot/deb-amd64/etc/apt/sources.list.d/igagis.list > /dev/null &&
+    sudo chroot /srv/chroot/deb-amd64 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61;
   fi
-- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
-    sudo prorab-make-raspberry-chroot.sh /tmp/rasp &&
-    echo "deb http://dl.bintray.com/igagis/rasp /" | sudo tee /tmp/rasp/etc/apt/sources.list.d/igagis.list > /dev/null &&
-    sudo chroot /tmp/rasp apt-get update &&
-    sudo chroot /tmp/rasp apt-get install --allow-unauthenticated -qq -y $linuxDependencies &&
-    sudo mkdir -p /tmp/rasp/build &&
-    sudo rsync -av $TRAVIS_BUILD_DIR/ /tmp/rasp/build/;
-  fi
-- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    rvm use ruby-2.2.1 &&
-    pod repo add --silent igagis https://$PRORAB_GIT_USERNAME:$PRORAB_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
-    pod install --project-directory=ios &&
-
-    brew tap igagis/tap &&
-    brew update > /dev/null &&
-    brew install prorab libutki;
-  fi
+#- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+#    echo "deb https://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
+#    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
+#    sudo apt-get update -qq &&
+#    sudo apt-get install -qq $linuxDependencies;
+#  fi
+#- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
+#    sudo prorab-make-raspberry-chroot.sh /tmp/rasp &&
+#    echo "deb http://dl.bintray.com/igagis/rasp /" | sudo tee /tmp/rasp/etc/apt/sources.list.d/igagis.list > /dev/null &&
+#    sudo chroot /tmp/rasp apt-get update &&
+#    sudo chroot /tmp/rasp apt-get install --allow-unauthenticated -qq -y $linuxDependencies &&
+#    sudo mkdir -p /tmp/rasp/build &&
+#    sudo rsync -av $TRAVIS_BUILD_DIR/ /tmp/rasp/build/;
+#  fi
+#- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+#    rvm use ruby-2.2.1 &&
+#    pod repo add --silent igagis https://$PRORAB_GIT_USERNAME:$PRORAB_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
+#    pod install --project-directory=ios &&
+#
+#    brew tap igagis/tap &&
+#    brew update > /dev/null &&
+#    brew install prorab libutki;
+#  fi
 
 
 script:
-- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+- if[ "$BUILD_NAME" == "debian" ]; then
     prorab-deb-prepare.sh &&
-    dpkg-buildpackage -us -uc &&
+    sbuild &&
     lintian ../*.changes;
   fi
-- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
-    sudo chroot /tmp/rasp bash -c "cd /build && prorab-deb-prepare.sh" &&
-    sudo chroot /tmp/rasp bash -c "cd /build && dpkg-buildpackage -us -uc";
-  fi
-- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    make &&
-    make test &&
-
-    xcodebuild -workspace ios/tests.xcworkspace -scheme tests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO;
-  fi
+#- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+#    prorab-deb-prepare.sh &&
+#    dpkg-buildpackage -us -uc &&
+#    lintian ../*.changes;
+#  fi
+#- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
+#    sudo chroot /tmp/rasp bash -c "cd /build && prorab-deb-prepare.sh" &&
+#    sudo chroot /tmp/rasp bash -c "cd /build && dpkg-buildpackage -us -uc";
+#  fi
+#- if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+#    make &&
+#    make test &&
+#
+#    xcodebuild -workspace ios/tests.xcworkspace -scheme tests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO;
+#  fi
 
 before_deploy:
   - prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` travis_bintray_deb.json.in
@@ -91,7 +104,8 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    condition: $TRAVIS_OS_NAME = linux && $CC = gcc
+#    condition: $TRAVIS_OS_NAME = linux && $CC = gcc
+    condition: $BUILD_NAME = debian
   file: travis_bintray_deb.json
   user: igagis
   key:
