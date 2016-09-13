@@ -11,20 +11,6 @@ compiler:
   - clang
   - gcc
 
-matrix:
-  include:
-    - os: osx
-      env: BUILD_NAME=macosx
-      compiler: clang
-    - os: linux
-      dist: trusty
-      env: BUILD_NAME=debian
-      compiler: gcc
-    - os: linux
-      dist: trusty
-      env: BUILD_NAME=clang
-      compiler: clang
-
 
 env:
   global:
@@ -38,6 +24,19 @@ env:
   - BUILD_NAME=ubuntu
   - BUILD_NAME=macosx
   - BUILD_NAME=clang
+
+
+matrix:
+  include:
+    - os: osx
+      env: BUILD_NAME=macosx
+      compiler: clang
+    - os: linux
+      env: BUILD_NAME=debian
+      compiler: gcc
+    - os: linux
+      env: BUILD_NAME=clang
+      compiler: clang
 
 
 before_install:
@@ -69,7 +68,8 @@ before_install:
 script:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     prorab-deb-prepare.sh &&
-    dpkg-buildpackage -us -uc;
+    dpkg-buildpackage -us -uc &&
+    lintian ../*.changes;
   fi
 - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
     sudo chroot /tmp/rasp bash -c "cd /build && prorab-deb-prepare.sh" &&
