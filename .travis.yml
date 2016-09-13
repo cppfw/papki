@@ -85,7 +85,7 @@ before_install:
 script:
 - if [ "$BUILD_NAME" == "debian" ]; then
     prorab-deb-prepare.sh &&
-    sbuild --run-lintian;
+    sg sbuild -c "sbuild --run-lintian";
   fi
 - if [ "$BUILD_NAME" == "clang" ]; then
     prorab-deb-prepare.sh &&
