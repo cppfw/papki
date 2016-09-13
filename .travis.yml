@@ -43,7 +43,7 @@ matrix:
 
 
 before_install:
-- if[ "$BUILD_NAME" == "debian" ]; then
+- if [ "$BUILD_NAME" == "debian" ]; then
     sudo sbuild-createchroot --include=build-essential unstable /srv/chroot/deb-amd64 http://httpredir.debian.org/debian &&
     echo "deb [trusted=yes] http://dl.bintray.com/igagis/deb /" | sudo tee /srv/chroot/deb-amd64/etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo chroot /srv/chroot/deb-amd64 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61;
@@ -74,7 +74,7 @@ before_install:
 
 
 script:
-- if[ "$BUILD_NAME" == "debian" ]; then
+- if [ "$BUILD_NAME" == "debian" ]; then
     prorab-deb-prepare.sh &&
     sbuild &&
     lintian ../*.changes;
