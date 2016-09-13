@@ -60,6 +60,10 @@ before_install:
     sudo chroot /srv/chroot/deb-amd64 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61;
   fi
 - if [ "$BUILD_NAME" == "raspberry_pi" ]; then
+    echo "deb http://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
+    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
+    sudo apt-get update -qq &&
+    sudo apt-get install -qq prorab;
     sudo prorab-make-raspberry-chroot.sh /tmp/rasp &&
     echo "deb http://dl.bintray.com/igagis/rasp /" | sudo tee /tmp/rasp/etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo chroot /tmp/rasp apt-get update &&
