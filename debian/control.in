@@ -1,5 +1,5 @@
 Source: libpapki
-Section: misc
+Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: g++ (>=4:4.8), debhelper (>= 9), prorab,
@@ -21,8 +21,8 @@ Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for libpapki$(soname) package.
 
 Package: libpapki-dev
-Section: devel
-Architecture: all
+Section: libdevel
+Architecture: any
 Depends: libpapki$(soname) (= ${binary:Version}), libpapki$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
 		libutki-dev
 Suggests: libpapki-doc
@@ -30,7 +30,7 @@ Description: cross-platform C++ file system library.
  File system abstraction library.
 
 Package: libpapki-doc
-Section: devel
+Section: doc
 Architecture: all
 Depends: ${misc:Depends}
 Description: documentation for libpapki - file system abstraction library.
