@@ -1,3 +1,9 @@
+libpapki (1.0.22) unstable; urgency=medium
+
+  * travis
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 14 Sep 2016 18:06:26 +0300
+
 libpapki (1.0.21) unstable; urgency=medium
 
   * bintray deployment fix
