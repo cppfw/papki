@@ -2,8 +2,8 @@ Source: libpapki
 Section: misc
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
-Build-Depends: debhelper (>= 9), prorab,
-		libc6-dev, libutki-dev
+Build-Depends: g++ (>=4:4.8), debhelper (>= 9), prorab,
+		libutki-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
