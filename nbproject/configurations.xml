@@ -32,6 +32,7 @@
       <itemPath>homebrew/libpapki.rb.in</itemPath>
       <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
+      <itemPath>../pogodi/travis_bintray_deb.json.in</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
