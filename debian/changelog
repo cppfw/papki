@@ -1,3 +1,9 @@
+libpapki (1.0.18) unstable; urgency=medium
+
+  * debian testing build
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 14 Sep 2016 15:43:12 +0300
+
 libpapki (1.0.17) unstable; urgency=medium
 
   * link to c++
