@@ -1,7 +1,7 @@
 {
 	"package": {
 		"name": "libpapki",
-		"repo": "deb",
+		"repo": "ubu",
 		"subject": "igagis"
 	},
 	
@@ -12,12 +12,7 @@
 	"files": [
 		{
 			"includePattern": "../(.[^/]*(\\.deb)$)",
-			"uploadPattern": "$1",
-			"matrixParams": {
-				"deb_distribution": "unstable",
-				"deb_component": "main",
-				"deb_architecture": "amd64"
-			}
+			"uploadPattern": "$1"
 		}
 	],
 	"publish": true,
