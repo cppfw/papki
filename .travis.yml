@@ -4,8 +4,6 @@ dist: trusty
 osx_image: xcode7.3
 
 
-
-
 env:
   global:
   #encrypted HOMEBREW_GITHUB_ACCESS_TOKEN for publishing to homebrew-tap
@@ -13,7 +11,6 @@ env:
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
   - linuxDependencies="debhelper prorab doxygen libutki-dev"
-
 
 
 matrix:
@@ -45,6 +42,10 @@ before_install:
     brew install prorab libutki;
   fi
 - if [ "$BUILD_NAME" == "ios" ]; then
+    brew tap igagis/tap &&
+    brew update > /dev/null &&
+    brew install prorab &&
+
     rvm use ruby-2.2.1 &&
     pod repo add --silent igagis https://$PRORAB_GIT_USERNAME:$PRORAB_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=ios;
