@@ -1,3 +1,9 @@
+libpapki (1.0.25) unstable; urgency=medium
+
+  * rasp deploy fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Sep 2016 16:23:34 +0300
+
 libpapki (1.0.24) unstable; urgency=medium
 
   * ubuntu deploy
