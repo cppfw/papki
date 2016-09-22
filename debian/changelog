@@ -1,3 +1,9 @@
+libpapki (1.0.26) unstable; urgency=medium
+
+  * disable whole program optimization in MSVC
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 22 Sep 2016 16:57:39 +0300
+
 libpapki (1.0.25) unstable; urgency=medium
 
   * rasp deploy fix
