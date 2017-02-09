@@ -46,6 +46,7 @@ before_install:
     brew update > /dev/null &&
     brew install prorab &&
 
+    brew install openssl &&
     echo rvm_autoupdate_flag=2 >> ~/.rvmrc &&
     rvm install ruby-2.2.2 &&
     rvm use ruby-2.2.2 &&
