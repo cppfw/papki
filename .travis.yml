@@ -47,7 +47,6 @@ before_install:
     brew install prorab &&
 
     brew install --force openssl &&
-    echo rvm_autoupdate_flag=2 >> ~/.rvmrc &&
     rvm install ruby-2.2.2 &&
     rvm use ruby-2.2.2 &&
     sudo gem install cocoapods &&
