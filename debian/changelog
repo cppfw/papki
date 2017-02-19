@@ -1,3 +1,9 @@
+libpapki (1.0.31) unstable; urgency=medium
+
+  * raspberry pi build tweak
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 19 Feb 2017 16:54:14 +0200
+
 libpapki (1.0.30) unstable; urgency=medium
 
   * ios deploy fixed
