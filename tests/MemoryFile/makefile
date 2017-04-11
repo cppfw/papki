@@ -24,14 +24,15 @@ else ifeq ($(prorab_os),windows)
     this_ldflags += -L/usr/lib -L/usr/local/lib
 endif
 
-#add dependency on libpapki.so
-$(abspath $(prorab_this_dir)tests): $(abspath $(prorab_this_dir)../../src/libpapki$(prorab_lib_extension))
-
 
 $(eval $(prorab-build-app))
 
-include $(prorab_this_dir)../test_target.mk
+#add dependency on libpapki.so
+$(prorab_this_name): $(abspath $(d)../../src/libpapki$(soext))
+
+
+include $(d)../test_target.mk
 
 
 #include makefile for building papki
-$(eval $(call prorab-include,$(prorab_this_dir)../../src/makefile))
+$(eval $(call prorab-include,$(d)../../src/makefile))
