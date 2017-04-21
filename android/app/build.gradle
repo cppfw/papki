@@ -89,3 +89,31 @@ dependencies {
 //    compile 'com.android.support:appcompat-v7:23.1.0'
     testCompile 'junit:junit:4.12'
 }
+
+
+
+task extractNDKLibs {
+    doLast {
+        configurations.compile.each {
+//            if (it.name.contains("sdk-base") || it.name.contains("sdk-audio")) {
+                def file = it.absoluteFile
+                copy {
+                    from zipTree(file)
+                    into "build/ndkLibs"
+                    include "jni/**/*"
+                }
+//            }
+        }
+    }
+}
+
+task deleteNDKLibs(type: Delete) {
+    delete "src/main/nkdLibs/"
+}
+
+build.dependsOn('extractNDKLibs')
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('generate')) {
+        task.dependsOn('extractNDKLibs')
+    }
+}
