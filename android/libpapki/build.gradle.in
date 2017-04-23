@@ -15,12 +15,16 @@ model {
             versionName = '1.0'
         }
         ndk {
-            moduleName = "utki"
+            platformVersion = 21
+            moduleName = "papki"
+            toolchain = 'clang'
             abiFilters.addAll(['armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64']) //this is default
             ldLibs.addAll(['android', 'log'])
+            stl = 'c++_shared'
             cppFlags.add("-std=c++11")
             cppFlags.add("-fexceptions")
             cppFlags.add("-frtti")
+            cppFlags.add("-I" + projectDir.getAbsolutePath() + "/build/ndkLibs/include")
         }
     }
 
@@ -40,21 +44,49 @@ model {
 
 }
 
+repositories {
+    maven {
+        url 'https://dl.bintray.com/igagis/android/'
+    }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'io.github.igagis:libutki:1.1.4+'
+    testCompile 'junit:junit:4.12'
+}
+
+
+//Extract NDK files from AARs
+task extractNDKLibs {
+    doLast {
+        configurations.compile.each {
+            def file = it.absoluteFile
+            copy {
+                from zipTree(file)
+                into "build/"
+                include "ndkLibs/**/*"
+            }
+        }
+    }
+}
+build.dependsOn('extractNDKLibs')
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('generate')) {
+        task.dependsOn('extractNDKLibs')
+    }
+}
+
+
+
+
+//pack library files to aar
 install {
     repositories.mavenInstaller {
         pom.project {
-            groupId "org.igagis"
+            groupId "io.github.igagis"
             artifactId "libpapki"
             version "1.0.0"
         }
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-//    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
-}
