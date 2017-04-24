@@ -1,3 +1,7 @@
+branches:
+  except:
+  - release
+
 sudo: required
 
 matrix:
