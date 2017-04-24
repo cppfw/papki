@@ -42,6 +42,7 @@ model {
             // build a default combined apk including all ABIs.
             // abiFilters.addAll(['x86'])
         }
+
         sources {
             main {
                 jni {
@@ -73,6 +74,10 @@ model {
                 proguardFiles.add(file('proguard-rules.pro'))
             }
         }
+    }
+
+    android.lintOptions {
+        abortOnError false
     }
 }
 
