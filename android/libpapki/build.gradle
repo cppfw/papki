@@ -1,5 +1,4 @@
 apply plugin: "com.android.model.library"
-apply plugin: 'com.github.dcendents.android-maven'
 
 model {
 
@@ -20,7 +19,7 @@ model {
             toolchain = 'clang'
             abiFilters.addAll(['armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64']) //this is default
             ldLibs.addAll(['android', 'log'])
-            stl = 'c++_shared'
+            stl = 'c++_static'
             cppFlags.add("-std=c++11")
             cppFlags.add("-fexceptions")
             cppFlags.add("-frtti")
@@ -51,7 +50,7 @@ repositories {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'io.github.igagis:libutki:1.1.4+'
+    compile 'io.github.igagis:libutki:+'
     testCompile 'junit:junit:4.12'
 }
 
@@ -71,7 +70,7 @@ task extractNDKLibs {
 }
 build.dependsOn('extractNDKLibs')
 tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('generate')) {
+    if (task.name.startsWith('compile')) {
         task.dependsOn('extractNDKLibs')
     }
 }
@@ -80,13 +79,24 @@ tasks.whenTaskAdded { task ->
 
 
 //pack library files to aar
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            groupId "io.github.igagis"
-            artifactId "libpapki"
-            version "1.0.0"
-        }
+def aarName = name
+
+task copyNdkLibsToAAR(type: Zip) {
+    baseName = aarName
+    version = "\$(version)"
+    extension = 'aar.in'
+    destinationDir = file('..') //put resulting AAR file to upper level directory
+
+    from zipTree("build/outputs/aar/" + aarName + "-release.aar")
+    from("../../src") {
+        exclude('makefile')
+        exclude('soname.txt')
+        into('ndkLibs/include')
+    }
+    from("build/intermediates/binaries/debug/lib"){
+        include('**/*.a')
+        into('ndkLibs')
     }
 }
 
+build.finalizedBy('copyNdkLibsToAAR')

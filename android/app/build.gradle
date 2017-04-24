@@ -102,7 +102,7 @@ task extractNDKLibs {
 }
 build.dependsOn('extractNDKLibs')
 tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('generate')) {
+    if (task.name.startsWith('compile')) {
         task.dependsOn('extractNDKLibs')
     }
 }
