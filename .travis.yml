@@ -163,9 +163,9 @@ script:
     sudo chroot /srv/chroot/rasp-armhf bash -c "cd /build && dpkg-buildpackage -us -uc";
   fi
 - if [ "$BUILD_NAME" == "android" ]; then
+    (cd android && ./gradlew build) &&
     prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` android/*.pom.in &&
-    prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` android/*.aar.in --filename-only &&
-    (cd android && ./gradlew build);
+    prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` android/*.aar.in --filename-only;
   fi
 
 before_deploy:
