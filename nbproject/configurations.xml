@@ -28,6 +28,7 @@
       <itemPath>debian/changelog</itemPath>
       <itemPath>debian/control.in</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
+      <itemPath>android/libpapki-$(version).pom.in</itemPath>
       <itemPath>cocoapods/libpapki.podspec.in</itemPath>
       <itemPath>homebrew/libpapki.rb.in</itemPath>
       <itemPath>makefile</itemPath>
