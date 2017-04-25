@@ -1,3 +1,9 @@
+libpapki (1.0.34) unstable; urgency=medium
+
+  * android dependency type corrected to aar
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 25 Apr 2017 18:21:51 +0300
+
 libpapki (1.0.33) unstable; urgency=medium
 
   * android deploy fix

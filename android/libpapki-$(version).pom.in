@@ -11,7 +11,7 @@
 		  <groupId>io.github.igagis</groupId>
 		  <artifactId>libutki</artifactId>
 		  <version>[1.1.5,)</version>
-		  <type>pom</type>
+		  <type>aar</type>
 		  <scope>compile</scope>
 	  </dependency>
   </dependencies>
