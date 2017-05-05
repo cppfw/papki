@@ -1,3 +1,9 @@
+libpapki (1.0.36) unstable; urgency=medium
+
+  * test release
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 05 May 2017 13:30:51 +0300
+
 libpapki (1.0.35) unstable; urgency=medium
 
   * remove rubbish from android manifest

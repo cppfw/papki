@@ -146,6 +146,9 @@ public:
 		if(this->isOpened()){
 			throw IllegalStateExc();
 		}
+		if(this->isDir()){
+			throw IllegalStateExc("File refers to dir, directory cannot be opened.");
+		}
 		this->openInternal(mode);
 		
 		//set open mode
