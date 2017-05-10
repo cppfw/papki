@@ -1,3 +1,9 @@
+libpapki (1.0.39) unstable; urgency=medium
+
+  * updating git access token
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 10 May 2017 13:02:39 +0300
+
 libpapki (1.0.38) unstable; urgency=medium
 
   * cygport correction
