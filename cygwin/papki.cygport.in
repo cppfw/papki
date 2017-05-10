@@ -10,7 +10,7 @@ Filesystem library."
 SRC_URI="https://github.com/igagis/papki/archive/${VERSION}.tar.gz"
 
 #compile time dependencies
-DEPEND="prorab, utki"
+DEPEND="prorab utki"
 
 #runtime dependencies
 REQUIRES="utki"
