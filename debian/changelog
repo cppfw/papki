@@ -1,3 +1,9 @@
+libpapki (1.0.41) unstable; urgency=medium
+
+  * rebuild cygwin binaries
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 03 Jul 2017 22:15:10 +0300
+
 libpapki (1.0.40) unstable; urgency=medium
 
   * msvs tools v141 build
