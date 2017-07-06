@@ -1,3 +1,9 @@
+libpapki (1.0.42) unstable; urgency=medium
+
+  * rebuild cygwin package with new prorab
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 06 Jul 2017 18:33:33 +0300
+
 libpapki (1.0.41) unstable; urgency=medium
 
   * rebuild cygwin binaries
