@@ -1,10 +1,3 @@
-/* 
- * File:   BufferFile.cpp
- * Author: igagis
- * 
- * Created on January 31, 2014, 4:17 PM
- */
-
 #include "BufferFile.hpp"
 
 #include <algorithm>

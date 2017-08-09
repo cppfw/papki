@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C13C1CD1C0F773800DFAF42 /* BufferFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C13C1C91C0F773800DFAF42 /* BufferFile.cpp */; };
-		2C13C1CE1C0F773800DFAF42 /* File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C13C1CA1C0F773800DFAF42 /* File.cpp */; };
-		2C13C1CF1C0F773800DFAF42 /* FSFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C13C1CB1C0F773800DFAF42 /* FSFile.cpp */; };
-		2C13C1D01C0F773800DFAF42 /* MemoryFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C13C1CC1C0F773800DFAF42 /* MemoryFile.cpp */; };
 		2C13C1D31C0F77C900DFAF42 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C13C1D11C0F77C900DFAF42 /* main.cpp */; };
 		2C6F90411C0F75E600125E53 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C6F90401C0F75E600125E53 /* tests.cpp */; };
 		2C6F90431C0F75FF00125E53 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C6F90421C0F75FF00125E53 /* tests.cpp */; };
@@ -20,13 +16,9 @@
 
 /* Begin PBXFileReference section */
 		289093EEF1FED6813279AE0F /* libPods-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C13C1C91C0F773800DFAF42 /* BufferFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BufferFile.cpp; path = ../src/papki/BufferFile.cpp; sourceTree = "<group>"; };
-		2C13C1CA1C0F773800DFAF42 /* File.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = File.cpp; path = ../src/papki/File.cpp; sourceTree = "<group>"; };
-		2C13C1CB1C0F773800DFAF42 /* FSFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FSFile.cpp; path = ../src/papki/FSFile.cpp; sourceTree = "<group>"; };
-		2C13C1CC1C0F773800DFAF42 /* MemoryFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MemoryFile.cpp; path = ../src/papki/MemoryFile.cpp; sourceTree = "<group>"; };
-		2C13C1D11C0F77C900DFAF42 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = tests/main.cpp; sourceTree = "<group>"; };
-		2C6F90401C0F75E600125E53 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tests.cpp; path = ../tests/FSFile/tests.cpp; sourceTree = "<group>"; };
-		2C6F90421C0F75FF00125E53 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tests.cpp; path = ../tests/MemoryFile/tests.cpp; sourceTree = "<group>"; };
+		2C13C1D11C0F77C900DFAF42 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2C6F90401C0F75E600125E53 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tests.cpp; path = ../../tests/FSFile/tests.cpp; sourceTree = "<group>"; };
+		2C6F90421C0F75FF00125E53 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tests.cpp; path = ../../tests/MemoryFile/tests.cpp; sourceTree = "<group>"; };
 		2CEEAFE51C0F7511009A9F15 /* tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CEEAFF41C0F7511009A9F15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CEEAFF91C0F7511009A9F15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,13 +41,6 @@
 		2CEEAFDC1C0F7511009A9F15 = {
 			isa = PBXGroup;
 			children = (
-				2C13C1D11C0F77C900DFAF42 /* main.cpp */,
-				2C13C1C91C0F773800DFAF42 /* BufferFile.cpp */,
-				2C13C1CA1C0F773800DFAF42 /* File.cpp */,
-				2C13C1CB1C0F773800DFAF42 /* FSFile.cpp */,
-				2C13C1CC1C0F773800DFAF42 /* MemoryFile.cpp */,
-				2C6F90421C0F75FF00125E53 /* tests.cpp */,
-				2C6F90401C0F75E600125E53 /* tests.cpp */,
 				2CEEAFE71C0F7511009A9F15 /* tests */,
 				2CEEAFE61C0F7511009A9F15 /* Products */,
 				7388518D6A096D5077027C45 /* Pods */,
@@ -74,6 +59,9 @@
 		2CEEAFE71C0F7511009A9F15 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				2C13C1D11C0F77C900DFAF42 /* main.cpp */,
+				2C6F90421C0F75FF00125E53 /* tests.cpp */,
+				2C6F90401C0F75E600125E53 /* tests.cpp */,
 				2CEEAFF41C0F7511009A9F15 /* Assets.xcassets */,
 				2CEEAFF91C0F7511009A9F15 /* Info.plist */,
 				2CEEAFE81C0F7511009A9F15 /* Supporting Files */,
@@ -224,10 +212,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C13C1CD1C0F773800DFAF42 /* BufferFile.cpp in Sources */,
-				2C13C1CE1C0F773800DFAF42 /* File.cpp in Sources */,
-				2C13C1CF1C0F773800DFAF42 /* FSFile.cpp in Sources */,
-				2C13C1D01C0F773800DFAF42 /* MemoryFile.cpp in Sources */,
 				2C13C1D31C0F77C900DFAF42 /* main.cpp in Sources */,
 				2C6F90431C0F75FF00125E53 /* tests.cpp in Sources */,
 				2C6F90411C0F75E600125E53 /* tests.cpp in Sources */,

@@ -1,10 +1,3 @@
-/* 
- * File:   MemoryFile.cpp
- * Author: igagis
- * 
- * Created on January 31, 2014, 4:17 PM
- */
-
 #include "MemoryFile.hpp"
 
 #include <algorithm>
