@@ -1,3 +1,9 @@
+libpapki (1.0.43) unstable; urgency=medium
+
+  * build for stretch
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 21 Aug 2017 22:13:32 +0300
+
 libpapki (1.0.42) unstable; urgency=medium
 
   * rebuild cygwin package with new prorab
