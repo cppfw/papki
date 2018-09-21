@@ -202,6 +202,12 @@ void FSFile::makeDir(){
 	if(mkdir(this->path().c_str(), 0777) != 0){
 		throw papki::Exc("mkdir() failed");
 	}
+#elif M_OS == M_OS_WINDOWS
+	if (!CreateDirectory(this->path().c_str(), NULL)){
+		if(GetLastError() != ERROR_ALREADY_EXISTS){
+			throw papki::Exc("CreateDirectory() failed");
+		}
+	}
 #else
 	throw papki::Exc("creating directory is not supported");
 #endif
