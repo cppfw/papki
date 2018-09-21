@@ -1,8 +1,3 @@
-/**
- * @file Ordinary file system File implementation
- * @author Ivan Gagis <igagis@gmail.com>
- */
-
 #pragma once
 
 #include <cstdio>

@@ -60,9 +60,6 @@ void FSFile::openInternal(E_Mode mode){
 	}
 }
 
-
-
-//override
 void FSFile::closeInternal()const noexcept{
 	ASSERT(this->handle)
 
@@ -70,9 +67,6 @@ void FSFile::closeInternal()const noexcept{
 	this->handle = 0;
 }
 
-
-
-//override
 size_t FSFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 	ASSERT(this->handle)
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
@@ -84,9 +78,6 @@ size_t FSFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 	return numBytesRead;
 }
 
-
-
-//override
 size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
@@ -140,9 +131,6 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	return numBytesToSeek;
 }
 
-
-
-//override
 void FSFile::rewindInternal()const{
 	if(!this->isOpened()){
 		throw papki::IllegalStateExc("cannot rewind, file is not opened");
@@ -154,9 +142,6 @@ void FSFile::rewindInternal()const{
 	}
 }
 
-
-
-//override
 bool FSFile::exists()const{
 	if(this->isOpened()){ //file is opened => it exists
 		return true;
@@ -186,7 +171,6 @@ bool FSFile::exists()const{
 
 
 
-//override
 void FSFile::makeDir(){
 	if(this->isOpened()){
 		throw papki::IllegalStateExc("cannot make directory when file is opened");
@@ -196,10 +180,10 @@ void FSFile::makeDir(){
 		throw papki::Exc("invalid directory name");
 	}
 
-#if M_OS == M_OS_LINUX
+#if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 //	TRACE(<< "creating directory = " << this->Path() << std::endl)
 	umask(0);//clear umask for proper permissions of newly created directory
-	if(mkdir(this->path().c_str(), 0777) != 0){
+	if(mkdir(this->path().c_str(), 0755) != 0){
 		throw papki::Exc("mkdir() failed");
 	}
 #elif M_OS == M_OS_WINDOWS
