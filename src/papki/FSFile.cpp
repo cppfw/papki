@@ -28,7 +28,7 @@ void FSFile::openInternal(E_Mode mode){
 	if(this->isDir()){
 		throw papki::Exc("path refers to a directory, directories can't be opened");
 	}
-	
+
 	const char* modeStr;
 	switch(mode){
 		case File::E_Mode::WRITE:
@@ -92,42 +92,42 @@ size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 
 size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	ASSERT(this->handle)
-	
+
 	//NOTE: fseek() accepts 'long int' as offset argument which is signed and can be
 	//      less than size_t value passed as argument to this function.
 	//      Therefore, do several seek operations with smaller offset if necessary.
-	
+
 	typedef long int T_FSeekOffset;
 	const std::size_t DMax = std::size_t(
 			((unsigned long int)(-1)) >> 1
 		);
 	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
 	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
-	
+
 	utki::clampTop(numBytesToSeek, this->curPos());
-	
+
 	for(size_t numBytesLeft = numBytesToSeek; numBytesLeft != 0;){
 		ASSERT(numBytesLeft <= numBytesToSeek)
-		
+
 		T_FSeekOffset offset;
 		if(numBytesLeft > DMax){
 			offset = T_FSeekOffset(DMax);
 		}else{
 			offset = T_FSeekOffset(numBytesLeft);
 		}
-		
+
 		ASSERT(offset > 0)
-		
+
 		if(fseek(this->handle, -offset, SEEK_CUR) != 0){
 			throw papki::Exc("fseek() failed");
 		}
-		
+
 		ASSERT(size_t(offset) < size_t(-1))
 		ASSERT(numBytesLeft >= size_t(offset))
-		
+
 		numBytesLeft -= size_t(offset);
 	}
-	
+
 	return numBytesToSeek;
 }
 
@@ -146,14 +146,14 @@ bool FSFile::exists()const{
 	if(this->isOpened()){ //file is opened => it exists
 		return true;
 	}
-	
+
 	if(this->path().size() == 0){
 		return false;
 	}
 
 	//if it is a directory, check directory existence
 	if(this->path()[this->path().size() - 1] == '/'){
-#if M_OS == M_OS_LINUX
+#if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 		DIR *pdir = opendir(this->path().c_str());
 		if(!pdir){
 			return false;
@@ -161,6 +161,19 @@ bool FSFile::exists()const{
 			closedir(pdir);
 			return true;
 		}
+#elif M_OS == M_OS_WINDOWS
+		DWORD attrs = GetFileAttributesA(this->path().c_str());
+		if (attrs == INVALID_FILE_ATTRIBUTES){
+			//Could not get file attributes, perhaps the file/directory does not exist.
+			return false;
+		}
+
+		if (attrs & FILE_ATTRIBUTE_DIRECTORY){
+			//This is a directory and it exists
+			return true;
+		}
+
+		return false;
 #else
 		throw papki::Exc("Checking for directory existence is not supported");
 #endif
@@ -225,7 +238,7 @@ std::string FSFile::getHomeDir() {
 #	else
 #		error "unsupported OS"
 #	endif
-	
+
 	if(!home){
 		throw papki::Exc("HOME environment variable does not exist");
 	}
@@ -234,7 +247,7 @@ std::string FSFile::getHomeDir() {
 #else
 #	error "unsupported os"
 #endif
-	
+
 	//append trailing '/' if needed
 	if(ret.size() == 0 || ret[ret.size() - 1] != '/'){
 		ret += '/';
@@ -339,7 +352,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 				s += "/";
 
 			files.push_back(s);
-			
+
 			if(files.size() == maxEntries){
 				break;
 			}
