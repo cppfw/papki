@@ -113,7 +113,7 @@ before_install:
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
     sudo apt-get update -qq &&
     sudo apt-get install -qq myci;
-    sudo prorab-make-raspberry-chroot.sh /srv/chroot/rasp-armhf &&
+    sudo myci-make-raspberry-chroot.sh /srv/chroot/rasp-armhf &&
     echo "deb http://dl.bintray.com/igagis/rasp unstable main" | sudo tee /srv/chroot/rasp-armhf/etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo chroot /srv/chroot/rasp-armhf apt-get update &&
     sudo chroot /srv/chroot/rasp-armhf apt-get install --allow-unauthenticated -qq -y $linuxDependencies g++ &&
@@ -212,13 +212,13 @@ deploy:
   dry-run: false
 - provider: script
   skip_cleanup: true
-  script: prorab-deploy-homebrew.sh -t igagis/tap
+  script: myci-deploy-homebrew.sh -t igagis/tap
   on:
     tags: true
     condition: $BUILD_NAME = macosx
 - provider: script
   skip_cleanup: true
-  script: rvm 2.3.3 do prorab-deploy-cocoapods.sh -r igagis
+  script: rvm 2.3.3 do myci-deploy-cocoapods.sh -r igagis
   on:
     tags: true
     condition: $BUILD_NAME = ios
