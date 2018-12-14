@@ -18,8 +18,6 @@ this_srcs += papki/MemoryFile.cpp
 
 
 
-this_cxxflags := 
-
 ifeq ($(debug),true)
     this_cxxflags += -DDEBUG
 endif
