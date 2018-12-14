@@ -9,10 +9,9 @@ url="http://github.com/igagis/papki"
 license=('MIT')
 groups=()
 
-#Need 'diffutils' package for 'cmp' program
-depends=('make' 'diffutils')
+depends=('mingw-w64-utki')
 
-makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen' 'mingw-w64-utki')
+makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen')
 checkdepends=('myci')
 optdepends=()
 provides=()
