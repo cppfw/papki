@@ -24,6 +24,7 @@ else ifeq ($(prorab_os),windows)
     this_ldflags += -L/usr/lib -L/usr/local/lib
 endif
 
+this_no_install := true
 
 $(eval $(prorab-build-app))
 

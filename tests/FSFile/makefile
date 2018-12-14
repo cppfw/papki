@@ -23,16 +23,14 @@ else ifeq ($(prorab_os),windows)
 #    this_ldflags += -L/usr/lib -L/usr/local/lib
 endif
 
+this_no_install := true
 
 $(eval $(prorab-build-app))
 
-include $(prorab_this_dir)../test_target.mk
+include $(d)../test_target.mk
 
 #add dependency on libpapki.so/dll
 $(prorab_this_name): $(abspath $(d)../../src/libpapki$(soext))
-
-include $(prorab_this_dir)../test_target.mk
-
 
 #include makefile for building papki
 $(eval $(call prorab-include,$(d)../../src/makefile))
