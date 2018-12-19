@@ -15,7 +15,7 @@ environment:
 
 install:
   - cmd: "%BASH% -lc \"echo -e '[pacman]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/mingw/$arch' >> /etc/pacman.conf\""
-  - cmd: "%BASH% -lc \"pacman -Sy --noconfirm myci && pacman -Syu --noconfirm && pacman -Syu --noconfirm\""
+  - cmd: "%BASH% -lc \"pacman -Sy --noconfirm myci && pacman -Syu --noconfirm --ignore=msys2-runtime\""
   - ps: (new-object net.webclient).DownloadFile('http://coapp.org/files/CoApp.Tools.Powershell.msi', 'C:\CoApp.Tools.Powershell.msi')
   - ps: Start-Process -FilePath msiexec -ArgumentList /i, 'C:\CoApp.Tools.Powershell.msi', /quiet -Wait
   - ps: $env:PSModulePath = $env:PSModulePath + ';C:\Program Files (x86)\Outercurve Foundation\Modules'
