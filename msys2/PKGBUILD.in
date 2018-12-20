@@ -27,7 +27,7 @@ url="http://github.com/igagis/papki"
 license=('MIT')
 groups=()
 
-depends=('${pkgPrefix}utki')
+depends=("${pkgPrefix}utki")
 
 makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen')
 checkdepends=('myci')
