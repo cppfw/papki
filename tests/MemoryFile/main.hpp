@@ -7,6 +7,4 @@
 
 inline void TestTingMemoryFile(){
 	TestBasicMemoryFile::Run();
-
-	TRACE_ALWAYS(<< "[PASSED]" << std::endl)
 }
