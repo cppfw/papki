@@ -1,15 +1,33 @@
 # Maintainer: Ivan Gagis <igagis@gmail.com>
-pkgname=mingw-w64-papki
+
+if [ "$MSYSTEM" == "MSYS" ]; then
+	pkgPrefix=
+	dirPrefix=/usr
+	arch=('x86_64' 'i686')
+elif [ "$MSYSTEM" == "MINGW32" ]; then
+	pkgPrefix=mingw-w64-i686-
+	dirPrefix=/mingw32
+	arch=('any')
+elif [ "$MSYSTEM" == "MINGW64" ]; then
+	pkgPrefix=mingw-w64-x86_64-
+	dirPrefix=/mingw64
+	arch=('any')
+else
+	echo "ERROR: unknown MSYS shell: $MSYSTEM"
+	exit 1
+fi
+
+pkgname="${pkgPrefix}papki"
 pkgver=$(version)
 pkgrel=1
 epoch=
 pkgdesc="file system abstraction library in C++"
-arch=('any')
+#arch=('any') #defined above
 url="http://github.com/igagis/papki"
 license=('MIT')
 groups=()
 
-depends=('mingw-w64-utki')
+depends=("${pkgPrefix}utki")
 
 makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen')
 checkdepends=('myci')
@@ -44,5 +62,5 @@ check() {
 
 package() {
 	cd "$rootDir"
-	make DESTDIR="$pkgdir" PREFIX=/mingw64 install
+	make DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
 }
