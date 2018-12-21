@@ -13,7 +13,9 @@ environment:
 
 
 install:
-  - C:\msys64\usr\bin\bash -lc "echo -e '[igagis_mingw64]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/mingw/x86_64' >> /etc/pacman.conf"
+  - C:\msys64\usr\bin\bash -lc "echo -e '[igagis_msys]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/msys' >> /etc/pacman.conf"
+  - C:\msys64\usr\bin\bash -lc "echo -e '[igagis_mingw64]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/mingw64' >> /etc/pacman.conf"
+  - C:\msys64\usr\bin\bash -lc "echo -e '[igagis_mingw32]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/mingw32' >> /etc/pacman.conf"
   - C:\msys64\usr\bin\pacman --noconfirm --ask 20 --sync --refresh --refresh --sysupgrade --sysupgrade
   - C:\msys64\usr\bin\pacman --noconfirm --ask 20 --sync --refresh --refresh --sysupgrade --sysupgrade
   - c:\msys64\usr\bin\pacman -Sy --noconfirm myci
@@ -35,7 +37,8 @@ test_script:
 
 before_deploy:
 - cmd: if "%APPVEYOR_REPO_TAG%"=="true" (
-          C:\msys64\usr\bin\bash -lc "cd /c/build && myci-deploy-pacman-bintray.sh -u igagis -r msys2 -p mingw/x86_64 -d igagis_mingw64 msys2/mingw-w64-x86_64-*-any.pkg.tar.xz"
+          C:\msys64\usr\bin\bash -lc "cd /c/build && myci-deploy-pacman-bintray.sh -u igagis -r msys2 -p mingw64 -d igagis_mingw64 msys2/mingw-w64-x86_64-*-any.pkg.tar.xz" &&
+          C:\msys64\usr\bin\bash -lc "cd /c/build && myci-deploy-pacman-bintray.sh -u igagis -r msys2 -p mingw32 -d igagis_mingw32 msys2/mingw-i686-*-any.pkg.tar.xz"
       ) else (
           echo Skipping deploy because not a tagged commit.
       )
