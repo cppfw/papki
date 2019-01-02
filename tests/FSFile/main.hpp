@@ -10,6 +10,4 @@ inline void TestTingFSFile(){
 	TestListDirContents::Run();
 	TestHomeDir::Run();
 	TestLoadWholeFileToMemory::Run();
-
-	TRACE_ALWAYS(<< "[PASSED]" << std::endl)
 }
