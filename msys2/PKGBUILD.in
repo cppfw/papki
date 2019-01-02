@@ -17,13 +17,15 @@ else
 	exit 1
 fi
 
-pkgname="${pkgPrefix}papki"
+packageName=papki
+
+pkgname="${pkgPrefix}${packageName}"
 pkgver=$(version)
 pkgrel=1
 epoch=
 pkgdesc="file system abstraction library in C++"
 #arch=('any') #defined above
-url="http://github.com/igagis/papki"
+url="http://github.com/igagis/${packageName}"
 license=('MIT')
 groups=()
 
