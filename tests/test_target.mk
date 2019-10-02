@@ -1,5 +1,6 @@
 ifeq ($(os),windows)
-    this_test_cmd := (cd $(d) && cmd /C 'set PATH=../../src;%PATH% && $$(notdir $$^)')
+    # to avoid /C converted to C:\ need to escape it as //C
+    this_test_cmd := (cd $(d) && cmd //C 'set PATH=../../src;%PATH% && $$(notdir $$^)')
 else ifeq ($(os),macosx)
     this_test_cmd := (cd $(d) && DYLD_LIBRARY_PATH=../../src ./$$(notdir $$^))
 else ifeq ($(os),linux)
@@ -22,7 +23,8 @@ $(eval $(this_rule))
 
 
 ifeq ($(os),windows)
-    this_gdb_cmd := (cd $(d) && cmd /C 'set PATH=../../src;%PATH% && gdb $$(notdir $$^)')
+    # to avoid /C converted to C:\ need to escape it as //C
+    this_gdb_cmd := (cd $(d) && cmd //C 'set PATH=../../src;%PATH% && gdb $$(notdir $$^)')
 else ifeq ($(os),macosx)
     this_gdb_cmd := (cd $(d) && DYLD_LIBRARY_PATH=../../src gdb ./$$(notdir $$^))
 else ifeq ($(os),linux)
