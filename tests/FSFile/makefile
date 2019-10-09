@@ -33,4 +33,4 @@ include $(d)../test_target.mk
 $(prorab_this_name): $(abspath $(d)../../src/libpapki$(soext))
 
 #include makefile for building papki
-$(eval $(call prorab-include,$(d)../../src/makefile))
+$(eval $(call prorab-try-include,$(d)../../src/makefile))
