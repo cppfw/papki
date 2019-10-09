@@ -7,7 +7,7 @@ configurations {
 
 	RuntimeLibrary {
 		key = "RuntimeLibrary";
-		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"
+		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL";
 	};
 }
 
@@ -40,30 +40,30 @@ nuget{
 			#destination = ${d_include}papki;
 			"..\src\papki\**\*.hpp"
 		};
-		
-		[x86,v140,release] { 
+
+		[x86,v140,release] {
 			lib: ..\msvs_solution\v140_Release\libpapki.lib;
 		}
-		[x86,v140,debug] { 
+		[x86,v140,debug] {
 			lib: ..\msvs_solution\v140_Debug\libpapki.lib;
 		}
-		[x64,v140,release] { 
+		[x64,v140,release] {
 			lib: ..\msvs_solution\x64\v140_Release\libpapki.lib;
 		}
-		[x64,v140,debug] { 
+		[x64,v140,debug] {
 			lib: ..\msvs_solution\x64\v140_Debug\libpapki.lib;
 		}
-		
-		[x86,v141,release] { 
+
+		[x86,v141,release] {
 			lib: ..\msvs_solution\v141_Release\libpapki.lib;
 		}
-		[x86,v141,debug] { 
+		[x86,v141,debug] {
 			lib: ..\msvs_solution\v141_Debug\libpapki.lib;
 		}
-		[x64,v141,release] { 
+		[x64,v141,release] {
 			lib: ..\msvs_solution\x64\v141_Release\libpapki.lib;
 		}
-		[x64,v141,debug] { 
+		[x64,v141,debug] {
 			lib: ..\msvs_solution\x64\v141_Debug\libpapki.lib;
 		}
 
