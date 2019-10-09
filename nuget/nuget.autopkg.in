@@ -6,8 +6,8 @@ configurations {
 	};
 
 	RuntimeLibrary {
-		key = "RuntimeLibrary";
-		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL";
+		key = "RuntimeLibrary"; // This is the key you can find in .vcxproj file
+		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"; // these choices must be valid values for .vcxproj file
 	};
 }
 
