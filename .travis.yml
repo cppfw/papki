@@ -29,11 +29,11 @@ matrix:
     - name: macosx
       os: osx
       compiler: clang
-      osx_image: xcode8.3
+      osx_image: xcode11
     - name: ios
       os: osx
       compiler: clang
-      osx_image: xcode8.3
+      osx_image: xcode11
     - name: android
       language: android
       android:
