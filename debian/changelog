@@ -1,3 +1,9 @@
+libpapki (1.0.58) unstable; urgency=medium
+
+  * nuget
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 14 Oct 2019 17:52:11 +0300
+
 libpapki (1.0.57) unstable; urgency=medium
 
   * nuget

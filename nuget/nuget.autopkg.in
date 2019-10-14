@@ -5,13 +5,9 @@ configurations {
 		choices: "v140,v141,v142";
 	};
 
-	UserRuntimeLibraryLinkage {
-		key = "RuntimeLibraryLinkage";
-		choices: "staticrt, dynamicrt";
-
-		dynamicrt {
-			condition = "( $(RuntimeLibraryLinkage.ToLower()) == '' Or $(RuntimeLibraryLinkage.ToLower()) == 'dynamicrt' )";
-		};
+	RuntimeLibrary {
+		key = "RuntimeLibrary"; // This is the key you can find in .vcxproj file
+		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"; // these choices must be valid values for .vcxproj file
 	};
 }
 
@@ -45,6 +41,8 @@ nuget{
 			"..\src\papki\**\*.hpp"
 		};
 
+		//==== v140 tools ====
+
 		[x86,v140,release] {
 			lib: ..\msvs_solution\v140_Release\libpapki.lib;
 		}
@@ -57,6 +55,8 @@ nuget{
 		[x64,v140,debug] {
 			lib: ..\msvs_solution\x64\v140_Debug\libpapki.lib;
 		}
+
+		//==== v141 tools ====
 
 		[x86,v141,release] {
 			lib: ..\msvs_solution\v141_Release\libpapki.lib;
@@ -71,31 +71,30 @@ nuget{
 			lib: ..\msvs_solution\x64\v141_Debug\libpapki.lib;
 		}
 
-		// ======= v142 tools ========
+		//==== v142 tools ====
 
-		[x86,v142,release,staticrt] {
+		[x86,v142,release,MultiThreaded] {
 			lib: ..\msvs_solution\v142_Release_MT\libpapki.lib;
 		}
-		[x86,v142,debug,staticrt] {
+		[x86,v142,debug,MultiThreadedDebug] {
 			lib: ..\msvs_solution\v142_Debug_MT\libpapki.lib;
 		}
-		[x64,v142,release,staticrt] {
+		[x64,v142,release,MultiThreaded] {
 			lib: ..\msvs_solution\x64\v142_Release_MT\libpapki.lib;
 		}
-		[x64,v142,debug,staticrt] {
+		[x64,v142,debug,MultiThreadedDebug] {
 			lib: ..\msvs_solution\x64\v142_Debug_MT\libpapki.lib;
 		}
-
-		[x86,v142,release,dynamicrt] {
+		[x86,v142,release,MultiThreadedDLL] {
 			lib: ..\msvs_solution\v142_Release_MD\libpapki.lib;
 		}
-		[x86,v142,debug,dynamicrt] {
+		[x86,v142,debug,MultiThreadedDebugDLL] {
 			lib: ..\msvs_solution\v142_Debug_MD\libpapki.lib;
 		}
-		[x64,v142,release,dynamicrt] {
+		[x64,v142,release,MultiThreadedDLL] {
 			lib: ..\msvs_solution\x64\v142_Release_MD\libpapki.lib;
 		}
-		[x64,v142,debug,dynamicrt] {
+		[x64,v142,debug,MultiThreadedDebugDLL] {
 			lib: ..\msvs_solution\x64\v142_Debug_MD\libpapki.lib;
 		}
 	}
