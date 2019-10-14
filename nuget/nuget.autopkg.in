@@ -5,8 +5,8 @@ configurations {
 		choices: "v140,v141,v142";
 	};
 
-	RuntimeLibrary {
-		key = "RuntimeLibrary";
+	UserRuntimeLibraryLinkage {
+		key = "RuntimeLibraryLinkage";
 		choices: "staticrt, dynamicrt";
 
 		dynamicrt {
