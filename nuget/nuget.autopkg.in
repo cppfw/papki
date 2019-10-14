@@ -10,7 +10,7 @@ configurations {
 		choices: "staticrt, dynamicrt";
 
 		dynamicrt {
-			condition = "( $(RuntimeLibrary.ToLower()) == '' Or $(RuntimeLibrary.ToLower()) == 'dynamicrt' )";
+			condition = "( $(RuntimeLibraryLinkage.ToLower()) == '' Or $(RuntimeLibraryLinkage.ToLower()) == 'dynamicrt' )";
 		};
 	};
 }
