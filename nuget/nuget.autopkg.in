@@ -6,8 +6,12 @@ configurations {
 	};
 
 	RuntimeLibrary {
-		key = "RuntimeLibrary"; // This is the key you can find in .vcxproj file
-		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"; // these choices must be valid values for .vcxproj file
+		key = "RuntimeLibrary";
+		choices: "staticrt, dynamicrt";
+
+		dynamicrt {
+			condition = "( $(RuntimeLibrary.ToLower()) == '' Or $(RuntimeLibrary.ToLower()) == 'dynamicrt' )";
+		};
 	};
 }
 
@@ -67,30 +71,33 @@ nuget{
 			lib: ..\msvs_solution\x64\v141_Debug\libpapki.lib;
 		}
 
-		[x86,v142,release,MultiThreaded] {
-                        lib: ..\msvs_solution\v142_Release_MT\libpapki.lib;
-                }
-                [x86,v142,debug,MultiThreadedDebug] {
-                        lib: ..\msvs_solution\v142_Debug_MT\libpapki.lib;
-                }
-                [x64,v142,release,MultiThreaded] {
-                        lib: ..\msvs_solution\x64\v142_Release_MT\libpapki.lib;
-                }
-                [x64,v142,debug,MultiThreadedDebug] {
-                        lib: ..\msvs_solution\x64\v142_Debug_MT\libpapki.lib;
-                }
-		[x86,v142,release,MultiThreadedDLL] {
-                        lib: ..\msvs_solution\v142_Release_MD\libpapki.lib;
-                }
-                [x86,v142,debug,MultiThreadedDebugDLL] {
-                        lib: ..\msvs_solution\v142_Debug_MD\libpapki.lib;
-                }
-                [x64,v142,release,MultiThreadedDLL] {
-                        lib: ..\msvs_solution\x64\v142_Release_MD\libpapki.lib;
-                }
-                [x64,v142,debug,MultiThreadedDebugDLL] {
-                        lib: ..\msvs_solution\x64\v142_Debug_MD\libpapki.lib;
-                }
+		// ======= v142 tools ========
+
+		[x86,v142,release,staticrt] {
+			lib: ..\msvs_solution\v142_Release_MT\libpapki.lib;
+		}
+		[x86,v142,debug,staticrt] {
+			lib: ..\msvs_solution\v142_Debug_MT\libpapki.lib;
+		}
+		[x64,v142,release,staticrt] {
+			lib: ..\msvs_solution\x64\v142_Release_MT\libpapki.lib;
+		}
+		[x64,v142,debug,staticrt] {
+			lib: ..\msvs_solution\x64\v142_Debug_MT\libpapki.lib;
+		}
+
+		[x86,v142,release,dynamicrt] {
+			lib: ..\msvs_solution\v142_Release_MD\libpapki.lib;
+		}
+		[x86,v142,debug,dynamicrt] {
+			lib: ..\msvs_solution\v142_Debug_MD\libpapki.lib;
+		}
+		[x64,v142,release,dynamicrt] {
+			lib: ..\msvs_solution\x64\v142_Release_MD\libpapki.lib;
+		}
+		[x64,v142,debug,dynamicrt] {
+			lib: ..\msvs_solution\x64\v142_Debug_MD\libpapki.lib;
+		}
 	}
 }
 
