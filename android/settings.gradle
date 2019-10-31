@@ -1,1 +1,1 @@
-include ':app', ':libpapki'
+include ':app', ':papki'
