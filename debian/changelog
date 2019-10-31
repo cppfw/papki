@@ -1,3 +1,9 @@
+libpapki (1.0.59) unstable; urgency=medium
+
+  * android package renamed
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 31 Oct 2019 14:40:30 +0200
+
 libpapki (1.0.58) unstable; urgency=medium
 
   * nuget
