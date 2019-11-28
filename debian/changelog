@@ -1,3 +1,9 @@
+libpapki (1.0.61) unstable; urgency=medium
+
+  * debian buster
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 28 Nov 2019 04:54:08 +0200
+
 libpapki (1.0.60) unstable; urgency=medium
 
   * deploy to msys2 from travis
