@@ -20,6 +20,12 @@ addons:
     - binfmt-support
     - qemu-user-static
     - myci
+  homebrew:
+    update: true
+    taps:
+    - igagis/tap
+    packages:
+    - myci
 
 matrix:
   include:
@@ -73,24 +79,10 @@ before_install:
     fi;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
-    rvm install ruby-2.3.3 &&
-    rvm use ruby-2.3.3 &&
-
-    brew update > /dev/null &&
-    brew tap igagis/tap &&
-    brew update > /dev/null &&
-    brew install prorab prorab-extra myci libutki;
+    brew install prorab prorab-extra libutki;
   fi
 # Force bundler 1.12.5 because version 1.13 has issues, see https://github.com/fastlane/fastlane/issues/6065#issuecomment-246044617
 - if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
-    rvm install ruby-2.3.3 &&
-    rvm use ruby-2.3.3 &&
-
-    brew update > /dev/null &&
-    brew tap igagis/tap &&
-    brew update > /dev/null &&
-    brew install myci &&
-
     sudo gem install cocoapods &&
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=xcode;
@@ -179,7 +171,7 @@ deploy:
     condition: $TRAVIS_JOB_NAME = macosx
 - provider: script
   skip_cleanup: true
-  script: rvm 2.3.3 do myci-deploy-cocoapods.sh -r igagis -v $PACKAGE_VERSION -u igagis -b cocoapods -p $PACKAGE_NAME-$PACKAGE_VERSION.zip cocoapods/$PACKAGE_NAME.podspec.in
+  script: myci-deploy-cocoapods.sh -r igagis -v $PACKAGE_VERSION -u igagis -b cocoapods -p $PACKAGE_NAME-$PACKAGE_VERSION.zip cocoapods/$PACKAGE_NAME.podspec.in
   on:
     tags: true
     condition: $TRAVIS_JOB_NAME = ios
