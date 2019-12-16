@@ -46,7 +46,7 @@ public:
 	~BufferFile()noexcept override{}
 
 	virtual std::unique_ptr<File> spawn()override{
-		throw papki::Exc("BufferFile::Spawn(): spawning is not supported.");
+		throw utki::exception("BufferFile::Spawn(): spawning is not supported.");
 	}
 
 protected:

@@ -76,14 +76,14 @@ bool File::isDir()const noexcept{
 
 
 std::vector<std::string> File::listDirContents(size_t maxEntries)const{
-	throw papki::Exc("File::ListDirContents(): not supported for this File instance");
+	throw papki::exception("File::ListDirContents(): not supported for this File instance");
 }
 
 
 
 size_t File::read(utki::Buf<std::uint8_t> buf)const{
 	if(!this->isOpened()){
-		throw papki::IllegalStateExc("Cannot read, file is not opened");
+		throw utki::illegal_state("Cannot read, file is not opened");
 	}
 	
 	size_t ret = this->readInternal(buf);
@@ -95,11 +95,11 @@ size_t File::read(utki::Buf<std::uint8_t> buf)const{
 
 size_t File::write(const utki::Buf<std::uint8_t> buf){
 	if(!this->isOpened()){
-		throw papki::IllegalStateExc("Cannot write, file is not opened");
+		throw utki::illegal_state("Cannot write, file is not opened");
 	}
 
 	if(this->ioMode != E_Mode::WRITE){
-		throw papki::Exc("file is opened, but not in WRITE mode");
+		throw utki::illegal_state("file is opened, but not in WRITE mode");
 	}
 	
 	size_t ret = this->writeInternal(buf);
@@ -133,7 +133,7 @@ size_t File::seekForwardInternal(size_t numBytesToSeek)const{
 
 
 void File::makeDir(){
-	throw papki::Exc("Make directory is not supported");
+	throw papki::exception("Make directory is not supported");
 }
 
 
@@ -154,7 +154,7 @@ struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
 
 std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)const{
 	if(this->isOpened()){
-		throw papki::IllegalStateExc("file should not be opened");
+		throw utki::illegal_state("file should not be opened");
 	}
 
 	File::Guard fileGuard(*this);//make sure we close the file upon exit from the function
@@ -218,7 +218,7 @@ std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 
 bool File::exists()const{
 	if(this->isDir()){
-		throw papki::Exc("File::Exists(): Checking for directory existence is not supported");
+		throw papki::exception("File::Exists(): Checking for directory existence is not supported");
 	}
 
 	if(this->isOpened()){
@@ -229,7 +229,7 @@ bool File::exists()const{
 	ASSERT(!this->isOpened())
 	try{
 		File::Guard fileGuard(const_cast<File&>(*this), File::E_Mode::READ);
-	}catch(papki::Exc&){
+	}catch(papki::exception&){
 		return false;//file opening failed, assume the file does not exist
 	}
 	return true;//file open succeeded => file exists
@@ -241,7 +241,7 @@ File::Guard::Guard(File& file, E_Mode mode) :
 		f(file)
 {
 	if(this->f.isOpened()){
-		throw papki::Exc("File::Guard::Guard(): file is already opened");
+		throw papki::exception("File::Guard::Guard(): file is already opened");
 	}
 
 	const_cast<File&>(this->f).open(mode);
@@ -252,7 +252,7 @@ File::Guard::Guard(const File& file) :
 		f(file)
 {
 	if(this->f.isOpened()){
-		throw papki::Exc("File::Guard::Guard(): file is already opened");
+		throw papki::exception("File::Guard::Guard(): file is already opened");
 	}
 
 	this->f.open();

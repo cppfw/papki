@@ -26,7 +26,7 @@ using namespace papki;
 
 void FSFile::openInternal(E_Mode mode){
 	if(this->isDir()){
-		throw papki::Exc("path refers to a directory, directories can't be opened");
+		throw papki::exception("path refers to a directory, directories can't be opened");
 	}
 
 	const char* modeStr;
@@ -41,7 +41,7 @@ void FSFile::openInternal(E_Mode mode){
 			modeStr = "rb";
 			break;
 		default:
-			throw papki::Exc("unknown mode");
+			throw papki::exception("unknown mode");
 			break;
 	}
 
@@ -56,7 +56,7 @@ void FSFile::openInternal(E_Mode mode){
 		TRACE(<< "FSFile::Open(): Path() = " << this->path().c_str() << std::endl)
 		std::stringstream ss;
 		ss << "fopen(" << this->path().c_str() << ") failed";
-		throw papki::Exc(ss.str());
+		throw papki::exception(ss.str());
 	}
 }
 
@@ -72,7 +72,7 @@ size_t FSFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
 	if(numBytesRead != buf.size()){//something happened
 		if(!feof(this->handle)){
-			throw papki::Exc("fread() error");//if it is not an EndOfFile then it is error
+			throw papki::exception("fread() error");//if it is not an EndOfFile then it is error
 		}
 	}
 	return numBytesRead;
@@ -82,7 +82,7 @@ size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
 	if(bytesWritten != buf.size()){//something bad has happened
-		throw papki::Exc("fwrite error");
+		throw papki::exception("fwrite error");
 	}
 
 	return bytesWritten;
@@ -119,7 +119,7 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 		ASSERT(offset > 0)
 
 		if(fseek(this->handle, -offset, SEEK_CUR) != 0){
-			throw papki::Exc("fseek() failed");
+			throw papki::exception("fseek() failed");
 		}
 
 		ASSERT(size_t(offset) < size_t(-1))
@@ -133,12 +133,12 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 
 void FSFile::rewindInternal()const{
 	if(!this->isOpened()){
-		throw papki::IllegalStateExc("cannot rewind, file is not opened");
+		throw utki::illegal_state("cannot rewind, file is not opened");
 	}
 
 	ASSERT(this->handle)
 	if(fseek(this->handle, 0, SEEK_SET) != 0){
-		throw papki::Exc("fseek() failed");
+		throw papki::exception("fseek() failed");
 	}
 }
 
@@ -175,7 +175,7 @@ bool FSFile::exists()const{
 
 		return false;
 #else
-		throw papki::Exc("Checking for directory existence is not supported");
+		throw papki::exception("Checking for directory existence is not supported");
 #endif
 	}else{
 		return this->File::exists();
@@ -186,27 +186,27 @@ bool FSFile::exists()const{
 
 void FSFile::makeDir(){
 	if(this->isOpened()){
-		throw papki::IllegalStateExc("cannot make directory when file is opened");
+		throw utki::illegal_state("cannot make directory when file is opened");
 	}
 
 	if(this->path().size() == 0 || this->path()[this->path().size() - 1] != '/'){
-		throw papki::Exc("invalid directory name");
+		throw papki::exception("invalid directory name");
 	}
 
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 //	TRACE(<< "creating directory = " << this->Path() << std::endl)
 	umask(0);//clear umask for proper permissions of newly created directory
 	if(mkdir(this->path().c_str(), 0755) != 0){
-		throw papki::Exc("mkdir() failed");
+		throw papki::exception("mkdir() failed");
 	}
 #elif M_OS == M_OS_WINDOWS
 	if (!CreateDirectory(this->path().c_str(), NULL)){
 		if(GetLastError() != ERROR_ALREADY_EXISTS){
-			throw papki::Exc("CreateDirectory() failed");
+			throw papki::exception("CreateDirectory() failed");
 		}
 	}
 #else
-	throw papki::Exc("creating directory is not supported");
+	throw papki::exception("creating directory is not supported");
 #endif
 }
 
@@ -225,7 +225,7 @@ std::string FSFile::getHomeDir() {
 		});
 
 		if (_dupenv_s(&buf, &size, "USERPROFILE") != 0) {
-			throw papki::Exc("USERPROFILE  environment virable could not be read");
+			throw papki::exception("USERPROFILE  environment virable could not be read");
 		}
 		ret = std::string(buf);
 	}
@@ -240,7 +240,7 @@ std::string FSFile::getHomeDir() {
 #	endif
 
 	if(!home){
-		throw papki::Exc("HOME environment variable does not exist");
+		throw papki::exception("HOME environment variable does not exist");
 	}
 
 	ret = std::string(home);
@@ -259,7 +259,7 @@ std::string FSFile::getHomeDir() {
 
 std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 	if(!this->isDir()){
-		throw papki::Exc("FSFile::ListDirContents(): this is not a directory");
+		throw papki::exception("FSFile::ListDirContents(): this is not a directory");
 	}
 
 	std::vector<std::string> files;
@@ -274,7 +274,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 		WIN32_FIND_DATA wfd;
 		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
 		if (h == INVALID_HANDLE_VALUE) {
-			throw papki::Exc("ListDirContents(): cannot find first file");
+			throw papki::exception("ListDirContents(): cannot find first file");
 		}
 
 		//create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
@@ -303,7 +303,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 			} while (FindNextFile(h, &wfd) != 0);
 
 			if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_NO_MORE_FILES) {
-				throw papki::Exc("ListDirContents(): find next file failed");
+				throw papki::exception("ListDirContents(): find next file failed");
 			}
 		}
 	}
@@ -314,7 +314,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 		if(!pdir){
 			std::stringstream ss;
 			ss << "FSFile::ListDirContents(): opendir() failure, error code = " << strerror(errno);
-			throw papki::Exc(ss.str());
+			throw papki::exception(ss.str());
 		}
 
 		//create DirentCloser to automatically call closedir on exit from the function in case of exceptions etc...
@@ -345,7 +345,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 			if(stat((this->path() + s).c_str(), &fileStats) < 0){
 				std::stringstream ss;
 				ss << "FSFile::ListDirContents(): stat() failure, error code = " << strerror(errno);
-				throw papki::Exc(ss.str());
+				throw papki::exception(ss.str());
 			}
 
 			if(fileStats.st_mode & S_IFDIR)//if this entry is a directory append '/' symbol to its end
@@ -362,7 +362,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 		if(errno != 0){
 			std::stringstream ss;
 			ss << "FSFile::ListDirContents(): readdir() failure, error code = " << strerror(errno);
-			throw papki::Exc(ss.str());
+			throw papki::exception(ss.str());
 		}
 	}
 
