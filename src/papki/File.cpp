@@ -198,15 +198,15 @@ std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 	
 	ASSERT(chunks.size() >= 1)
 	
-	std::vector<std::uint8_t> ret((chunks.size() - 1) * chunks.front().size() + res);
+	std::vector<std::uint8_t> ret((chunks.size() - (res == 0 ? 0 : 1)) * chunks.front().size() + res);
 	
 	auto p = ret.begin();
-	for(; chunks.size() > 1; p += chunks.front().size()){
+	for(; chunks.size() > (res == 0 ? 0 : 1); p += chunks.front().size()){
 		memcpy(&*p, &*chunks.front().begin(), chunks.front().size());
 		chunks.pop_front();
 	}
 	
-	ASSERT(chunks.size() == 1)
+	ASSERT(chunks.size() == (res == 0 ? 0 : 1))
 	ASSERT(res <= chunks.front().size())
 	memcpy(&*p, &*chunks.front().begin(), res);
 	ASSERT(p + res == ret.end())
