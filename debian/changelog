@@ -1,3 +1,9 @@
+libpapki (1.0.64) unstable; urgency=medium
+
+  * MSVS: use old style debug information format
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 03 Jan 2020 22:49:19 +0200
+
 libpapki (1.0.63) unstable; urgency=medium
 
   * load whole file to memory fix
