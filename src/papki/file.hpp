@@ -137,23 +137,23 @@ public:
 	/**
 	 * @brief Open file.
 	 * Opens file for reading/writing or creates the file.
-	 * @param mode - file opening mode (reading/writing/create).
+	 * @param io_mode - file opening mode (reading/writing/create).
 	 * @throw utki::invalid_state - if file is already opened.
 	 */
-	void open(mode mode){
+	void open(mode io_mode){
 		if(this->isOpened()){
 			throw utki::invalid_state("papki::file::open(): file is already opened");
 		}
 		if(this->isDir()){
 			throw utki::invalid_state("file refers to directory. Directory cannot be opened.");
 		}
-		this->openInternal(mode);
+		this->openInternal(io_mode);
 		
 		//set open mode
-		if(mode == mode::create){
+		if(io_mode == mode::create){
 			this->ioMode = mode::write;
 		}else{
-			this->ioMode = mode;
+			this->ioMode = io_mode;
 		}
 
 		this->isOpened_var = true;
