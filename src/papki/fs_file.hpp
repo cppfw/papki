@@ -65,7 +65,12 @@ public:
 	 * On *nix systems it will be something like "/home/user/".
      * @return Absolute path to the user's home directory.
      */
-	static std::string getHomeDir();
+	static std::string get_home_dir();
+
+	// TODO: deprecated, remove.
+	static std::string getHomeDir(){
+		return get_home_dir();
+	}
 
 
 
@@ -76,4 +81,4 @@ public:
 
 
 
-}//~namespace
+}

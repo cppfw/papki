@@ -212,7 +212,7 @@ void fs_file::make_dir(){
 
 
 
-std::string fs_file::getHomeDir() {
+std::string fs_file::get_home_dir() {
 	std::string ret;
 
 #if M_OS == M_OS_WINDOWS && M_COMPILER == M_COMPILER_MSVC
