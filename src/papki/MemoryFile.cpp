@@ -13,7 +13,7 @@ void MemoryFile::openInternal(mode mode){
 
 
 
-size_t MemoryFile::readInternal(utki::Buf<std::uint8_t> buf)const{
+size_t MemoryFile::readInternal(utki::span<std::uint8_t> buf)const{
 	ASSERT(this->idx <= this->data.size())
 	size_t numBytesRead = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
 	memcpy(buf.begin(), &this->data[idx], numBytesRead);
@@ -24,7 +24,7 @@ size_t MemoryFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 
 
 
-size_t MemoryFile::writeInternal(const utki::Buf<std::uint8_t> buf){
+size_t MemoryFile::writeInternal(const utki::span<std::uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
 	size_t numBytesTillEOF = this->data.size() - this->idx;

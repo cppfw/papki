@@ -76,12 +76,12 @@ bool file::isDir()const noexcept{
 
 
 std::vector<std::string> file::listDirContents(size_t maxEntries)const{
-	throw papki::exception("file::ListDirContents(): not supported for this file instance");
+	throw std::runtime_error("file::listDirContents(): not supported for this file instance");
 }
 
 
 
-size_t file::read(utki::Buf<std::uint8_t> buf)const{
+size_t file::read(utki::span<std::uint8_t> buf)const{
 	if(!this->isOpened()){
 		throw utki::invalid_state("Cannot read, file is not opened");
 	}
@@ -93,7 +93,7 @@ size_t file::read(utki::Buf<std::uint8_t> buf)const{
 
 
 
-size_t file::write(const utki::Buf<std::uint8_t> buf){
+size_t file::write(const utki::span<std::uint8_t> buf){
 	if(!this->isOpened()){
 		throw utki::invalid_state("Cannot write, file is not opened");
 	}
@@ -116,7 +116,7 @@ size_t file::seekForwardInternal(size_t numBytesToSeek)const{
 	for(; bytesRead != numBytesToSeek;){
 		size_t curNumToRead = numBytesToSeek - bytesRead;
 		utki::clampTop(curNumToRead, buf.size());
-		size_t res = this->read(utki::Buf<std::uint8_t>(&*buf.begin(), curNumToRead));
+		size_t res = this->read(utki::make_span(&*buf.begin(), curNumToRead));
 		ASSERT(bytesRead < numBytesToSeek)
 		ASSERT(numBytesToSeek >= res)
 		ASSERT(bytesRead <= numBytesToSeek - res)
@@ -133,7 +133,7 @@ size_t file::seekForwardInternal(size_t numBytesToSeek)const{
 
 
 void file::makeDir(){
-	throw papki::exception("Make directory is not supported");
+	throw std::runtime_error("Make directory is not supported");
 }
 
 
@@ -141,7 +141,7 @@ void file::makeDir(){
 namespace{
 const size_t DReadBlockSize = 4 * 1024;
 
-//Define a class derived from StaticBuffer. This is just to define custom
+//Define a class derived from std::array. This is just to define custom
 //copy constructor which will do nothing to avoid unnecessary buffer copying when
 //inserting new element to the list of chunks.
 struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
@@ -176,7 +176,7 @@ std::vector<std::uint8_t> file::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 		size_t numBytesToRead = maxBytesToLoad - bytesRead;
 		utki::clampTop(numBytesToRead, chunks.back().size());
 		
-		res = this->read(utki::Buf<std::uint8_t>(&*chunks.back().begin(), numBytesToRead));
+		res = this->read(utki::make_span(&*chunks.back().begin(), numBytesToRead));
 
 		bytesRead += res;
 		
@@ -218,7 +218,8 @@ std::vector<std::uint8_t> file::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 
 bool file::exists()const{
 	if(this->isDir()){
-		throw papki::exception("file::Exists(): Checking for directory existence is not supported");
+		// TODO: implement checking for directory existance
+		throw utki::invalid_state("file::exists(): path is a directory, checking for directory existence is not yet supported");
 	}
 
 	if(this->isOpened()){
@@ -229,7 +230,7 @@ bool file::exists()const{
 	ASSERT(!this->isOpened())
 	try{
 		file::guard fileGuard(const_cast<file&>(*this), file::mode::read);
-	}catch(papki::exception&){
+	}catch(std::runtime_error&){
 		return false; // file opening failed, assume the file does not exist
 	}
 	return true; // file open succeeded => file exists
@@ -237,11 +238,11 @@ bool file::exists()const{
 
 
 
-file::guard::guard(file& f, mode io_mode) :
+file::guard::guard(const file& f, mode io_mode) :
 		f(f)
 {
 	if(this->f.isOpened()){
-		throw papki::exception("file::guard::guard(): file is already opened");
+		throw utki::invalid_state("file::guard::guard(): file is already opened");
 	}
 
 	const_cast<file&>(this->f).open(io_mode);
@@ -252,7 +253,7 @@ file::guard::guard(const file& f) :
 		f(f)
 {
 	if(this->f.isOpened()){
-		throw papki::exception("file::guard::guard(): file is already opened");
+		throw utki::invalid_state("file::guard::guard(): file is already opened");
 	}
 
 	this->f.open();

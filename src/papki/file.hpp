@@ -2,15 +2,12 @@
 
 #include <string>
 #include <memory>
+#include <stdexcept>
 
 #include <utki/debug.hpp>
 #include <utki/config.hpp>
-#include <utki/Buf.hpp>
-#include <utki/Unique.hpp>
-
-
-#include "exception.hpp"
-
+#include <utki/span.hpp>
+#include <utki/exception.hpp>
 
 namespace papki{
 
@@ -238,7 +235,7 @@ public:
 	 *         except the case when end of file reached.
 	 * @throw utki::invalid_state - if file is not opened.
 	 */
-	size_t read(utki::Buf<std::uint8_t> buf)const;
+	size_t read(utki::span<std::uint8_t> buf)const;
 
 protected:
 	/**
@@ -249,8 +246,8 @@ protected:
 	 * @param buf - buffer to fill with read data.
 	 * @return number of bytes actually read.
 	 */
-	virtual size_t readInternal(utki::Buf<std::uint8_t> buf)const{
-		throw utki::exception("readInternal(): unsupported");
+	virtual size_t readInternal(utki::span<std::uint8_t> buf)const{
+		throw std::runtime_error("readInternal(): unsupported");
 	}
 	
 public:
@@ -263,7 +260,7 @@ public:
 	 *         in the file system.
 	 * @throw utki::invalid_state - if file is not opened or opened for reading only.
 	 */
-	size_t write(const utki::Buf<std::uint8_t> buf);
+	size_t write(const utki::span<std::uint8_t> buf);
 
 protected:
 	/**
@@ -274,8 +271,8 @@ protected:
 	 * @param buf - buffer containing the data to write.
 	 * @return number of bytes actually written.
 	 */
-	virtual size_t writeInternal(const utki::Buf<std::uint8_t> buf){
-		throw utki::exception("writeInternal(): unsupported");
+	virtual size_t writeInternal(const utki::span<std::uint8_t> buf){
+		throw std::runtime_error("writeInternal(): unsupported");
 	}
 	
 public:
@@ -339,7 +336,7 @@ protected:
 	 * @return number of bytes actually skipped.
 	 */
 	virtual size_t seekBackwardInternal(size_t numBytesToSeek)const{
-		throw utki::exception("SeekBackward(): unsupported");
+		throw std::runtime_error("SeekBackward(): unsupported");
 	}
 	
 public:
@@ -438,7 +435,7 @@ public:
 	class guard{
 		const file& f;
 	public:
-		guard(file &file, mode mode);
+		guard(const file &file, mode mode);
 
 		guard(const file &file);
 		

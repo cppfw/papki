@@ -7,9 +7,6 @@
 #include "tests.hpp"
 
 
-
-
-
 namespace TestSeekForward{
 void Run(){
 	papki::fs_file f("test.file.txt");
@@ -23,10 +20,10 @@ void Run(){
 			
 			papki::File::Guard fileGuard(f, papki::File::mode::read);
 			
-			auto res = f.read(utki::wrapBuf(buf));
+			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res == buf.size())
 			
-			res = f.read(utki::wrapBuf(testByte));
+			res = f.read(utki::make_span(testByte));
 			ASSERT_ALWAYS(res == testByte.size())
 			
 //			TRACE_ALWAYS(<< "testByte = " << unsigned(testByte[0]) << std::endl)
@@ -39,7 +36,7 @@ void Run(){
 
 			std::array<std::uint8_t, 1> buf;
 
-			auto res = f.read(utki::wrapBuf(buf));
+			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res == 1)
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])
@@ -52,7 +49,7 @@ void Run(){
 
 			std::array<std::uint8_t, 1> buf;
 
-			auto res = f.read(utki::wrapBuf(buf));
+			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res == 1)
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])

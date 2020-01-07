@@ -28,7 +28,7 @@ private:
 	BufferFile& operator=(BufferFile&&) = delete;
 	
 private:
-	utki::Buf<std::uint8_t> data;
+	utki::span<std::uint8_t> data;
 	mutable decltype(data)::iterator ptr;
 	
 public:
@@ -39,7 +39,7 @@ public:
 	 *               but ownership of the buffer is not taken. Thus, the buffer should remain alive during lifetime of this BufferFile object.
 	 */
 	//NOTE: ownership of the buffer is not taken, buffer must remain alive during this object's lifetime.
-	BufferFile(utki::Buf<std::uint8_t> data) :
+	BufferFile(utki::span<std::uint8_t> data) :
 			data(data)
 	{}
 	
@@ -55,9 +55,9 @@ protected:
 	
 	void closeInternal()const noexcept override{}
 	
-	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
+	size_t readInternal(utki::span<std::uint8_t> buf)const override;
 
-	size_t writeInternal(const utki::Buf<std::uint8_t> buf)override;
+	size_t writeInternal(const utki::span<std::uint8_t> buf)override;
 	
 	size_t seekForwardInternal(size_t numBytesToSeek)const override;
 	

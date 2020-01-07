@@ -69,9 +69,9 @@ protected:
 	
 	void closeInternal()const noexcept override{}
 	
-	size_t readInternal(utki::Buf<std::uint8_t> buf)const override;
+	size_t readInternal(utki::span<std::uint8_t> buf)const override;
 	
-	size_t writeInternal(const utki::Buf<std::uint8_t> buf)override;
+	size_t writeInternal(const utki::span<std::uint8_t> buf)override;
 	
 	size_t seekForwardInternal(size_t numBytesToSeek)const override;
 	

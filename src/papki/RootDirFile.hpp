@@ -26,7 +26,7 @@ public:
 			rootDir(rootDir)
 	{
 		if(!this->baseFile){
-			throw papki::exception("RootDirFile(): passed in base file pointer is null");
+			throw std::invalid_argument("RootDirFile(): passed in base file pointer is null");
 		}
 		this->File::setPathInternal(this->baseFile->path());
 		this->baseFile->setPath(this->rootDir + this->path());
@@ -57,11 +57,11 @@ private:
 		return this->baseFile->listDirContents(maxEntries);
 	}
 	
-	size_t readInternal(utki::Buf<std::uint8_t> buf)const override{
+	size_t readInternal(utki::span<std::uint8_t> buf)const override{
 		return this->baseFile->read(buf);
 	}
 	
-	size_t writeInternal(const utki::Buf<std::uint8_t> buf)override{
+	size_t writeInternal(const utki::span<std::uint8_t> buf)override{
 		return this->baseFile->write(buf);
 	}
 	

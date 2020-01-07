@@ -15,7 +15,7 @@ void Run(){
 
 	{
 		std::uint8_t buf[] = {1, 2, 3, 4};
-		utki::Buf<std::uint8_t> b(buf, sizeof(buf));
+		auto b = utki::make_span(buf, sizeof(buf));
 		
 		papki::File::Guard fileGuard(f, papki::File::mode::create);
 		
@@ -27,7 +27,7 @@ void Run(){
 		
 		papki::File::Guard fileGuard(f, papki::File::mode::read);
 		
-		f.read(utki::wrapBuf(b));
+		f.read(utki::make_span(b));
 		
 		ASSERT_ALWAYS(b[0] == 1)
 		ASSERT_ALWAYS(b[1] == 2)
@@ -35,4 +35,4 @@ void Run(){
 		ASSERT_ALWAYS(b[3] == 4)
 	}
 }
-}//~namespace
+}

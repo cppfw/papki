@@ -26,7 +26,7 @@ using namespace papki;
 
 void fs_file::openInternal(mode mode){
 	if(this->isDir()){
-		throw papki::exception("path refers to a directory, directories can't be opened");
+		throw utki::invalid_state("path refers to a directory, directories can't be opened");
 	}
 
 	const char* modeStr;
@@ -41,8 +41,7 @@ void fs_file::openInternal(mode mode){
 			modeStr = "rb";
 			break;
 		default:
-			throw papki::exception("unknown mode");
-			break;
+			throw std::invalid_argument("unknown mode");
 	}
 
 #if M_COMPILER == M_COMPILER_MSVC
@@ -56,7 +55,7 @@ void fs_file::openInternal(mode mode){
 		TRACE(<< "fs_file::Open(): Path() = " << this->path().c_str() << std::endl)
 		std::stringstream ss;
 		ss << "fopen(" << this->path().c_str() << ") failed";
-		throw papki::exception(ss.str());
+		throw std::system_error(errno, std::generic_category(), ss.str());
 	}
 }
 
@@ -67,22 +66,22 @@ void fs_file::closeInternal()const noexcept{
 	this->handle = 0;
 }
 
-size_t fs_file::readInternal(utki::Buf<std::uint8_t> buf)const{
+size_t fs_file::readInternal(utki::span<std::uint8_t> buf)const{
 	ASSERT(this->handle)
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
-	if(numBytesRead != buf.size()){//something happened
+	if(numBytesRead != buf.size()){ // something happened
 		if(!feof(this->handle)){
-			throw papki::exception("fread() error");//if it is not an EndOfFile then it is error
+			throw std::runtime_error("fread() error");//if it is not an EndOfFile then it is error
 		}
 	}
 	return numBytesRead;
 }
 
-size_t fs_file::writeInternal(const utki::Buf<std::uint8_t> buf){
+size_t fs_file::writeInternal(const utki::span<std::uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
 	if(bytesWritten != buf.size()){//something bad has happened
-		throw papki::exception("fwrite error");
+		throw std::runtime_error("fwrite error");
 	}
 
 	return bytesWritten;
@@ -119,7 +118,7 @@ size_t fs_file::seekBackwardInternal(size_t numBytesToSeek)const{
 		ASSERT(offset > 0)
 
 		if(fseek(this->handle, -offset, SEEK_CUR) != 0){
-			throw papki::exception("fseek() failed");
+			throw std::runtime_error("fseek() failed");
 		}
 
 		ASSERT(size_t(offset) < size_t(-1))
@@ -138,7 +137,7 @@ void fs_file::rewindInternal()const{
 
 	ASSERT(this->handle)
 	if(fseek(this->handle, 0, SEEK_SET) != 0){
-		throw papki::exception("fseek() failed");
+		throw std::runtime_error("fseek() failed");
 	}
 }
 
@@ -190,23 +189,24 @@ void fs_file::makeDir(){
 	}
 
 	if(this->path().size() == 0 || this->path()[this->path().size() - 1] != '/'){
-		throw papki::exception("invalid directory name");
+		throw utki::invalid_state("invalid directory name, should end with '/'");
 	}
 
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 //	TRACE(<< "creating directory = " << this->Path() << std::endl)
 	umask(0);//clear umask for proper permissions of newly created directory
 	if(mkdir(this->path().c_str(), 0755) != 0){
-		throw papki::exception("mkdir() failed");
+		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
 	}
 #elif M_OS == M_OS_WINDOWS
 	if (!CreateDirectory(this->path().c_str(), NULL)){
-		if(GetLastError() != ERROR_ALREADY_EXISTS){
-			throw papki::exception("CreateDirectory() failed");
+		auto error = GetLastError();
+		if(error != ERROR_ALREADY_EXISTS){
+			throw std::system_error(error, std::generic_category(), "CreateDirectory() failed");
 		}
 	}
 #else
-	throw papki::exception("creating directory is not supported");
+	throw std::runtime_error("creating directory is not supported");
 #endif
 }
 
@@ -240,7 +240,7 @@ std::string fs_file::getHomeDir() {
 #	endif
 
 	if(!home){
-		throw papki::exception("HOME environment variable does not exist");
+		throw std::runtime_error("HOME environment variable does not exist");
 	}
 
 	ret = std::string(home);
@@ -259,7 +259,7 @@ std::string fs_file::getHomeDir() {
 
 std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 	if(!this->isDir()){
-		throw papki::exception("fs_file::ListDirContents(): this is not a directory");
+		throw utki::invalid_state("fs_file::listDirContents(): this is not a directory");
 	}
 
 	std::vector<std::string> files;
@@ -274,7 +274,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 		WIN32_FIND_DATA wfd;
 		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
 		if (h == INVALID_HANDLE_VALUE) {
-			throw papki::exception("ListDirContents(): cannot find first file");
+			throw std::system_error(GetLastError(), std::generic_category(), "FindFirstFile() failed");
 		}
 
 		//create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
@@ -314,7 +314,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 		if(!pdir){
 			std::stringstream ss;
 			ss << "fs_file::ListDirContents(): opendir() failure, error code = " << strerror(errno);
-			throw papki::exception(ss.str());
+			throw std::system_error(errno, std::generic_category(), ss.str());
 		}
 
 		//create DirentCloser to automatically call closedir on exit from the function in case of exceptions etc...
@@ -344,8 +344,8 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 			//TRACE(<< s << std::endl)
 			if(stat((this->path() + s).c_str(), &fileStats) < 0){
 				std::stringstream ss;
-				ss << "fs_file::ListDirContents(): stat() failure, error code = " << strerror(errno);
-				throw papki::exception(ss.str());
+				ss << "fs_file::listDirContents(): stat() failure, error code = " << strerror(errno);
+				throw std::system_error(errno, std::system_category(), ss.str());
 			}
 
 			if(fileStats.st_mode & S_IFDIR)//if this entry is a directory append '/' symbol to its end
@@ -362,7 +362,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 		if(errno != 0){
 			std::stringstream ss;
 			ss << "fs_file::ListDirContents(): readdir() failure, error code = " << strerror(errno);
-			throw papki::exception(ss.str());
+			throw std::system_error(errno, std::system_category(), ss.str());
 		}
 	}
 
