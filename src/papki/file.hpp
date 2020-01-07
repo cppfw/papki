@@ -423,7 +423,12 @@ public:
 	 * @return Array containing loaded file data.
 	 * @throw utki::invalid_state - if file is already opened.
 	 */
-	std::vector<std::uint8_t> loadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const;
+	std::vector<std::uint8_t> load(size_t maxBytesToLoad = size_t(-1))const;
+
+	//TODO: deprecated, remove.
+	std::vector<std::uint8_t> loadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const{
+		return this->load(maxBytesToLoad);
+	}
 
 	/**
 	 * @brief Check for file/directory existence.

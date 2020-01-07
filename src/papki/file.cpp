@@ -152,7 +152,7 @@ struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
 
 
 
-std::vector<std::uint8_t> file::loadWholeFileIntoMemory(size_t maxBytesToLoad)const{
+std::vector<std::uint8_t> file::load(size_t maxBytesToLoad)const{
 	if(this->isOpened()){
 		throw utki::invalid_state("file should not be opened");
 	}
