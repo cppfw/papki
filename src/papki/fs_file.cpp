@@ -24,7 +24,7 @@ using namespace papki;
 
 
 
-void fs_file::openInternal(mode mode){
+void fs_file::open_internal(mode mode){
 	if(this->isDir()){
 		throw utki::invalid_state("path refers to a directory, directories can't be opened");
 	}
@@ -59,7 +59,7 @@ void fs_file::openInternal(mode mode){
 	}
 }
 
-void fs_file::closeInternal()const noexcept{
+void fs_file::close_internal()const noexcept{
 	ASSERT(this->handle)
 
 	fclose(this->handle);

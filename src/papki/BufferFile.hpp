@@ -51,9 +51,9 @@ public:
 
 protected:
 
-	void openInternal(mode mode)override;
+	void open_internal(mode mode)override;
 	
-	void closeInternal()const noexcept override{}
+	void close_internal()const noexcept override{}
 	
 	size_t readInternal(utki::span<std::uint8_t> buf)const override;
 

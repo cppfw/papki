@@ -7,7 +7,7 @@ using namespace papki;
 
 
 
-void MemoryFile::openInternal(mode mode){
+void MemoryFile::open_internal(mode mode){
 	this->idx = 0;
 }
 

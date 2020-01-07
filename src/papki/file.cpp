@@ -9,7 +9,7 @@ using namespace papki;
 
 
 
-std::string file::ext()const{
+std::string file::suffix()const{
 	size_t dotPos = this->path().rfind('.');
 	if(dotPos == std::string::npos || dotPos == 0){//NOTE: dotPos is 0 for hidden files in *nix systems
 		return std::string();
@@ -45,7 +45,7 @@ std::string file::dir()const{
 
 
 
-std::string file::notDir()const{
+std::string file::not_dir()const{
 	size_t slashPos = this->path().rfind('/');
 	if(slashPos == std::string::npos){//no slash found
 		return this->path();
@@ -60,7 +60,7 @@ std::string file::notDir()const{
 
 
 
-bool file::isDir()const noexcept{
+bool file::is_dir()const noexcept{
 	if(this->path().size() == 0){
 		return false;
 	}

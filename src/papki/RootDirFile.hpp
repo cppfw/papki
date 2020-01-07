@@ -28,7 +28,7 @@ public:
 		if(!this->baseFile){
 			throw std::invalid_argument("RootDirFile(): passed in base file pointer is null");
 		}
-		this->File::setPathInternal(this->baseFile->path());
+		this->file::set_path_internal(this->baseFile->path());
 		this->baseFile->setPath(this->rootDir + this->path());
 	}
 	
@@ -40,16 +40,16 @@ public:
 	RootDirFile& operator=(const RootDirFile&) = delete;
 	
 private:
-	void setPathInternal(const std::string& pathName)const override{
-		this->File::setPathInternal(pathName);
+	void set_path_internal(const std::string& pathName)const override{
+		this->file::set_path_internal(pathName);
 		this->baseFile->setPath(this->rootDir + pathName);
 	}
 	
-	void openInternal(mode mode)override{
+	void open_internal(mode mode)override{
 		this->baseFile->open(mode);
 	}
 	
-	void closeInternal()const noexcept override{
+	void close_internal()const noexcept override{
 		this->baseFile->close();
 	}
 	

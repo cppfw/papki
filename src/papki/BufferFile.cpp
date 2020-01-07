@@ -8,7 +8,7 @@ using namespace papki;
 
 
 
-void BufferFile::openInternal(mode mode){
+void BufferFile::open_internal(mode mode){
 	this->ptr = this->data.begin();
 }
 

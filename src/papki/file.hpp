@@ -67,21 +67,26 @@ public:
 
 	/**
 	 * @brief Set the path for this file instance.
-	 * @param pathName - the path to a file or directory.
+	 * @param pathname - the path to a file or directory.
 	 */
-	void setPath(const std::string& pathName)const{
+	void set_path(const std::string& pathname)const{
 		if(this->isOpened()){
 			throw utki::invalid_state("papki::file::set_path(): Cannot set path when file is opened");
 		}
 
-		this->setPathInternal(pathName);
+		this->set_path_internal(pathname);
+	}
+
+	// TODO: deprecated, remove.
+	void setPath(const std::string& pathName)const{
+		this->set_path(pathName);
 	}
 
 protected:
-	virtual void setPathInternal(const std::string& pathName)const{
-		this->path_var = pathName;
+	virtual void set_path_internal(const std::string& pathname)const{
+		this->path_var = pathname;
 	}
-	
+
 public:
 	
 	/**
@@ -96,24 +101,34 @@ public:
 	 * @brief Get current position from beginning of the file.
 	 * @return Current position from beginning of the file
 	 */
-	size_t curPos()const noexcept{
+	size_t cur_pos()const noexcept{
 		return this->curPos_var;
 	}
 
+	// TODO: deprecated, remove.
+	size_t curPos()const noexcept{
+		return this->cur_pos();
+	}
+
 	/**
-	 * @brief Get file extension.
+	 * @brief Get file suffix.
 	 * Returns a string containing the tail part of the file path, everything that
 	 * goes after the last dot character ('.') in the file path string.
 	 * I.e. if the file path is '/home/user/some.file.txt' then the return value
 	 * will be 'txt'.
 	 * Note, that on *nix systems if the file name starts with a dot then this file is treated as hidden,
-	 * in that case it is thought that the file has no extension. I.e., for example
-	 * , if the file path is '/home/user/.myfile' then the file has no extension and this function
+	 * in that case it is thought that the file has no suffix. I.e., for example
+	 * , if the file path is '/home/user/.myfile' then the file has no suffix and this function
 	 * will return an empty string. Although, if the file path is '/home/user/.myfile.txt' then the file
-	 * does have an extension and the function will return 'txt'.
-	 * @return String representing file extension.
+	 * does have a suffix and the function will return 'txt'.
+	 * @return String representing file suffix.
 	 */
-	std::string ext()const;
+	std::string suffix()const;
+
+	// TODO: deprecated, remove.
+	std::string ext()const{
+		return this->suffix();
+	}
 
 	/**
 	 * @brief Get directory part of the path.
@@ -129,7 +144,11 @@ public:
 	 * will be 'some.file.txt'.
 	 * @return String representation of directory part of the path.
 	 */
-	std::string notDir()const;
+	std::string not_dir()const;
+
+	std::string notDir()const{
+		return this->not_dir();
+	}
 	
 	/**
 	 * @brief Open file.
@@ -138,13 +157,13 @@ public:
 	 * @throw utki::invalid_state - if file is already opened.
 	 */
 	void open(mode io_mode){
-		if(this->isOpened()){
+		if(this->is_open()){
 			throw utki::invalid_state("papki::file::open(): file is already opened");
 		}
-		if(this->isDir()){
+		if(this->is_dir()){
 			throw utki::invalid_state("file refers to directory. Directory cannot be opened.");
 		}
-		this->openInternal(io_mode);
+		this->open_internal(io_mode);
 		
 		//set open mode
 		if(io_mode == mode::create){
@@ -160,7 +179,7 @@ public:
 	
 	/**
 	 * @brief Open file for reading.
-	 * This is equivalent to Open(mode::read);
+	 * This is the equivalent to open(mode::read);
 	 * @throw utki::invalid_state - if file is already opened.
 	 */
 	void open()const{
@@ -173,7 +192,7 @@ protected:
 	 * Derived class should override this function with its own implementation.
 	 * @param mode - opening mode.
 	 */
-	virtual void openInternal(mode io_mode) = 0;
+	virtual void open_internal(mode io_mode) = 0;
 	
 public:
 	/**
@@ -183,7 +202,7 @@ public:
 		if(!this->isOpened()){
 			return;
 		}
-		this->closeInternal();
+		this->close_internal();
 		this->isOpened_var = false;
 	}
 	
@@ -192,16 +211,21 @@ protected:
 	 * @brief Close file, internal implementation.
 	 * Derived class should override this function with its own implementation.
 	 */
-	virtual void closeInternal()const noexcept = 0;
+	virtual void close_internal()const noexcept = 0;
 	
 public:
 	/**
-	 * @brief Check if the file is opened.
-	 * @return true - if the file is opened.
+	 * @brief Check if the file is open.
+	 * @return true - if the file is open.
 	 * @return false - otherwise.
 	 */
-	bool isOpened()const noexcept{
+	bool is_open()const noexcept{
 		return this->isOpened_var;
+	}
+
+	// TODO: deprecated, remove.
+	bool isOpened()const noexcept{
+		return this->is_open();
 	}
 
 	/**
@@ -213,7 +237,12 @@ public:
 	 * @return true - if current path points to a directory.
 	 * @return false - otherwise.
 	 */
-	bool isDir()const noexcept;
+	bool is_dir()const noexcept;
+
+	//TODO: deprecated, remove.
+	bool isDir()const noexcept{
+		return this->is_dir();
+	}
 
 	/**
 	 * @brief Get list of files and subdirectories of a directory.
