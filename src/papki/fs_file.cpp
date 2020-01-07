@@ -302,8 +302,10 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 				}
 			} while (FindNextFile(h, &wfd) != 0);
 
-			if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_NO_MORE_FILES) {
-				throw papki::exception("list_dir(): find next file failed");
+			auto error = GetLastError();
+
+			if(error != ERROR_SUCCESS && error != ERROR_NO_MORE_FILES) {
+				throw std::system_error(error, std::generic_category(), "list_dir(): find next file failed");
 			}
 		}
 	}
