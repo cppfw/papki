@@ -225,7 +225,7 @@ std::string fs_file::get_home_dir() {
 		});
 
 		if (_dupenv_s(&buf, &size, "USERPROFILE") != 0) {
-			throw papki::exception("USERPROFILE  environment virable could not be read");
+			throw std::runtime_error("USERPROFILE  environment virable could not be read");
 		}
 		ret = std::string(buf);
 	}

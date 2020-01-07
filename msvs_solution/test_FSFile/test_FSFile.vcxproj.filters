@@ -23,10 +23,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tests\FSFile\main.cpp">
+    <ClCompile Include="..\..\tests\fs_file\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tests\FSFile\tests.cpp">
+    <ClCompile Include="..\..\tests\fs_file\tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

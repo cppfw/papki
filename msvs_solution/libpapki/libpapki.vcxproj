@@ -464,30 +464,25 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\papki\BufferFile.hpp" />
-    <ClInclude Include="..\..\src\papki\Exc.hpp" />
-    <ClInclude Include="..\..\src\papki\File.hpp" />
-    <ClInclude Include="..\..\src\papki\FSFile.hpp" />
-    <ClInclude Include="..\..\src\papki\MemoryFile.hpp" />
-    <ClInclude Include="..\..\src\papki\RootDirFile.hpp" />
+    <ClInclude Include="..\..\src\**\*.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\papki\BufferFile.cpp" />
-    <ClCompile Include="..\..\src\papki\File.cpp" />
-    <ClCompile Include="..\..\src\papki\FSFile.cpp" />
-    <ClCompile Include="..\..\src\papki\MemoryFile.cpp" />
+    <ClCompile Include="..\..\src\papki\file.cpp" />
+    <ClCompile Include="..\..\src\papki\fs_file.cpp" />
+    <ClCompile Include="..\..\src\papki\span_file.cpp" />
+    <ClCompile Include="..\..\src\papki\vector_file.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libutki.1.1.7\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.7\build\native\libutki.targets')" />
+    <Import Project="..\packages\libutki.1.1.56\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.56\build\native\libutki.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libutki.1.1.7\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.7\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.1.56\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.56\build\native\libutki.targets'))" />
   </Target>
 </Project>
