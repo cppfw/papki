@@ -37,7 +37,7 @@ public:
 	};
 
 	//TODO: deprecated, remove.
-	typedef mode mode;
+	typedef mode E_Mode;
 
 protected:
 	mode ioMode; // mode only matters when file is opened
