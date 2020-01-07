@@ -75,8 +75,8 @@ bool file::is_dir()const noexcept{
 
 
 
-std::vector<std::string> file::listDirContents(size_t maxEntries)const{
-	throw std::runtime_error("file::listDirContents(): not supported for this file instance");
+std::vector<std::string> file::list_dir(size_t maxEntries)const{
+	throw std::runtime_error("file::list_dir(): not supported for this file instance");
 }
 
 

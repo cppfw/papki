@@ -257,9 +257,9 @@ std::string fs_file::getHomeDir() {
 }
 
 
-std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
+std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 	if(!this->isDir()){
-		throw utki::invalid_state("fs_file::listDirContents(): this is not a directory");
+		throw utki::invalid_state("fs_file::list_dir(): this is not a directory");
 	}
 
 	std::vector<std::string> files;
@@ -269,7 +269,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 		std::string pattern = this->path();
 		pattern += '*';
 
-		TRACE(<< "fs_file::ListDirContents(): pattern = " << pattern << std::endl)
+		TRACE(<< "fs_file::list_dir(): pattern = " << pattern << std::endl)
 
 		WIN32_FIND_DATA wfd;
 		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
@@ -303,7 +303,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 			} while (FindNextFile(h, &wfd) != 0);
 
 			if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_NO_MORE_FILES) {
-				throw papki::exception("ListDirContents(): find next file failed");
+				throw papki::exception("list_dir(): find next file failed");
 			}
 		}
 	}
@@ -313,7 +313,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 
 		if(!pdir){
 			std::stringstream ss;
-			ss << "fs_file::ListDirContents(): opendir() failure, error code = " << strerror(errno);
+			ss << "fs_file::list_dir(): opendir() failure, error code = " << strerror(errno);
 			throw std::system_error(errno, std::generic_category(), ss.str());
 		}
 
@@ -329,7 +329,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 				int ret;
 				do{
 					ret = closedir(this->pdir);
-					ASSERT_INFO(ret == 0 || errno == EINTR, "fs_file::ListDirContents(): closedir() failed: " << strerror(errno))
+					ASSERT_INFO(ret == 0 || errno == EINTR, "fs_file::list_dir(): closedir() failed: " << strerror(errno))
 				}while(ret != 0 && errno == EINTR);
 			}
 		} dirCloser(pdir);
@@ -344,7 +344,7 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 			//TRACE(<< s << std::endl)
 			if(stat((this->path() + s).c_str(), &fileStats) < 0){
 				std::stringstream ss;
-				ss << "fs_file::listDirContents(): stat() failure, error code = " << strerror(errno);
+				ss << "fs_file::list_dir(): stat() failure, error code = " << strerror(errno);
 				throw std::system_error(errno, std::system_category(), ss.str());
 			}
 
@@ -361,14 +361,14 @@ std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 		//check if we exited the while() loop because of readdir() failed
 		if(errno != 0){
 			std::stringstream ss;
-			ss << "fs_file::ListDirContents(): readdir() failure, error code = " << strerror(errno);
+			ss << "fs_file::list_dir(): readdir() failure, error code = " << strerror(errno);
 			throw std::system_error(errno, std::system_category(), ss.str());
 		}
 	}
 
 #else
 
-#	error "fs_file::ListDirContents(): version is not implemented yet for this os"
+#	error "fs_file::list_dir(): version is not implemented yet for this os"
 
 #endif
 	return files;

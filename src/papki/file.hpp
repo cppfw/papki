@@ -251,7 +251,7 @@ public:
 	 * @param maxEntries - maximum number of entries in the returned list. 0 means no limit.
 	 * @return The array of string objects representing the directory entries.
 	 */
-	virtual std::vector<std::string> listDirContents(size_t maxEntries = 0)const;
+	virtual std::vector<std::string> list_dir(size_t maxEntries = 0)const;
 
 	/**
 	 * @brief Read data from file.

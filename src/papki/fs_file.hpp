@@ -69,7 +69,7 @@ public:
 
 
 
-	virtual std::vector<std::string> listDirContents(size_t maxEntries = 0)const override;
+	virtual std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
 	
 	virtual std::unique_ptr<File> spawn()override;
 };

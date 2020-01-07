@@ -257,7 +257,7 @@ std::string FSFile::getHomeDir() {
 }
 
 
-std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
+std::vector<std::string> FSFile::list_dir(size_t maxEntries)const{
 	if(!this->isDir()){
 		throw std::runtime_error("FSFile::ListDirContents(): this is not a directory");
 	}

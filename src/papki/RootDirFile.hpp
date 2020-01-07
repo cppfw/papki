@@ -53,8 +53,8 @@ private:
 		this->baseFile->close();
 	}
 	
-	std::vector<std::string> listDirContents(size_t maxEntries = 0)const override{
-		return this->baseFile->listDirContents(maxEntries);
+	std::vector<std::string> list_dir(size_t maxEntries = 0)const override{
+		return this->baseFile->list_dir(maxEntries);
 	}
 	
 	size_t readInternal(utki::span<std::uint8_t> buf)const override{

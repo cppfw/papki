@@ -65,15 +65,15 @@ void Run(){
 	papki::fs_file curDir("./");
 	papki::File& f = curDir;
 	
-	std::vector<std::string> r = f.listDirContents();
+	std::vector<std::string> r = f.list_dir();
 	ASSERT_ALWAYS(r.size() >= 3)
 //	TRACE_ALWAYS(<< "list = " << r << std::endl)
 	
-	std::vector<std::string> r1 = f.listDirContents(1);
+	std::vector<std::string> r1 = f.list_dir(1);
 	ASSERT_ALWAYS(r1.size() == 1)
 	ASSERT_ALWAYS(r[0] == r1[0])
 	
-	std::vector<std::string> r2 = f.listDirContents(2);
+	std::vector<std::string> r2 = f.list_dir(2);
 	ASSERT_ALWAYS(r2.size() == 2)
 	ASSERT_ALWAYS(r[0] == r2[0])
 	ASSERT_ALWAYS(r[1] == r2[1])
