@@ -1,4 +1,4 @@
-#include "MemoryFile.hpp"
+#include "vector_file.hpp"
 
 #include <algorithm>
 #include <cstring>
@@ -7,13 +7,13 @@ using namespace papki;
 
 
 
-void MemoryFile::open_internal(mode mode){
+void vector_file::open_internal(mode mode){
 	this->idx = 0;
 }
 
 
 
-size_t MemoryFile::read_internal(utki::span<std::uint8_t> buf)const{
+size_t vector_file::read_internal(utki::span<std::uint8_t> buf)const{
 	ASSERT(this->idx <= this->data.size())
 	size_t numBytesRead = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
 	memcpy(buf.begin(), &this->data[idx], numBytesRead);
@@ -24,7 +24,7 @@ size_t MemoryFile::read_internal(utki::span<std::uint8_t> buf)const{
 
 
 
-size_t MemoryFile::write_internal(const utki::span<std::uint8_t> buf){
+size_t vector_file::write_internal(const utki::span<std::uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
 	size_t numBytesTillEOF = this->data.size() - this->idx;
@@ -42,7 +42,7 @@ size_t MemoryFile::write_internal(const utki::span<std::uint8_t> buf){
 
 
 
-size_t MemoryFile::seek_forward_internal(size_t numBytesToSeek)const{
+size_t vector_file::seek_forward_internal(size_t numBytesToSeek)const{
 	ASSERT(this->idx <= this->data.size())
 	numBytesToSeek = std::min(this->data.size() - this->idx, numBytesToSeek);
 	this->idx += numBytesToSeek;
@@ -50,7 +50,7 @@ size_t MemoryFile::seek_forward_internal(size_t numBytesToSeek)const{
 	return numBytesToSeek;
 }
 
-size_t MemoryFile::seek_backward_internal(size_t numBytesToSeek)const{
+size_t vector_file::seek_backward_internal(size_t numBytesToSeek)const{
 	ASSERT(this->idx <= this->data.size())
 	numBytesToSeek = std::min(this->idx, numBytesToSeek);
 	this->idx -= numBytesToSeek;
@@ -58,6 +58,6 @@ size_t MemoryFile::seek_backward_internal(size_t numBytesToSeek)const{
 	return numBytesToSeek;
 }
 
-void MemoryFile::rewind_internal()const{
+void vector_file::rewind_internal()const{
 	this->idx = 0;
 }
