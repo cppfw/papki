@@ -1,3 +1,9 @@
+libpapki (1.0.68) unstable; urgency=medium
+
+  * include utki/Buf.hpp to FSFile.hpp
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 07 Jan 2020 20:50:21 +0200
+
 libpapki (1.0.67) unstable; urgency=medium
 
   * typedef mode E_Mode

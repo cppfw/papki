@@ -5,6 +5,7 @@
 
 #include <utki/debug.hpp>
 #include <utki/config.hpp>
+#include <utki/Buf.hpp>
 
 #include "file.hpp"
 
