@@ -67,7 +67,7 @@ void FSFile::close_internal()const noexcept{
 	this->handle = 0;
 }
 
-size_t FSFile::readInternal(utki::span<std::uint8_t> buf)const{
+size_t FSFile::read_internal(utki::span<std::uint8_t> buf)const{
 	ASSERT(this->handle)
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
 	if(numBytesRead != buf.size()){//something happened
@@ -78,7 +78,7 @@ size_t FSFile::readInternal(utki::span<std::uint8_t> buf)const{
 	return numBytesRead;
 }
 
-size_t FSFile::writeInternal(const utki::span<std::uint8_t> buf){
+size_t FSFile::write_internal(const utki::span<std::uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
 	if(bytesWritten != buf.size()){//something bad has happened
@@ -90,7 +90,7 @@ size_t FSFile::writeInternal(const utki::span<std::uint8_t> buf){
 
 
 
-size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
+size_t FSFile::seek_backward_internal(size_t numBytesToSeek)const{
 	ASSERT(this->handle)
 
 	//NOTE: fseek() accepts 'long int' as offset argument which is signed and can be
@@ -131,7 +131,7 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	return numBytesToSeek;
 }
 
-void FSFile::rewindInternal()const{
+void FSFile::rewind_internal()const{
 	if(!this->isOpened()){
 		throw utki::invalid_state("cannot rewind, file is not opened");
 	}

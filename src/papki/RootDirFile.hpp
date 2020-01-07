@@ -57,23 +57,23 @@ private:
 		return this->baseFile->list_dir(maxEntries);
 	}
 	
-	size_t readInternal(utki::span<std::uint8_t> buf)const override{
+	size_t read_internal(utki::span<std::uint8_t> buf)const override{
 		return this->baseFile->read(buf);
 	}
 	
-	size_t writeInternal(const utki::span<std::uint8_t> buf)override{
+	size_t write_internal(const utki::span<std::uint8_t> buf)override{
 		return this->baseFile->write(buf);
 	}
 	
-	size_t seekForwardInternal(size_t numBytesToSeek)const override{
+	size_t seek_forward_internal(size_t numBytesToSeek)const override{
 		return this->baseFile->seekForward(numBytesToSeek);
 	}
 	
-	size_t seekBackwardInternal(size_t numBytesToSeek)const override{
+	size_t seek_backward_internal(size_t numBytesToSeek)const override{
 		return this->baseFile->seekBackward(numBytesToSeek);
 	}
 	
-	void rewindInternal()const override{
+	void rewind_internal()const override{
 		this->baseFile->rewind();
 	}
 	

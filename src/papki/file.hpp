@@ -275,7 +275,7 @@ protected:
 	 * @param buf - buffer to fill with read data.
 	 * @return number of bytes actually read.
 	 */
-	virtual size_t readInternal(utki::span<std::uint8_t> buf)const{
+	virtual size_t read_internal(utki::span<std::uint8_t> buf)const{
 		throw std::runtime_error("readInternal(): unsupported");
 	}
 	
@@ -300,7 +300,7 @@ protected:
 	 * @param buf - buffer containing the data to write.
 	 * @return number of bytes actually written.
 	 */
-	virtual size_t writeInternal(const utki::span<std::uint8_t> buf){
+	virtual size_t write_internal(const utki::span<std::uint8_t> buf){
 		throw std::runtime_error("writeInternal(): unsupported");
 	}
 	
@@ -315,13 +315,18 @@ public:
 	 * @return number of bytes actually skipped.
 	 * @throw utki::invalid_state - if file is not opened.
 	 */
-	size_t seekForward(size_t numBytesToSeek)const{
+	size_t seek_forward(size_t numBytesToSeek)const{
 		if(!this->isOpened()){
 			throw utki::invalid_state("seekForward(): file is not opened");
 		}
-		size_t ret = this->seekForwardInternal(numBytesToSeek);
+		size_t ret = this->seek_forward_internal(numBytesToSeek);
 		this->curPos_var += ret;
 		return ret;
+	}
+
+	// TODO: deprecated, remove.
+	size_t seekForward(size_t numBytesToSeek)const{
+		return this->seek_forward(numBytesToSeek);
 	}
 	
 protected:
@@ -334,7 +339,7 @@ protected:
 	 * @param numBytesToSeek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
 	 */
-	virtual size_t seekForwardInternal(size_t numBytesToSeek)const;
+	virtual size_t seek_forward_internal(size_t numBytesToSeek)const;
 	
 public:
 
@@ -346,14 +351,19 @@ public:
 	 * @return number of bytes actually skipped.
 	 * @throw utki::invalid_state - if file is not opened.
 	 */
-	size_t seekBackward(size_t numBytesToSeek)const{
-		if(!this->isOpened()){
+	size_t seek_backward(size_t numBytesToSeek)const{
+		if(!this->is_open()){
 			throw utki::invalid_state("seekBackward(): file is not opened");
 		}
-		size_t ret = this->seekBackwardInternal(numBytesToSeek);
+		size_t ret = this->seek_backward_internal(numBytesToSeek);
 		ASSERT(ret <= this->curPos_var)
 		this->curPos_var -= ret;
 		return ret;
+	}
+
+	// TODO: deprecated, remove.
+	size_t seekBackward(size_t numBytesToSeek)const{
+		return this->seek_backward(numBytesToSeek);
 	}
 	
 protected:
@@ -364,8 +374,8 @@ protected:
 	 * @param numBytesToSeek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
 	 */
-	virtual size_t seekBackwardInternal(size_t numBytesToSeek)const{
-		throw std::runtime_error("SeekBackward(): unsupported");
+	virtual size_t seek_backward_internal(size_t numBytesToSeek)const{
+		throw std::runtime_error("seek_backward() is unsupported");
 	}
 	
 public:
@@ -376,10 +386,10 @@ public:
 	 * @throw utki::invalid_state - if file is not opened.
 	 */
 	void rewind()const{
-		if(!this->isOpened()){
+		if(!this->is_open()){
 			throw utki::invalid_state("Rewind(): file is not opened");
 		}
-		this->rewindInternal();
+		this->rewind_internal();
 		this->curPos_var = 0;
 	}
 	
@@ -389,7 +399,7 @@ protected:
 	 * This function is called by Rewind() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
 	 */
-	virtual void rewindInternal()const{
+	virtual void rewind_internal()const{
 		mode m = this->ioMode;
 		this->close();
 		const_cast<file*>(this)->open(m);

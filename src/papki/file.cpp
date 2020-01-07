@@ -86,7 +86,7 @@ size_t file::read(utki::span<std::uint8_t> buf)const{
 		throw utki::invalid_state("Cannot read, file is not opened");
 	}
 	
-	size_t ret = this->readInternal(buf);
+	size_t ret = this->read_internal(buf);
 	this->curPos_var += ret;
 	return ret;
 }
@@ -102,14 +102,14 @@ size_t file::write(const utki::span<std::uint8_t> buf){
 		throw utki::invalid_state("file is opened, but not in write mode");
 	}
 	
-	size_t ret = this->writeInternal(buf);
+	size_t ret = this->write_internal(buf);
 	this->curPos_var += ret;
 	return ret;
 }
 
 
 
-size_t file::seekForwardInternal(size_t numBytesToSeek)const{
+size_t file::seek_forward_internal(size_t numBytesToSeek)const{
 	std::array<std::uint8_t, 0x1000> buf;//4kb buffer
 	
 	size_t bytesRead = 0;

@@ -26,16 +26,16 @@ protected:
 
 	void close_internal()const noexcept override;
 
-	size_t readInternal(utki::span<std::uint8_t> buf)const override;
+	size_t read_internal(utki::span<std::uint8_t> buf)const override;
 
-	size_t writeInternal(const utki::span<std::uint8_t> buf)override;
+	size_t write_internal(const utki::span<std::uint8_t> buf)override;
 
 	//NOTE: use default implementation of SeekForward() because of the problems with
 	//      fseek() as it can set file pointer beyond the end of file.
 	
-	size_t seekBackwardInternal(size_t numBytesToSeek)const override;
+	size_t seek_backward_internal(size_t numBytesToSeek)const override;
 	
-	void rewindInternal()const override;
+	void rewind_internal()const override;
 	
 public:
 	/**
