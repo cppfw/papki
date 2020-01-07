@@ -132,7 +132,7 @@ size_t file::seek_forward_internal(size_t numBytesToSeek)const{
 
 
 
-void file::makeDir(){
+void file::make_dir(){
 	throw std::runtime_error("Make directory is not supported");
 }
 

@@ -77,8 +77,8 @@ private:
 		this->baseFile->rewind();
 	}
 	
-	void makeDir()override{
-		this->baseFile->makeDir();
+	void make_dir()override{
+		this->baseFile->make_dir();
 	}
 	
 	bool exists()const override{

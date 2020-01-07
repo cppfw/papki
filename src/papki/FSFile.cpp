@@ -184,7 +184,7 @@ bool FSFile::exists()const{
 
 
 
-void FSFile::makeDir(){
+void FSFile::make_dir(){
 	if(this->isOpened()){
 		throw utki::invalid_state("cannot make directory when file is opened");
 	}

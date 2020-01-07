@@ -57,7 +57,7 @@ public:
 	
 	bool exists()const override;
 	
-	void makeDir()override;
+	void make_dir()override;
 
 	/**
 	 * @brief Get user home directory.

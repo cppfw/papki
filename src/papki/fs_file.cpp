@@ -183,7 +183,7 @@ bool fs_file::exists()const{
 
 
 
-void fs_file::makeDir(){
+void fs_file::make_dir(){
 	if(this->isOpened()){
 		throw utki::invalid_state("cannot make directory when file is opened");
 	}

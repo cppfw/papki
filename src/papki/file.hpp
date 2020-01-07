@@ -414,7 +414,7 @@ public:
 	 * directory creation.
 	 * @throw utki::invalid_state - if file is opened.
 	 */
-	virtual void makeDir();
+	virtual void make_dir();
 
 public:
 	/**
