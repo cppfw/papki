@@ -1,8 +1,3 @@
-/**
- * @file File abstract interface
- * @author Ivan Gagis <igagis@gmail.com>
- */
-
 #pragma once
 
 #include <string>
@@ -19,13 +14,11 @@
 
 namespace papki{
 
-
-
 /**
  * @brief Abstract interface to a file system.
  * This class represents an abstract interface to a file system.
  */
-class File : public utki::Unique{
+class file{
 	mutable std::string path_var;
 
 	mutable bool isOpened_var = false;
@@ -37,27 +30,33 @@ public:
 	/**
 	 * @brief Modes of opening the file.
 	 */
-	enum class E_Mode{
-		READ,  ///Open existing file for read only
-		WRITE, ///Open existing file for read and write
-		CREATE ///Create new file and open it for read and write. If file exists it will be replaced by empty file.
+	enum class mode{
+		read, /// Open existing file for read only.
+		READ = read, //TODO: deprecaed, remove.
+		write, /// Open existing file for read and write.
+		WRITE = write, //TODO: deprecated, remove.
+		create, /// Create new file and open it for read and write. If file exists it will be replaced by empty file.
+		CREATE = create //TODO: deprecated, remove.
 	};
 
+	//TODO: deprecated, remove.
+	typedef mode mode;
+
 protected:
-	E_Mode ioMode;//mode only matters when file is opened
+	mode ioMode; // mode only matters when file is opened
 
 	/**
 	 * @brief Constructor.
-	 * @param pathName - initial path to set to the newly created File instance.
+	 * @param pathName - initial path to set to the newly created file instance.
 	 */
-	File(const std::string& pathName = std::string()) :
+	file(const std::string& pathName = std::string()) :
 			path_var(pathName)
 	{}
 
 public:
-	File(const File&) = delete;
-	File(File&&) = delete;
-	File& operator=(const File&) = delete;
+	file(const file&) = delete;
+	file(file&&) = delete;
+	file& operator=(const file&) = delete;
 
 	/**
 	 * @brief Destructor.
@@ -65,12 +64,12 @@ public:
 	 * The file shall be closed upon the object destruction, all the implementations should
 	 * assure that.
 	 */
-	virtual ~File()noexcept{
+	virtual ~file()noexcept{
 		ASSERT(!this->isOpened())
 	}
 
 	/**
-	 * @brief Set the path for this File instance.
+	 * @brief Set the path for this file instance.
 	 * @param pathName - the path to a file or directory.
 	 */
 	void setPath(const std::string& pathName)const{
@@ -89,8 +88,8 @@ protected:
 public:
 	
 	/**
-	 * @brief Get the current path being held by this File instance.
-	 * @return The path this File instance holds.
+	 * @brief Get the current path being held by this file instance.
+	 * @return The path this file instance holds.
 	 */
 	const std::string& path()const noexcept{
 		return this->path_var;
@@ -98,8 +97,8 @@ public:
 
 	/**
 	 * @brief Get current position from beginning of the file.
-     * @return Current position from beginning of the file
-     */
+	 * @return Current position from beginning of the file
+	 */
 	size_t curPos()const noexcept{
 		return this->curPos_var;
 	}
@@ -123,16 +122,16 @@ public:
 	 * @brief Get directory part of the path.
 	 * Example: if path is '/home/user/some.file.txt' then the return value
 	 * will be '/home/user/'.
-     * @return String representation of directory part of the path.
-     */
+	 * @return String representation of directory part of the path.
+	 */
 	std::string dir()const;
 	
 	/**
 	 * @brief Get file part of the path.
 	 * Example: if path is '/home/user/some.file.txt' then the return value
 	 * will be 'some.file.txt'.
-     * @return String representation of directory part of the path.
-     */
+	 * @return String representation of directory part of the path.
+	 */
 	std::string notDir()const;
 	
 	/**
@@ -141,18 +140,18 @@ public:
 	 * @param mode - file opening mode (reading/writing/create).
 	 * @throw utki::invalid_state - if file is already opened.
 	 */
-	void open(E_Mode mode){
+	void open(mode mode){
 		if(this->isOpened()){
 			throw utki::invalid_state("papki::file::open(): file is already opened");
 		}
 		if(this->isDir()){
-			throw utki::invalid_state("File refers to directory. Directory cannot be opened.");
+			throw utki::invalid_state("file refers to directory. Directory cannot be opened.");
 		}
 		this->openInternal(mode);
 		
 		//set open mode
-		if(mode == E_Mode::CREATE){
-			this->ioMode = E_Mode::WRITE;
+		if(mode == mode::create){
+			this->ioMode = mode::write;
 		}else{
 			this->ioMode = mode;
 		}
@@ -164,20 +163,20 @@ public:
 	
 	/**
 	 * @brief Open file for reading.
-	 * This is equivalent to Open(E_Mode::READ);
+	 * This is equivalent to Open(mode::read);
 	 * @throw utki::invalid_state - if file is already opened.
-     */
+	 */
 	void open()const{
-		const_cast<File*>(this)->open(E_Mode::READ);
+		const_cast<file*>(this)->open(mode::read);
 	}
 	
 protected:
 	/**
 	 * @brief Open file, internal implementation.
 	 * Derived class should override this function with its own implementation.
-     * @param mode - opening mode.
-     */
-	virtual void openInternal(E_Mode mode) = 0;
+	 * @param mode - opening mode.
+	 */
+	virtual void openInternal(mode io_mode) = 0;
 	
 public:
 	/**
@@ -195,7 +194,7 @@ protected:
 	/**
 	 * @brief Close file, internal implementation.
 	 * Derived class should override this function with its own implementation.
-     */
+	 */
 	virtual void closeInternal()const noexcept = 0;
 	
 public:
@@ -221,7 +220,7 @@ public:
 
 	/**
 	 * @brief Get list of files and subdirectories of a directory.
-	 * If this File instance holds a path to a directory then this method
+	 * If this file instance holds a path to a directory then this method
 	 * can be used to obtain the contents of the directory.
 	 * @param maxEntries - maximum number of entries in the returned list. 0 means no limit.
 	 * @return The array of string objects representing the directory entries.
@@ -247,9 +246,9 @@ protected:
 	 * Override this function to implement reading routine. This function is called
 	 * by Read() method after it has done some safety checks.
 	 * It is assumed that the whole passed buffer needs to be filled with data.
-     * @param buf - buffer to fill with read data.
-     * @return number of bytes actually read.
-     */
+	 * @param buf - buffer to fill with read data.
+	 * @return number of bytes actually read.
+	 */
 	virtual size_t readInternal(utki::Buf<std::uint8_t> buf)const{
 		throw utki::exception("readInternal(): unsupported");
 	}
@@ -272,9 +271,9 @@ protected:
 	 * Override this function to implement writing routine. This function is called
 	 * by Write() method after it has done some safety checks.
 	 * It is assumed that the whole passed buffer needs to be written to the file.
-     * @param buf - buffer containing the data to write.
-     * @return number of bytes actually written.
-     */
+	 * @param buf - buffer containing the data to write.
+	 * @return number of bytes actually written.
+	 */
 	virtual size_t writeInternal(const utki::Buf<std::uint8_t> buf){
 		throw utki::exception("writeInternal(): unsupported");
 	}
@@ -306,9 +305,9 @@ protected:
 	 * Derived class may override this function with its own implementation.
 	 * Otherwise, there is a default implementation which just reads and wastes
 	 * necessary amount of bytes.
-     * @param numBytesToSeek - number of bytes to seek.
+	 * @param numBytesToSeek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
-     */
+	 */
 	virtual size_t seekForwardInternal(size_t numBytesToSeek)const;
 	
 public:
@@ -336,9 +335,9 @@ protected:
 	 * @brief Seek backwards, internal implementation.
 	 * This function is called by SeekBackward() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
-     * @param numBytesToSeek - number of bytes to seek.
+	 * @param numBytesToSeek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
-     */
+	 */
 	virtual size_t seekBackwardInternal(size_t numBytesToSeek)const{
 		throw utki::exception("SeekBackward(): unsupported");
 	}
@@ -363,18 +362,18 @@ protected:
 	 * @brief Rewind, internal implementation.
 	 * This function is called by Rewind() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
-     */
+	 */
 	virtual void rewindInternal()const{
-		E_Mode m = this->ioMode;
+		mode m = this->ioMode;
 		this->close();
-		const_cast<File*>(this)->open(m);
+		const_cast<file*>(this)->open(m);
 	}
 	
 public:
 
 	/**
 	 * @brief Create directory.
-	 * If this File instance is a directory then try to create that directory on
+	 * If this file instance is a directory then try to create that directory on
 	 * file system. Not all file systems are writable, so not all of them support
 	 * directory creation.
 	 * @throw utki::invalid_state - if file is opened.
@@ -399,54 +398,58 @@ public:
 
 	
 	/**
-	 * @brief Creates another File object of same implementation.
+	 * @brief Creates another file object of same implementation.
 	 * Creates a 'clone' of the file system implementation represented by this object.
 	 * It does not copy current file path or open/close state etc. Spawned object is in
 	 * initial state.
-     * @return Newly spawned File object.
-     */
-	virtual std::unique_ptr<File> spawn() = 0;
+	 * @return Newly spawned file object.
+	 */
+	virtual std::unique_ptr<file> spawn() = 0;
 	
-	std::unique_ptr<const File> spawn()const{
-		return const_cast<File*>(this)->spawn();
+	std::unique_ptr<const file> spawn()const{
+		return const_cast<file*>(this)->spawn();
 	}
 	
 public:
 	/**
-	 * @brief File guard class.
+	 * @brief file guard class.
 	 * Use this class to open the file within the particular scope.
 	 * As the file guard object goes out of the scope it will close the file in its destructor.
 	 * Usage:
 	 * @code
-	 *	File& fi;//assume we have some ting::File object visible in current scope.
-	 *	...
-	 *	{
-	 *		//assume the 'fi' is closed.
-	 *		//Let's create the file guard object. This will open the file 'fi'
-	 *		// for reading by calling fi.Open(ting::File::READ) method.
-	 *		ting::File::Guard fileGuard(fi, ting::File::READ);
-	 * 
-	 *		...
-	 *		//do some reading
-	 *		fi.Read(...);
-	 *		
-	 *		//going out of scope will destroy the 'fileGuard' object. In turn,
-	 *		//it will automatically close the file 'fi' in its destructor by
-	 *		//calling fi.Close() method.
-	 *	}
-	 * @endcode
-	 */
-	class Guard{
-		const File& f;
+	 *	file& fi;//assume we have some papki::file object visible in current scope.
+	*	...
+	*	{
+	*		//assume the 'fi' is closed.
+	*		//Let's create the file guard object. This will open the file 'fi'
+	*		// for reading by calling fi.Open(papki::file::mode::read) method.
+	*		papki::file::Guard fileGuard(fi, papki::file::mode::read);
+	* 
+	*		...
+	*		//do some reading
+	*		fi.Read(...);
+	*		
+	*		//going out of scope will destroy the 'fileGuard' object. In turn,
+	*		//it will automatically close the file 'fi' in its destructor by
+	*		//calling fi.Close() method.
+	*	}
+	* @endcode
+	*/
+	class guard{
+		const file& f;
 	public:
-		Guard(File &file, E_Mode mode);
+		guard(file &file, mode mode);
 
-		Guard(const File &file);
+		guard(const file &file);
 		
-		~Guard();
+		~guard();
 	};
+
+	//TODO: deprecated, remove.
+	typedef guard Guard;
 };
 
+//TODO: deprecated, remove.
+typedef file File;
 
-
-}//~namespace
+}

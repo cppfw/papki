@@ -6,7 +6,7 @@
 
 #include <utki/config.hpp>
 
-#include "File.hpp"
+#include "file.hpp"
 
 #include <vector>
 
@@ -48,7 +48,7 @@ public:
 	
 
 	virtual std::unique_ptr<File> spawn()override{
-		return utki::makeUnique<MemoryFile>();
+		return utki::make_unique<MemoryFile>();
 	}
 
 	
@@ -65,7 +65,7 @@ public:
 	}
 	
 protected:
-	void openInternal(E_Mode mode)override;
+	void openInternal(mode mode)override;
 	
 	void closeInternal()const noexcept override{}
 	

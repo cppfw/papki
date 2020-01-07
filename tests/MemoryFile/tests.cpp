@@ -17,7 +17,7 @@ void Run(){
 		std::uint8_t buf[] = {1, 2, 3, 4};
 		utki::Buf<std::uint8_t> b(buf, sizeof(buf));
 		
-		papki::File::Guard fileGuard(f, papki::File::E_Mode::CREATE);
+		papki::File::Guard fileGuard(f, papki::File::mode::create);
 		
 		f.write(b);
 	}
@@ -25,7 +25,7 @@ void Run(){
 	{
 		std::array<std::uint8_t, 4> b;
 		
-		papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
+		papki::File::Guard fileGuard(f, papki::File::mode::read);
 		
 		f.read(utki::wrapBuf(b));
 		

@@ -7,7 +7,7 @@
 
 #include <utki/config.hpp>
 
-#include "File.hpp"
+#include "file.hpp"
 
 namespace papki{
 
@@ -33,7 +33,7 @@ public:
 	}
 	
 	static std::unique_ptr<const RootDirFile> makeUniqueConst(std::unique_ptr<const File> baseFile, const std::string& rootDir){
-		return utki::makeUnique<const RootDirFile>(std::unique_ptr<File>(const_cast<File*>(baseFile.release())), rootDir);
+		return utki::make_unique<const RootDirFile>(std::unique_ptr<File>(const_cast<File*>(baseFile.release())), rootDir);
 	}
 	
 	RootDirFile(const RootDirFile&) = delete;
@@ -45,7 +45,7 @@ private:
 		this->baseFile->setPath(this->rootDir + pathName);
 	}
 	
-	void openInternal(E_Mode mode)override{
+	void openInternal(mode mode)override{
 		this->baseFile->open(mode);
 	}
 	
@@ -86,7 +86,7 @@ private:
 	}
 	
 	std::unique_ptr<File> spawn()override{
-		return utki::makeUnique<RootDirFile>(this->baseFile->spawn(), this->rootDir);
+		return utki::make_unique<RootDirFile>(this->baseFile->spawn(), this->rootDir);
 	}
 };
 

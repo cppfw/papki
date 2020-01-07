@@ -1,7 +1,7 @@
 #include <utki/debug.hpp>
 #include <utki/types.hpp>
 
-#include "../../src/papki/FSFile.hpp"
+#include "../../src/papki/fs_file.hpp"
 #include "../../src/papki/RootDirFile.hpp"
 
 #include "tests.hpp"
@@ -12,7 +12,7 @@
 
 namespace TestSeekForward{
 void Run(){
-	papki::FSFile f("test.file.txt");
+	papki::fs_file f("test.file.txt");
 	ASSERT_ALWAYS(!f.isDir())
 	ASSERT_ALWAYS(!f.isOpened())
 	
@@ -21,7 +21,7 @@ void Run(){
 		{
 			std::vector<std::uint8_t> buf(numToSeek);
 			
-			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
+			papki::File::Guard fileGuard(f, papki::File::mode::read);
 			
 			auto res = f.read(utki::wrapBuf(buf));
 			ASSERT_ALWAYS(res == buf.size())
@@ -33,9 +33,9 @@ void Run(){
 		}
 		
 		{
-			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
+			papki::File::Guard fileGuard(f, papki::File::mode::read);
 
-			f.File::seekForward(numToSeek);
+			f.file::seekForward(numToSeek);
 
 			std::array<std::uint8_t, 1> buf;
 
@@ -46,7 +46,7 @@ void Run(){
 		}
 
 		{
-			papki::File::Guard fileGuard(f, papki::File::E_Mode::READ);
+			papki::File::Guard fileGuard(f, papki::File::mode::read);
 
 			f.seekForward(numToSeek);
 
@@ -65,7 +65,7 @@ void Run(){
 
 namespace TestListDirContents{
 void Run(){
-	papki::FSFile curDir("./");
+	papki::fs_file curDir("./");
 	papki::File& f = curDir;
 	
 	std::vector<std::string> r = f.listDirContents();
@@ -87,7 +87,7 @@ void Run(){
 
 namespace TestHomeDir{
 void Run(){
-	std::string hd = papki::FSFile::getHomeDir();
+	std::string hd = papki::fs_file::getHomeDir();
 	
 	ASSERT_ALWAYS(hd.size() > 1) //There is always a trailing '/' character, so make sure there is something else besides that.
 	ASSERT_ALWAYS(hd[hd.size() - 1] == '/')
@@ -100,7 +100,7 @@ void Run(){
 
 namespace TestLoadWholeFileToMemory{
 void Run(){
-	papki::RootDirFile f(utki::makeUnique<papki::FSFile>(), "");
+	papki::RootDirFile f(utki::make_unique<papki::fs_file>(), "");
 	f.setPath("test.file.txt");
 	ASSERT_ALWAYS(!f.isDir())
 	ASSERT_ALWAYS(!f.isOpened())

@@ -16,15 +16,15 @@
 #include <cstdlib>
 #include <sstream>
 
-#include "FSFile.hpp"
+#include "fs_file.hpp"
 
-// TODO: deprecated, remove whole file.
+
 
 using namespace papki;
 
 
 
-void FSFile::openInternal(mode mode){
+void fs_file::openInternal(mode mode){
 	if(this->isDir()){
 		throw papki::exception("path refers to a directory, directories can't be opened");
 	}
@@ -53,21 +53,21 @@ void FSFile::openInternal(mode mode){
 	this->handle = fopen(this->path().c_str(), modeStr);
 #endif
 	if(!this->handle){
-		TRACE(<< "FSFile::Open(): Path() = " << this->path().c_str() << std::endl)
+		TRACE(<< "fs_file::Open(): Path() = " << this->path().c_str() << std::endl)
 		std::stringstream ss;
 		ss << "fopen(" << this->path().c_str() << ") failed";
 		throw papki::exception(ss.str());
 	}
 }
 
-void FSFile::closeInternal()const noexcept{
+void fs_file::closeInternal()const noexcept{
 	ASSERT(this->handle)
 
 	fclose(this->handle);
 	this->handle = 0;
 }
 
-size_t FSFile::readInternal(utki::Buf<std::uint8_t> buf)const{
+size_t fs_file::readInternal(utki::Buf<std::uint8_t> buf)const{
 	ASSERT(this->handle)
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
 	if(numBytesRead != buf.size()){//something happened
@@ -78,7 +78,7 @@ size_t FSFile::readInternal(utki::Buf<std::uint8_t> buf)const{
 	return numBytesRead;
 }
 
-size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
+size_t fs_file::writeInternal(const utki::Buf<std::uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
 	if(bytesWritten != buf.size()){//something bad has happened
@@ -90,7 +90,7 @@ size_t FSFile::writeInternal(const utki::Buf<std::uint8_t> buf){
 
 
 
-size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
+size_t fs_file::seekBackwardInternal(size_t numBytesToSeek)const{
 	ASSERT(this->handle)
 
 	//NOTE: fseek() accepts 'long int' as offset argument which is signed and can be
@@ -131,7 +131,7 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 	return numBytesToSeek;
 }
 
-void FSFile::rewindInternal()const{
+void fs_file::rewindInternal()const{
 	if(!this->isOpened()){
 		throw utki::invalid_state("cannot rewind, file is not opened");
 	}
@@ -142,7 +142,7 @@ void FSFile::rewindInternal()const{
 	}
 }
 
-bool FSFile::exists()const{
+bool fs_file::exists()const{
 	if(this->isOpened()){ //file is opened => it exists
 		return true;
 	}
@@ -184,7 +184,7 @@ bool FSFile::exists()const{
 
 
 
-void FSFile::makeDir(){
+void fs_file::makeDir(){
 	if(this->isOpened()){
 		throw utki::invalid_state("cannot make directory when file is opened");
 	}
@@ -212,7 +212,7 @@ void FSFile::makeDir(){
 
 
 
-std::string FSFile::getHomeDir() {
+std::string fs_file::getHomeDir() {
 	std::string ret;
 
 #if M_OS == M_OS_WINDOWS && M_COMPILER == M_COMPILER_MSVC
@@ -257,9 +257,9 @@ std::string FSFile::getHomeDir() {
 }
 
 
-std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
+std::vector<std::string> fs_file::listDirContents(size_t maxEntries)const{
 	if(!this->isDir()){
-		throw papki::exception("FSFile::ListDirContents(): this is not a directory");
+		throw papki::exception("fs_file::ListDirContents(): this is not a directory");
 	}
 
 	std::vector<std::string> files;
@@ -269,7 +269,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 		std::string pattern = this->path();
 		pattern += '*';
 
-		TRACE(<< "FSFile::ListDirContents(): pattern = " << pattern << std::endl)
+		TRACE(<< "fs_file::ListDirContents(): pattern = " << pattern << std::endl)
 
 		WIN32_FIND_DATA wfd;
 		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
@@ -313,7 +313,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 
 		if(!pdir){
 			std::stringstream ss;
-			ss << "FSFile::ListDirContents(): opendir() failure, error code = " << strerror(errno);
+			ss << "fs_file::ListDirContents(): opendir() failure, error code = " << strerror(errno);
 			throw papki::exception(ss.str());
 		}
 
@@ -329,7 +329,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 				int ret;
 				do{
 					ret = closedir(this->pdir);
-					ASSERT_INFO(ret == 0 || errno == EINTR, "FSFile::ListDirContents(): closedir() failed: " << strerror(errno))
+					ASSERT_INFO(ret == 0 || errno == EINTR, "fs_file::ListDirContents(): closedir() failed: " << strerror(errno))
 				}while(ret != 0 && errno == EINTR);
 			}
 		} dirCloser(pdir);
@@ -344,7 +344,7 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 			//TRACE(<< s << std::endl)
 			if(stat((this->path() + s).c_str(), &fileStats) < 0){
 				std::stringstream ss;
-				ss << "FSFile::ListDirContents(): stat() failure, error code = " << strerror(errno);
+				ss << "fs_file::ListDirContents(): stat() failure, error code = " << strerror(errno);
 				throw papki::exception(ss.str());
 			}
 
@@ -361,20 +361,20 @@ std::vector<std::string> FSFile::listDirContents(size_t maxEntries)const{
 		//check if we exited the while() loop because of readdir() failed
 		if(errno != 0){
 			std::stringstream ss;
-			ss << "FSFile::ListDirContents(): readdir() failure, error code = " << strerror(errno);
+			ss << "fs_file::ListDirContents(): readdir() failure, error code = " << strerror(errno);
 			throw papki::exception(ss.str());
 		}
 	}
 
 #else
 
-#	error "FSFile::ListDirContents(): version is not implemented yet for this os"
+#	error "fs_file::ListDirContents(): version is not implemented yet for this os"
 
 #endif
 	return files;
 }
 
 
-std::unique_ptr<File> FSFile::spawn(){
-	return utki::make_unique<FSFile>();
+std::unique_ptr<File> fs_file::spawn(){
+	return utki::make_unique<fs_file>();
 }

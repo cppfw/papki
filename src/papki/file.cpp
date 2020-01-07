@@ -1,7 +1,7 @@
 #include <list>
 #include <cstring>
 
-#include "File.hpp"
+#include "file.hpp"
 
 
 
@@ -9,7 +9,7 @@ using namespace papki;
 
 
 
-std::string File::ext()const{
+std::string file::ext()const{
 	size_t dotPos = this->path().rfind('.');
 	if(dotPos == std::string::npos || dotPos == 0){//NOTE: dotPos is 0 for hidden files in *nix systems
 		return std::string();
@@ -30,7 +30,7 @@ std::string File::ext()const{
 
 
 
-std::string File::dir()const{
+std::string file::dir()const{
 	size_t slashPos = this->path().rfind('/');
 	if(slashPos == std::string::npos){//no slash found
 		return std::string();
@@ -45,7 +45,7 @@ std::string File::dir()const{
 
 
 
-std::string File::notDir()const{
+std::string file::notDir()const{
 	size_t slashPos = this->path().rfind('/');
 	if(slashPos == std::string::npos){//no slash found
 		return this->path();
@@ -60,7 +60,7 @@ std::string File::notDir()const{
 
 
 
-bool File::isDir()const noexcept{
+bool file::isDir()const noexcept{
 	if(this->path().size() == 0){
 		return false;
 	}
@@ -75,13 +75,13 @@ bool File::isDir()const noexcept{
 
 
 
-std::vector<std::string> File::listDirContents(size_t maxEntries)const{
-	throw papki::exception("File::ListDirContents(): not supported for this File instance");
+std::vector<std::string> file::listDirContents(size_t maxEntries)const{
+	throw papki::exception("file::ListDirContents(): not supported for this file instance");
 }
 
 
 
-size_t File::read(utki::Buf<std::uint8_t> buf)const{
+size_t file::read(utki::Buf<std::uint8_t> buf)const{
 	if(!this->isOpened()){
 		throw utki::invalid_state("Cannot read, file is not opened");
 	}
@@ -93,13 +93,13 @@ size_t File::read(utki::Buf<std::uint8_t> buf)const{
 
 
 
-size_t File::write(const utki::Buf<std::uint8_t> buf){
+size_t file::write(const utki::Buf<std::uint8_t> buf){
 	if(!this->isOpened()){
 		throw utki::invalid_state("Cannot write, file is not opened");
 	}
 
-	if(this->ioMode != E_Mode::WRITE){
-		throw utki::invalid_state("file is opened, but not in WRITE mode");
+	if(this->ioMode != mode::write){
+		throw utki::invalid_state("file is opened, but not in write mode");
 	}
 	
 	size_t ret = this->writeInternal(buf);
@@ -109,7 +109,7 @@ size_t File::write(const utki::Buf<std::uint8_t> buf){
 
 
 
-size_t File::seekForwardInternal(size_t numBytesToSeek)const{
+size_t file::seekForwardInternal(size_t numBytesToSeek)const{
 	std::array<std::uint8_t, 0x1000> buf;//4kb buffer
 	
 	size_t bytesRead = 0;
@@ -132,7 +132,7 @@ size_t File::seekForwardInternal(size_t numBytesToSeek)const{
 
 
 
-void File::makeDir(){
+void file::makeDir(){
 	throw papki::exception("Make directory is not supported");
 }
 
@@ -152,12 +152,12 @@ struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
 
 
 
-std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)const{
+std::vector<std::uint8_t> file::loadWholeFileIntoMemory(size_t maxBytesToLoad)const{
 	if(this->isOpened()){
 		throw utki::invalid_state("file should not be opened");
 	}
 
-	File::Guard fileGuard(*this);//make sure we close the file upon exit from the function
+	file::guard fileGuard(*this);//make sure we close the file upon exit from the function
 	
 	std::list<Chunk> chunks;
 	
@@ -216,49 +216,49 @@ std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)co
 
 
 
-bool File::exists()const{
+bool file::exists()const{
 	if(this->isDir()){
-		throw papki::exception("File::Exists(): Checking for directory existence is not supported");
+		throw papki::exception("file::Exists(): Checking for directory existence is not supported");
 	}
 
 	if(this->isOpened()){
 		return true;
 	}
 
-	//try opening and closing the file to find out if it exists or not
+	// try opening and closing the file to find out if it exists or not
 	ASSERT(!this->isOpened())
 	try{
-		File::Guard fileGuard(const_cast<File&>(*this), File::E_Mode::READ);
+		file::guard fileGuard(const_cast<file&>(*this), file::mode::read);
 	}catch(papki::exception&){
-		return false;//file opening failed, assume the file does not exist
+		return false; // file opening failed, assume the file does not exist
 	}
-	return true;//file open succeeded => file exists
+	return true; // file open succeeded => file exists
 }
 
 
 
-File::Guard::Guard(File& file, E_Mode mode) :
-		f(file)
+file::guard::guard(file& f, mode io_mode) :
+		f(f)
 {
 	if(this->f.isOpened()){
-		throw papki::exception("File::Guard::Guard(): file is already opened");
+		throw papki::exception("file::guard::guard(): file is already opened");
 	}
 
-	const_cast<File&>(this->f).open(mode);
+	const_cast<file&>(this->f).open(io_mode);
 }
 
 
-File::Guard::Guard(const File& file) :
-		f(file)
+file::guard::guard(const file& f) :
+		f(f)
 {
 	if(this->f.isOpened()){
-		throw papki::exception("File::Guard::Guard(): file is already opened");
+		throw papki::exception("file::guard::guard(): file is already opened");
 	}
 
 	this->f.open();
 }
 
 
-File::Guard::~Guard(){
+file::guard::~guard(){
 	this->f.close();
 }

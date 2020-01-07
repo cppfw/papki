@@ -6,7 +6,7 @@
 
 #include <utki/config.hpp>
 
-#include "File.hpp"
+#include "file.hpp"
 
 
 namespace papki{
@@ -51,7 +51,7 @@ public:
 
 protected:
 
-	void openInternal(E_Mode mode)override;
+	void openInternal(mode mode)override;
 	
 	void closeInternal()const noexcept override{}
 	

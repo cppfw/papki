@@ -12,13 +12,13 @@
 
 namespace papki{
 
-// TODO: deprecated, remove whole file.
+
 
 /**
  * @brief Native OS file system implementation of File interface.
  * Implementation of a ting::File interface for native file system of the OS.
  */
-class FSFile : public File{
+class fs_file : public file{
 	mutable FILE* handle = nullptr;
 
 protected:
@@ -47,7 +47,7 @@ public:
 	 * the root directory and the path returned by Path() method. 
      * @param pathName - initial path to set passed to File constructor.
      */
-	FSFile(const std::string& pathName = std::string()) :
+	fs_file(const std::string& pathName = std::string()) :
 			File(pathName)
 	{}
 	
@@ -55,7 +55,7 @@ public:
 	 * @brief Destructor.
 	 * This destructor calls the Close() method.
 	 */
-	virtual ~FSFile()noexcept{
+	virtual ~fs_file()noexcept{
 		this->close();
 	}	
 	
