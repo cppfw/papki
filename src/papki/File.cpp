@@ -83,7 +83,7 @@ std::vector<std::string> File::listDirContents(size_t maxEntries)const{
 
 size_t File::read(utki::Buf<std::uint8_t> buf)const{
 	if(!this->isOpened()){
-		throw utki::illegal_state("Cannot read, file is not opened");
+		throw utki::invalid_state("Cannot read, file is not opened");
 	}
 	
 	size_t ret = this->readInternal(buf);
@@ -95,11 +95,11 @@ size_t File::read(utki::Buf<std::uint8_t> buf)const{
 
 size_t File::write(const utki::Buf<std::uint8_t> buf){
 	if(!this->isOpened()){
-		throw utki::illegal_state("Cannot write, file is not opened");
+		throw utki::invalid_state("Cannot write, file is not opened");
 	}
 
 	if(this->ioMode != E_Mode::WRITE){
-		throw utki::illegal_state("file is opened, but not in WRITE mode");
+		throw utki::invalid_state("file is opened, but not in WRITE mode");
 	}
 	
 	size_t ret = this->writeInternal(buf);
@@ -154,7 +154,7 @@ struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
 
 std::vector<std::uint8_t> File::loadWholeFileIntoMemory(size_t maxBytesToLoad)const{
 	if(this->isOpened()){
-		throw utki::illegal_state("file should not be opened");
+		throw utki::invalid_state("file should not be opened");
 	}
 
 	File::Guard fileGuard(*this);//make sure we close the file upon exit from the function

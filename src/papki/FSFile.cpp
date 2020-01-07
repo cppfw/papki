@@ -133,7 +133,7 @@ size_t FSFile::seekBackwardInternal(size_t numBytesToSeek)const{
 
 void FSFile::rewindInternal()const{
 	if(!this->isOpened()){
-		throw utki::illegal_state("cannot rewind, file is not opened");
+		throw utki::invalid_state("cannot rewind, file is not opened");
 	}
 
 	ASSERT(this->handle)
@@ -186,7 +186,7 @@ bool FSFile::exists()const{
 
 void FSFile::makeDir(){
 	if(this->isOpened()){
-		throw utki::illegal_state("cannot make directory when file is opened");
+		throw utki::invalid_state("cannot make directory when file is opened");
 	}
 
 	if(this->path().size() == 0 || this->path()[this->path().size() - 1] != '/'){

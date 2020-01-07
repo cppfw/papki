@@ -75,7 +75,7 @@ public:
 	 */
 	void setPath(const std::string& pathName)const{
 		if(this->isOpened()){
-			throw utki::illegal_state("papki::file::set_path(): Cannot set path when file is opened");
+			throw utki::invalid_state("papki::file::set_path(): Cannot set path when file is opened");
 		}
 
 		this->setPathInternal(pathName);
@@ -139,14 +139,14 @@ public:
 	 * @brief Open file.
 	 * Opens file for reading/writing or creates the file.
 	 * @param mode - file opening mode (reading/writing/create).
-	 * @throw utki::illegal_state - if file is already opened.
+	 * @throw utki::invalid_state - if file is already opened.
 	 */
 	void open(E_Mode mode){
 		if(this->isOpened()){
-			throw utki::illegal_state("papki::file::open(): file is already opened");
+			throw utki::invalid_state("papki::file::open(): file is already opened");
 		}
 		if(this->isDir()){
-			throw utki::illegal_state("File refers to directory. Directory cannot be opened.");
+			throw utki::invalid_state("File refers to directory. Directory cannot be opened.");
 		}
 		this->openInternal(mode);
 		
@@ -165,7 +165,7 @@ public:
 	/**
 	 * @brief Open file for reading.
 	 * This is equivalent to Open(E_Mode::READ);
-	 * @throw utki::illegal_state - if file is already opened.
+	 * @throw utki::invalid_state - if file is already opened.
      */
 	void open()const{
 		const_cast<File*>(this)->open(E_Mode::READ);
@@ -237,7 +237,7 @@ public:
 	 * @param buf - buffer where to store the read data.
 	 * @return Number of bytes actually read. Shall always be equal to number of bytes requested to read
 	 *         except the case when end of file reached.
-	 * @throw utki::illegal_state - if file is not opened.
+	 * @throw utki::invalid_state - if file is not opened.
 	 */
 	size_t read(utki::Buf<std::uint8_t> buf)const;
 
@@ -262,7 +262,7 @@ public:
 	 * @return Number of bytes actually written. Normally, should always write all the passed data,
 	 *         the only reasonable case when less data is written is when there is no more free space
 	 *         in the file system.
-	 * @throw utki::illegal_state - if file is not opened or opened for reading only.
+	 * @throw utki::invalid_state - if file is not opened or opened for reading only.
 	 */
 	size_t write(const utki::Buf<std::uint8_t> buf);
 
@@ -288,11 +288,11 @@ public:
 	 * It will not go beyond the end of file.
 	 * @param numBytesToSeek - number of bytes to skip.
 	 * @return number of bytes actually skipped.
-	 * @throw utki::illegal_state - if file is not opened.
+	 * @throw utki::invalid_state - if file is not opened.
 	 */
 	size_t seekForward(size_t numBytesToSeek)const{
 		if(!this->isOpened()){
-			throw utki::illegal_state("seekForward(): file is not opened");
+			throw utki::invalid_state("seekForward(): file is not opened");
 		}
 		size_t ret = this->seekForwardInternal(numBytesToSeek);
 		this->curPos_var += ret;
@@ -319,11 +319,11 @@ public:
 	 * support seeking backwards.
 	 * @param numBytesToSeek - number of bytes to skip.
 	 * @return number of bytes actually skipped.
-	 * @throw utki::illegal_state - if file is not opened.
+	 * @throw utki::invalid_state - if file is not opened.
 	 */
 	size_t seekBackward(size_t numBytesToSeek)const{
 		if(!this->isOpened()){
-			throw utki::illegal_state("seekBackward(): file is not opened");
+			throw utki::invalid_state("seekBackward(): file is not opened");
 		}
 		size_t ret = this->seekBackwardInternal(numBytesToSeek);
 		ASSERT(ret <= this->curPos_var)
@@ -348,11 +348,11 @@ public:
 	/**
 	 * @brief Seek to the beginning of the file.
 	 * There is a default implementation of this operation by just closing and opening the file again.
-	 * @throw utki::illegal_state - if file is not opened.
+	 * @throw utki::invalid_state - if file is not opened.
 	 */
 	void rewind()const{
 		if(!this->isOpened()){
-			throw utki::illegal_state("Rewind(): file is not opened");
+			throw utki::invalid_state("Rewind(): file is not opened");
 		}
 		this->rewindInternal();
 		this->curPos_var = 0;
@@ -377,7 +377,7 @@ public:
 	 * If this File instance is a directory then try to create that directory on
 	 * file system. Not all file systems are writable, so not all of them support
 	 * directory creation.
-	 * @throw utki::illegal_state - if file is opened.
+	 * @throw utki::invalid_state - if file is opened.
 	 */
 	virtual void makeDir();
 
@@ -386,7 +386,7 @@ public:
 	 * @brief Load the entire file into the RAM.
 	 * @param maxBytesToLoad - maximum bytes to load. Default value is the maximum limit the size_t type can hold.
 	 * @return Array containing loaded file data.
-	 * @throw utki::illegal_state - if file is already opened.
+	 * @throw utki::invalid_state - if file is already opened.
 	 */
 	std::vector<std::uint8_t> loadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const;
 

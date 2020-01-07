@@ -59,7 +59,7 @@ public:
      */
 	decltype(data) resetData(){
 		if(this->isOpened()){
-			throw utki::illegal_state("MemoryFile::ResetData(): could not reset data while file is opened");
+			throw utki::invalid_state("MemoryFile::ResetData(): could not reset data while file is opened");
 		}
 		return std::move(this->data);
 	}
