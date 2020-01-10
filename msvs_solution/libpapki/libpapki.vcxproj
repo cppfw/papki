@@ -467,10 +467,7 @@
     <ClInclude Include="..\..\src\**\*.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\papki\file.cpp" />
-    <ClCompile Include="..\..\src\papki\fs_file.cpp" />
-    <ClCompile Include="..\..\src\papki\span_file.cpp" />
-    <ClCompile Include="..\..\src\papki\vector_file.cpp" />
+    <ClCompile Include="..\..\src\**\*.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
