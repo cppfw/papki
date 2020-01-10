@@ -1,3 +1,9 @@
+libpapki (1.0.69) unstable; urgency=medium
+
+  * added papki:is_dir() function
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 10 Jan 2020 11:16:39 +0200
+
 libpapki (1.0.68) unstable; urgency=medium
 
   * include utki/Buf.hpp to FSFile.hpp
