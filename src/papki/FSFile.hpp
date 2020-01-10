@@ -18,4 +18,4 @@ namespace papki{
 
 typedef fs_file FSFile;
 
-}//~namespace
+}

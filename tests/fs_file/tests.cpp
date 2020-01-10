@@ -2,7 +2,8 @@
 #include <utki/types.hpp>
 
 #include "../../src/papki/fs_file.hpp"
-#include "../../src/papki/RootDirFile.hpp"
+#include "../../src/papki/root_dir.hpp"
+#include "../../src/papki/util.hpp"
 
 #include "tests.hpp"
 
@@ -56,7 +57,7 @@ void Run(){
 		}
 	}//~for
 }
-}//~namespace
+}
 
 
 
@@ -78,7 +79,7 @@ void Run(){
 	ASSERT_ALWAYS(r[0] == r2[0])
 	ASSERT_ALWAYS(r[1] == r2[1])
 }
-}//~namespace
+}
 
 
 
@@ -86,18 +87,18 @@ namespace TestHomeDir{
 void Run(){
 	std::string hd = papki::fs_file::getHomeDir();
 	
-	ASSERT_ALWAYS(hd.size() > 1) //There is always a trailing '/' character, so make sure there is something else besides that.
-	ASSERT_ALWAYS(hd[hd.size() - 1] == '/')
+	ASSERT_ALWAYS(hd.size() != 0) // There is always a trailing '/' character, so make sure there is something else besides that.
+	ASSERT_ALWAYS(papki::is_dir(hd))
 	
 	TRACE_ALWAYS(<< "\tHome dir = " << hd << std::endl)
 }
-}//~namespace
+}
 
 
 
 namespace TestLoadWholeFileToMemory{
 void Run(){
-	papki::RootDirFile f(utki::make_unique<papki::fs_file>(), "");
+	papki::root_dir f(utki::make_unique<papki::fs_file>(), "");
 	f.setPath("test.file.txt");
 	ASSERT_ALWAYS(!f.isDir())
 	ASSERT_ALWAYS(!f.isOpened())
@@ -127,4 +128,4 @@ void Run(){
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 }
-}//~namespace
+}

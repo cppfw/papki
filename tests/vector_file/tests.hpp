@@ -3,4 +3,4 @@
 
 namespace TestBasicMemoryFile{
 void Run();
-}//~namespace
+}
