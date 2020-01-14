@@ -444,7 +444,7 @@ public:
 	 * Fall back implementation is to open the file, seek to its end and get current position.
 	 * @return file size.
 	 */
-	virtual size_t size()const;
+	virtual uint64_t size()const;
 	
 	/**
 	 * @brief Creates another file object of same implementation.

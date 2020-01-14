@@ -237,7 +237,7 @@ bool file::exists()const{
 }
 
 
-size_t file::size()const{
+uint64_t file::size()const{
 	if(this->is_open()){
 		throw utki::invalid_state("file must not be open when calling file::size() method");
 	}

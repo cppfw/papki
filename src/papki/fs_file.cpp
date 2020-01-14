@@ -411,7 +411,7 @@ size_t fs_file::size()const{
 	}
 	return file_stats.st_size;
 #else
-#	error "fs_file::size(): is not implemented yet for this os"
+	return this->file::size();
 #endif
 }
 
