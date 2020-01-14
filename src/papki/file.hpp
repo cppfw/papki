@@ -419,14 +419,14 @@ public:
 public:
 	/**
 	 * @brief Load the entire file into the RAM.
-	 * @param maxBytesToLoad - maximum bytes to load. Default value is the maximum limit the size_t type can hold.
+	 * @param max_bytes_to_load - maximum bytes to load. Default value is the maximum limit the size_t type can hold.
 	 * @return Array containing loaded file data.
 	 * @throw utki::invalid_state - if file is already opened.
 	 */
-	std::vector<std::uint8_t> load(size_t maxBytesToLoad = size_t(-1))const;
+	std::vector<uint8_t> load(size_t max_bytes_to_load = ~0)const;
 
 	//TODO: deprecated, remove.
-	std::vector<std::uint8_t> loadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const{
+	std::vector<uint8_t> loadWholeFileIntoMemory(size_t maxBytesToLoad = size_t(-1))const{
 		return this->load(maxBytesToLoad);
 	}
 

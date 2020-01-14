@@ -152,65 +152,30 @@ struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
 
 
 
-std::vector<std::uint8_t> file::load(size_t maxBytesToLoad)const{
-	if(this->isOpened()){
-		throw utki::invalid_state("file should not be opened");
+std::vector<uint8_t> file::load(size_t max_bytes_to_load)const{
+	if(this->is_open()){
+		throw utki::invalid_state("file::load(): file should not be opened");
 	}
 
-	file::guard fileGuard(*this);//make sure we close the file upon exit from the function
-	
-	std::list<Chunk> chunks;
-	
-	size_t res = 0;
-	size_t bytesRead = 0;
-	
-	for(;;){
-		if(bytesRead == maxBytesToLoad){
-			break;
-		}
-		
-		chunks.push_back(Chunk());
-		
-		ASSERT(maxBytesToLoad > bytesRead)
-		
-		size_t numBytesToRead = maxBytesToLoad - bytesRead;
-		utki::clampTop(numBytesToRead, chunks.back().size());
-		
-		res = this->read(utki::make_span(&*chunks.back().begin(), numBytesToRead));
+	std::vector<uint8_t> ret;
 
-		bytesRead += res;
-		
-		if(res != numBytesToRead){
-			ASSERT(res < chunks.back().size())
-			ASSERT(res < numBytesToRead)
-			if(res == 0){
-				chunks.pop_back();//pop empty chunk
-			}
-			break;
+	file::guard file_guard(*this); // make sure we close the file upon exit from the function
+	
+	const size_t read_chunk_size = 0x1000; // 4kb
+
+	for(size_t num_bytes_read = 0; max_bytes_to_load != 0; num_bytes_read += read_chunk_size){
+		auto num_bytes_to_read = std::min(max_bytes_to_load, read_chunk_size);
+		ret.resize(ret.size() + num_bytes_to_read);
+		auto n = this->read(utki::make_span(&ret[num_bytes_read], num_bytes_to_read));
+		ASSERT(n <= num_bytes_to_read)
+		if(n != num_bytes_to_read){
+			ret.resize(num_bytes_read + n);
+			return ret;
 		}
+		ASSERT(max_bytes_to_load >= num_bytes_to_read)
+		max_bytes_to_load -= num_bytes_to_read;
 	}
-	
-	ASSERT(maxBytesToLoad >= bytesRead)
-	
-	if(chunks.size() == 0){
-		return std::vector<std::uint8_t>();
-	}
-	
-	ASSERT(chunks.size() >= 1)
-	
-	std::vector<std::uint8_t> ret((chunks.size() - (res == 0 ? 0 : 1)) * chunks.front().size() + res);
-	
-	auto p = ret.begin();
-	for(; chunks.size() > (res == 0 ? 0 : 1); p += chunks.front().size()){
-		memcpy(&*p, &*chunks.front().begin(), chunks.front().size());
-		chunks.pop_front();
-	}
-	
-	ASSERT(chunks.size() == (res == 0 ? 0 : 1))
-	ASSERT(res <= chunks.front().size())
-	memcpy(&*p, &*chunks.front().begin(), res);
-	ASSERT(p + res == ret.end())
-	
+
 	return ret;
 }
 
