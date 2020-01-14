@@ -382,9 +382,16 @@ size_t fs_file::size()const{
 	}
 
 #if M_OS == M_OS_WINDOWS
-	OFSTRUCT ofstruct;
-	HFILE hfile = OpenFile(this->path().c_str(), &ofstruct, OF_READ);
-	if(hfile == HFILE_ERROR){
+	HANDLE hfile = CreateFile(
+			this->path().c_str(),
+			GENERIC_READ,
+			FILE_SHARE_READ | FILE_SHARE_WRITE,
+			NULL,
+			OPEN_EXISTING,
+			FILE_ATTRIBUTE_NORMAL,
+			NULL
+		);
+	if(hfile == INVALID_HANDLE_VALUE){
 		throw std::system_error(GetLastError(), std::generic_category(), "OpenFile() failed");
 	}
 	utki::scope_exit hfile_scope_exit([&hfile](){
