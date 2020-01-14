@@ -46,7 +46,7 @@ public:
 
 protected:
 
-	void open_internal(mode mode)override;
+	void open_internal(mode io_mode)override;
 	
 	void close_internal()const noexcept override{}
 	

@@ -18,7 +18,7 @@ class fs_file : public file{
 	mutable FILE* handle = nullptr;
 
 protected:
-	void open_internal(mode mode)override;
+	void open_internal(mode io_mode)override;
 
 	void close_internal()const noexcept override;
 

@@ -190,7 +190,7 @@ protected:
 	/**
 	 * @brief Open file, internal implementation.
 	 * Derived class should override this function with its own implementation.
-	 * @param mode - opening mode.
+	 * @param io_mode - opening mode.
 	 */
 	virtual void open_internal(mode io_mode) = 0;
 	

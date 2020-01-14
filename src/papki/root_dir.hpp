@@ -45,8 +45,8 @@ private:
 		this->baseFile->setPath(this->rootDir + pathName);
 	}
 	
-	void open_internal(mode mode)override{
-		this->baseFile->open(mode);
+	void open_internal(mode io_mode)override{
+		this->baseFile->open(io_mode);
 	}
 	
 	void close_internal()const noexcept override{
