@@ -57,7 +57,7 @@ public:
 	
 	bool exists()const override;
 	
-	size_t size()const override;
+	uint64_t size()const override;
 
 	void make_dir()override;
 

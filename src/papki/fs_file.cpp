@@ -376,7 +376,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 }
 
 
-size_t fs_file::size()const{
+uint64_t fs_file::size()const{
 	if(this->is_dir()){
 		throw utki::invalid_state("method size() is called on directory");
 	}
