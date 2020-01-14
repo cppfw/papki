@@ -142,7 +142,7 @@ void fs_file::rewind_internal()const{
 }
 
 bool fs_file::exists()const{
-	if(this->isOpened()){ //file is opened => it exists
+	if(this->isOpened()){ // file is opened => it exists
 		return true;
 	}
 
@@ -150,7 +150,7 @@ bool fs_file::exists()const{
 		return false;
 	}
 
-	//if it is a directory, check directory existence
+	// if it is a directory, check directory existence
 	if(this->path()[this->path().size() - 1] == '/'){
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 		DIR *pdir = opendir(this->path().c_str());
@@ -163,12 +163,12 @@ bool fs_file::exists()const{
 #elif M_OS == M_OS_WINDOWS
 		DWORD attrs = GetFileAttributesA(this->path().c_str());
 		if (attrs == INVALID_FILE_ATTRIBUTES){
-			//Could not get file attributes, perhaps the file/directory does not exist.
+			// Could not get file attributes, perhaps the file/directory does not exist.
 			return false;
 		}
 
 		if (attrs & FILE_ATTRIBUTE_DIRECTORY){
-			//This is a directory and it exists
+			// This is a directory and it exists
 			return true;
 		}
 
@@ -194,7 +194,7 @@ void fs_file::make_dir(){
 
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 //	TRACE(<< "creating directory = " << this->Path() << std::endl)
-	umask(0);//clear umask for proper permissions of newly created directory
+	umask(0); // clear umask for proper permissions of newly created directory
 	if(mkdir(this->path().c_str(), 0755) != 0){
 		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
 	}
@@ -248,7 +248,7 @@ std::string fs_file::get_home_dir() {
 #	error "unsupported os"
 #endif
 
-	//append trailing '/' if needed
+	// append trailing '/' if needed
 	if(ret.size() == 0 || ret[ret.size() - 1] != '/'){
 		ret += '/';
 	}
@@ -277,7 +277,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 			throw std::system_error(GetLastError(), std::generic_category(), "FindFirstFile() failed");
 		}
 
-		//create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
+		// create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
 		{
 			utki::ScopeExit scopeExit([h]() {
 				FindClose(h);
@@ -287,7 +287,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 				std::string s(wfd.cFileName);
 				ASSERT(s.size() > 0)
 
-				//do not add ./ and ../ directories, we are not interested in them
+				// do not add ./ and ../ directories, we are not interested in them
 				if (s == "." || s == "..") {
 					continue;
 				}
@@ -319,7 +319,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 			throw std::system_error(errno, std::generic_category(), ss.str());
 		}
 
-		//create DirentCloser to automatically call closedir on exit from the function in case of exceptions etc...
+		// create DirentCloser to automatically call closedir on exit from the function in case of exceptions etc...
 		struct DirCloser{
 			DIR *pdir;
 
@@ -336,11 +336,11 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 			}
 		} dirCloser(pdir);
 
-		errno = 0;//clear errno
+		errno = 0;
 		while(dirent *pent = readdir(pdir)){
 			std::string s(pent->d_name);
 			if(s == "." || s == "..")
-				continue;//do not add ./ and ../ directories, we are not interested in them
+				continue; // do not add ./ and ../ directories, we are not interested in them
 
 			struct stat fileStats;
 			//TRACE(<< s << std::endl)
@@ -350,7 +350,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 				throw std::system_error(errno, std::system_category(), ss.str());
 			}
 
-			if(fileStats.st_mode & S_IFDIR)//if this entry is a directory append '/' symbol to its end
+			if(fileStats.st_mode & S_IFDIR) // if this entry is a directory append '/' symbol to its end
 				s += "/";
 
 			files.push_back(s);
@@ -358,9 +358,9 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 			if(files.size() == maxEntries){
 				break;
 			}
-		}//~while()
+		}
 
-		//check if we exited the while() loop because of readdir() failed
+		// check if we exited the while() loop because of readdir() failed
 		if(errno != 0){
 			std::stringstream ss;
 			ss << "fs_file::list_dir(): readdir() failure, error code = " << strerror(errno);
@@ -370,7 +370,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 
 #else
 
-#	error "fs_file::list_dir(): version is not implemented yet for this os"
+#	error "fs_file::list_dir(): is not implemented yet for this os"
 
 #endif
 	return files;
