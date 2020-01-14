@@ -1,3 +1,9 @@
+libpapki (1.0.70) unstable; urgency=medium
+
+  * added file::size() method
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 14 Jan 2020 22:16:31 +0200
+
 libpapki (1.0.69) unstable; urgency=medium
 
   * added papki:is_dir() function
