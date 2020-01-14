@@ -66,7 +66,7 @@ bool file::is_dir()const noexcept{
 	}
 
 	ASSERT(this->path().size() > 0)
-	if(this->path()[this->path().size() - 1] == '/'){
+	if(this->path().back() == '/'){
 		return true;
 	}
 
@@ -217,17 +217,17 @@ std::vector<std::uint8_t> file::load(size_t maxBytesToLoad)const{
 
 
 bool file::exists()const{
-	if(this->isDir()){
+	if(this->is_dir()){
 		// TODO: implement checking for directory existance
 		throw utki::invalid_state("file::exists(): path is a directory, checking for directory existence is not yet supported");
 	}
 
-	if(this->isOpened()){
+	if(this->is_open()){
 		return true;
 	}
 
 	// try opening and closing the file to find out if it exists or not
-	ASSERT(!this->isOpened())
+	ASSERT(!this->is_open())
 	try{
 		file::guard fileGuard(const_cast<file&>(*this), file::mode::read);
 	}catch(std::runtime_error&){
@@ -236,6 +236,16 @@ bool file::exists()const{
 	return true; // file open succeeded => file exists
 }
 
+
+size_t file::size()const{
+	if(this->is_open()){
+		throw utki::invalid_state("file must not be open when calling file::size() method");
+	}
+
+	file::guard file_guard(*this, file::mode::read);
+
+	return this->seek_forward(~0);
+}
 
 
 file::guard::guard(const file& f, mode io_mode) :

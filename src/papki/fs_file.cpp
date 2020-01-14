@@ -142,7 +142,7 @@ void fs_file::rewind_internal()const{
 }
 
 bool fs_file::exists()const{
-	if(this->isOpened()){ // file is opened => it exists
+	if(this->is_open()){ // file is opened => it exists
 		return true;
 	}
 
@@ -150,8 +150,7 @@ bool fs_file::exists()const{
 		return false;
 	}
 
-	// if it is a directory, check directory existence
-	if(this->path()[this->path().size() - 1] == '/'){
+	if(this->is_dir()){
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 		DIR *pdir = opendir(this->path().c_str());
 		if(!pdir){
@@ -174,17 +173,17 @@ bool fs_file::exists()const{
 
 		return false;
 #else
-		throw papki::exception("Checking for directory existence is not supported");
+		throw std::runtime_exception("Checking for directory existence is not supported");
 #endif
 	}else{
-		return this->File::exists();
+		return this->file::exists();
 	}
 }
 
 
 
 void fs_file::make_dir(){
-	if(this->isOpened()){
+	if(this->is_open()){
 		throw utki::invalid_state("cannot make directory when file is opened");
 	}
 
@@ -376,6 +375,38 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 	return files;
 }
 
+
+size_t fs_file::size()const{
+	if(this->is_dir()){
+		throw utki::invalid_state("method size() is called on directory");
+	}
+
+#if M_OS == M_OS_WINDOWS
+	OFSTRUCT ofstruct;
+	HFILE hfile = OpenFile(this->path().c_str(), &ofstruct, OF_READ);
+	if(hfile == HFILE_ERROR){
+		throw std::system_error(GetLastError(), std::generic_category(), "OpenFile() failed");
+	}
+	utki::scope_exit hfile_scope_exit([&hfile](){
+		if(CloseHandle(hfile) == 0){
+			TRACE(<< "ERROR: CloseHandle() failed" << std::endl)
+		}
+	});
+	LARGE_INTEGER size;
+	if(GetFileSizeEx(hfile, &size) == 0){
+		throw std::system_error(GetLastError(), std::generic_category(), "GetFileSizeEx() failed");
+	}
+	return size.QuadPart;
+#elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+	struct stat file_stats;
+	if(stat(this->path().c_str(), &file_stats) < 0){
+		throw std::system_error(errno, std::system_category(), "stat() failed");
+	}
+	return file_stats.st_size;
+#else
+#	error "fs_file::size(): is not implemented yet for this os"
+#endif
+}
 
 std::unique_ptr<File> fs_file::spawn(){
 	return utki::make_unique<fs_file>();

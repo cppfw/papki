@@ -70,7 +70,7 @@ public:
 	 * @param pathname - the path to a file or directory.
 	 */
 	void set_path(const std::string& pathname)const{
-		if(this->isOpened()){
+		if(this->is_open()){
 			throw utki::invalid_state("papki::file::set_path(): Cannot set path when file is opened");
 		}
 
@@ -437,6 +437,14 @@ public:
 	 */
 	virtual bool exists()const;
 
+	/**
+	 * @brief Get file size.
+	 * The file must not be open when calling this method.
+	 * Not all file systems provide efficient way to get file size.
+	 * Fall back implementation is to open the file, seek to its end and get current position.
+	 * @return file size.
+	 */
+	virtual size_t size()const;
 	
 	/**
 	 * @brief Creates another file object of same implementation.
