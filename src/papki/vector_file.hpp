@@ -38,7 +38,7 @@ public:
 	 * @brief Current file size.
      * @return current size of the file.
      */
-	size_t size(){
+	size_t size()const override{
 		return this->data.size();
 	}
 	
