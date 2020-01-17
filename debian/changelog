@@ -1,3 +1,9 @@
+libpapki (1.0.72) unstable; urgency=medium
+
+  * debian/buster i386 packages
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 17 Jan 2020 18:16:46 +0200
+
 libpapki (1.0.71) unstable; urgency=medium
 
   * refactoring
