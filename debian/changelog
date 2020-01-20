@@ -1,3 +1,9 @@
+libpapki (1.0.73) unstable; urgency=medium
+
+  * msys2 deployment fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 21 Jan 2020 00:07:04 +0200
+
 libpapki (1.0.72) unstable; urgency=medium
 
   * debian/buster i386 packages
