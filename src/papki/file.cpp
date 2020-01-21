@@ -9,57 +9,6 @@ using namespace papki;
 
 
 
-std::string file::suffix()const{
-	size_t dotPos = this->path().rfind('.');
-	if(dotPos == std::string::npos || dotPos == 0){//NOTE: dotPos is 0 for hidden files in *nix systems
-		return std::string();
-	}else{
-		ASSERT(dotPos > 0)
-		ASSERT(this->path().size() > 0)
-		ASSERT(this->path().size() >= dotPos + 1)
-		
-		//Check for hidden file on *nix systems
-		if(this->path()[dotPos - 1] == '/'){
-			return std::string();
-		}
-		
-		return std::string(this->path(), dotPos + 1, this->path().size() - (dotPos + 1));
-	}
-	ASSERT(false)
-}
-
-
-
-std::string file::dir()const{
-	size_t slashPos = this->path().rfind('/');
-	if(slashPos == std::string::npos){//no slash found
-		return std::string();
-	}
-
-	ASSERT(slashPos > 0)
-	ASSERT(this->path().size() > 0)
-	ASSERT(this->path().size() >= slashPos + 1)
-
-	return std::string(this->path(), 0, slashPos + 1);
-}
-
-
-
-std::string file::not_dir()const{
-	size_t slashPos = this->path().rfind('/');
-	if(slashPos == std::string::npos){//no slash found
-		return this->path();
-	}
-
-	ASSERT(slashPos > 0)
-	ASSERT(this->path().size() > 0)
-	ASSERT(this->path().size() >= slashPos + 1)
-
-	return std::string(this->path(), slashPos + 1);
-}
-
-
-
 bool file::is_dir()const noexcept{
 	if(this->path().size() == 0){
 		return false;

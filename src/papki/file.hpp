@@ -9,6 +9,8 @@
 #include <utki/span.hpp>
 #include <utki/exception.hpp>
 
+#include "util.hpp"
+
 namespace papki{
 
 /**
@@ -123,7 +125,9 @@ public:
 	 * does have a suffix and the function will return 'txt'.
 	 * @return String representing file suffix.
 	 */
-	std::string suffix()const;
+	std::string suffix()const{
+		return papki::suffix(this->path());
+	}
 
 	// TODO: deprecated, remove.
 	std::string ext()const{
@@ -136,7 +140,9 @@ public:
 	 * will be '/home/user/'.
 	 * @return String representation of directory part of the path.
 	 */
-	std::string dir()const;
+	std::string dir()const{
+		return papki::dir(this->path());
+	}
 	
 	/**
 	 * @brief Get file part of the path.
@@ -144,7 +150,9 @@ public:
 	 * will be 'some.file.txt'.
 	 * @return String representation of directory part of the path.
 	 */
-	std::string not_dir()const;
+	std::string not_dir()const{
+		return papki::not_dir(this->path());
+	}
 
 	std::string notDir()const{
 		return this->not_dir();
