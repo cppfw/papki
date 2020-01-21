@@ -1,3 +1,9 @@
+libpapki (1.0.74) unstable; urgency=medium
+
+  * added some utility path functions
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 21 Jan 2020 17:56:33 +0200
+
 libpapki (1.0.73) unstable; urgency=medium
 
   * msys2 deployment fix
