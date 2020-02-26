@@ -8,9 +8,9 @@
 
 namespace TestBasicMemoryFile{
 void Run(){
-	papki::MemoryFile f;
-	ASSERT_ALWAYS(!f.isDir())
-	ASSERT_ALWAYS(!f.isOpened())
+	papki::vector_file f;
+	ASSERT_ALWAYS(!f.is_dir())
+	ASSERT_ALWAYS(!f.is_open())
 	ASSERT_ALWAYS(f.size() == 0)
 
 	{

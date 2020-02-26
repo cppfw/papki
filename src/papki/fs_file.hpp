@@ -26,8 +26,8 @@ protected:
 
 	size_t write_internal(const utki::span<std::uint8_t> buf)override;
 
-	//NOTE: use default implementation of seek_forward() because of the problems with
-	//      fseek(), as it can set file pointer beyond the end of file.
+	// NOTE: use default implementation of seek_forward() because of the problems with
+	//       fseek(), as it can set file pointer beyond the end of file.
 	
 	size_t seek_backward_internal(size_t numBytesToSeek)const override;
 	
@@ -44,7 +44,7 @@ public:
      * @param pathName - initial path to set passed to File constructor.
      */
 	fs_file(const std::string& pathName = std::string()) :
-			File(pathName)
+			file(pathName)
 	{}
 	
 	/**
@@ -73,8 +73,6 @@ public:
 	static std::string getHomeDir(){
 		return get_home_dir();
 	}
-
-
 
 	virtual std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
 	
