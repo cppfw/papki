@@ -6,7 +6,7 @@ class Libpapki < Formula
 
   depends_on "prorab" => :build
   depends_on "libutki"
-  depends_on "libz"
+  depends_on "zlib"
   
   def install
     ENV['PATH'] += ':/usr/local/bin'

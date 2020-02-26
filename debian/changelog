@@ -1,3 +1,9 @@
+libpapki (1.0.76) unstable; urgency=medium
+
+  * fix homebrew zlib dependency
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 26 Feb 2020 19:19:14 +0200
+
 libpapki (1.0.75) unstable; urgency=medium
 
   * add zip_file
