@@ -1,3 +1,9 @@
+libpapki (1.0.75) unstable; urgency=medium
+
+  * add zip_file
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 26 Feb 2020 17:03:29 +0200
+
 libpapki (1.0.74) unstable; urgency=medium
 
   * added some utility path functions
