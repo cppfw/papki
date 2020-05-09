@@ -1,3 +1,9 @@
+libpapki (1.0.77) unstable; urgency=medium
+
+  * added file::write(span<char>) function
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 09 May 2020 18:18:58 +0300
+
 libpapki (1.0.76) unstable; urgency=medium
 
   * fix homebrew zlib dependency
