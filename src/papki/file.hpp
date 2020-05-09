@@ -307,7 +307,7 @@ public:
 	 *         in the file system.
 	 */
 	size_t write(const utki::span<char> buf){
-		return this->write(utki::make_span(buf.data(), buf.size()));
+		return this->write(utki::make_span(reinterpret_cast<const uint8_t*>(buf.data()), buf.size()));
 	}
 
 protected:
