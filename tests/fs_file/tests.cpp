@@ -15,9 +15,9 @@ void Run(){
 	ASSERT_ALWAYS(!f.isOpened())
 	
 	for(unsigned numToSeek = 0; numToSeek < 0x1000; numToSeek += (0x1000 / 4)){
-		std::array<std::uint8_t, 1> testByte;
+		std::array<uint8_t, 1> testByte;
 		{
-			std::vector<std::uint8_t> buf(numToSeek);
+			std::vector<uint8_t> buf(numToSeek);
 			
 			papki::File::Guard fileGuard(f, papki::File::mode::read);
 			
@@ -35,7 +35,7 @@ void Run(){
 
 			f.file::seekForward(numToSeek);
 
-			std::array<std::uint8_t, 1> buf;
+			std::array<uint8_t, 1> buf;
 
 			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res == 1)
@@ -48,7 +48,7 @@ void Run(){
 
 			f.seekForward(numToSeek);
 
-			std::array<std::uint8_t, 1> buf;
+			std::array<uint8_t, 1> buf;
 
 			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res == 1)
@@ -104,27 +104,27 @@ void Run(){
 	ASSERT_ALWAYS(!f.isOpened())
 	
 	{
-		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory();
+		std::vector<uint8_t> r = f.loadWholeFileIntoMemory();
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(66874);
+		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(66874);
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(4096);
+		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(4096);
 		ASSERT_ALWAYS(r.size() == 4096)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(35);
+		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(35);
 		ASSERT_ALWAYS(r.size() == 35)
 	}
 	
 	{
-		std::vector<std::uint8_t> r = f.loadWholeFileIntoMemory(1000000);
+		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(1000000);
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 }

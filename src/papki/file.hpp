@@ -272,7 +272,7 @@ public:
 	 *         except the case when end of file reached.
 	 * @throw utki::invalid_state - if file is not opened.
 	 */
-	size_t read(utki::span<std::uint8_t> buf)const;
+	size_t read(utki::span<uint8_t> buf)const;
 
 protected:
 	/**
@@ -283,7 +283,7 @@ protected:
 	 * @param buf - buffer to fill with read data.
 	 * @return number of bytes actually read.
 	 */
-	virtual size_t read_internal(utki::span<std::uint8_t> buf)const{
+	virtual size_t read_internal(utki::span<uint8_t> buf)const{
 		throw std::runtime_error("readInternal(): unsupported");
 	}
 	
@@ -295,9 +295,20 @@ public:
 	 * @return Number of bytes actually written. Normally, should always write all the passed data,
 	 *         the only reasonable case when less data is written is when there is no more free space
 	 *         in the file system.
-	 * @throw utki::invalid_state - if file is not opened or opened for reading only.
 	 */
-	size_t write(const utki::span<std::uint8_t> buf);
+	size_t write(const utki::span<uint8_t> buf);
+
+	/**
+	 * @brief Write data to file.
+	 * Same as write(span<uint8_t>) but for span of chars.
+	 * @param buf - buffer holding the data to write.
+	 * @return Number of bytes actually written. Normally, should always write all the passed data,
+	 *         the only reasonable case when less data is written is when there is no more free space
+	 *         in the file system.
+	 */
+	size_t write(const utki::span<char> buf){
+		return this->write(utki::make_span(buf.data(), buf.size()));
+	}
 
 protected:
 	/**
@@ -308,7 +319,7 @@ protected:
 	 * @param buf - buffer containing the data to write.
 	 * @return number of bytes actually written.
 	 */
-	virtual size_t write_internal(const utki::span<std::uint8_t> buf){
+	virtual size_t write_internal(const utki::span<uint8_t> buf){
 		throw std::runtime_error("writeInternal(): unsupported");
 	}
 	

@@ -57,11 +57,11 @@ private:
 		return this->baseFile->list_dir(maxEntries);
 	}
 	
-	size_t read_internal(utki::span<std::uint8_t> buf)const override{
+	size_t read_internal(utki::span<uint8_t> buf)const override{
 		return this->baseFile->read(buf);
 	}
 	
-	size_t write_internal(const utki::span<std::uint8_t> buf)override{
+	size_t write_internal(const utki::span<uint8_t> buf)override{
 		return this->baseFile->write(buf);
 	}
 	

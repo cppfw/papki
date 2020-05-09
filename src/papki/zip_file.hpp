@@ -21,7 +21,7 @@ public:
 
 	void open_internal(papki::File::E_Mode mode) override;
 	void close_internal()const noexcept override;
-	size_t read_internal(utki::span<std::uint8_t> buf)const override;
+	size_t read_internal(utki::span<uint8_t> buf)const override;
 	bool exists() const override;
 	std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
 	

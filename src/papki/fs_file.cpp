@@ -66,7 +66,7 @@ void fs_file::close_internal()const noexcept{
 	this->handle = 0;
 }
 
-size_t fs_file::read_internal(utki::span<std::uint8_t> buf)const{
+size_t fs_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(this->handle)
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
 	if(numBytesRead != buf.size()){ // something happened
@@ -77,7 +77,7 @@ size_t fs_file::read_internal(utki::span<std::uint8_t> buf)const{
 	return numBytesRead;
 }
 
-size_t fs_file::write_internal(const utki::span<std::uint8_t> buf){
+size_t fs_file::write_internal(const utki::span<uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
 	if(bytesWritten != buf.size()){//something bad has happened

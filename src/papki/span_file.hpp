@@ -24,7 +24,7 @@ private:
 	span_file& operator=(span_file&&) = delete;
 	
 private:
-	utki::span<std::uint8_t> data;
+	utki::span<uint8_t> data;
 	mutable decltype(data)::iterator ptr;
 	
 public:
@@ -34,7 +34,7 @@ public:
 	 *               The reference to the buffer is saved in the span_file object,
 	 *               but ownership of the buffer is not taken. Thus, the buffer should remain alive during lifetime of this span_file object.
 	 */
-	span_file(utki::span<std::uint8_t> data) :
+	span_file(utki::span<uint8_t> data) :
 			data(data)
 	{}
 	
@@ -50,9 +50,9 @@ protected:
 	
 	void close_internal()const noexcept override{}
 	
-	size_t read_internal(utki::span<std::uint8_t> buf)const override;
+	size_t read_internal(utki::span<uint8_t> buf)const override;
 
-	size_t write_internal(const utki::span<std::uint8_t> buf)override;
+	size_t write_internal(const utki::span<uint8_t> buf)override;
 	
 	size_t seek_forward_internal(size_t numBytesToSeek)const override;
 	

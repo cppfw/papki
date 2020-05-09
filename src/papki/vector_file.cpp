@@ -13,7 +13,7 @@ void vector_file::open_internal(mode mode){
 
 
 
-size_t vector_file::read_internal(utki::span<std::uint8_t> buf)const{
+size_t vector_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(this->idx <= this->data.size())
 	size_t numBytesRead = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
 	memcpy(buf.begin(), &this->data[idx], numBytesRead);
@@ -24,7 +24,7 @@ size_t vector_file::read_internal(utki::span<std::uint8_t> buf)const{
 
 
 
-size_t vector_file::write_internal(const utki::span<std::uint8_t> buf){
+size_t vector_file::write_internal(const utki::span<uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
 	size_t numBytesTillEOF = this->data.size() - this->idx;

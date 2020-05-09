@@ -30,7 +30,7 @@ std::vector<std::string> file::list_dir(size_t maxEntries)const{
 
 
 
-size_t file::read(utki::span<std::uint8_t> buf)const{
+size_t file::read(utki::span<uint8_t> buf)const{
 	if(!this->isOpened()){
 		throw utki::invalid_state("Cannot read, file is not opened");
 	}
@@ -42,8 +42,8 @@ size_t file::read(utki::span<std::uint8_t> buf)const{
 
 
 
-size_t file::write(const utki::span<std::uint8_t> buf){
-	if(!this->isOpened()){
+size_t file::write(const utki::span<uint8_t> buf){
+	if(!this->is_open()){
 		throw utki::invalid_state("Cannot write, file is not opened");
 	}
 
@@ -59,7 +59,7 @@ size_t file::write(const utki::span<std::uint8_t> buf){
 
 
 size_t file::seek_forward_internal(size_t numBytesToSeek)const{
-	std::array<std::uint8_t, 0x1000> buf;//4kb buffer
+	std::array<uint8_t, 0x1000> buf;//4kb buffer
 	
 	size_t bytesRead = 0;
 	for(; bytesRead != numBytesToSeek;){
@@ -93,7 +93,7 @@ const size_t DReadBlockSize = 4 * 1024;
 //Define a class derived from std::array. This is just to define custom
 //copy constructor which will do nothing to avoid unnecessary buffer copying when
 //inserting new element to the list of chunks.
-struct Chunk : public std::array<std::uint8_t, DReadBlockSize>{
+struct Chunk : public std::array<uint8_t, DReadBlockSize>{
 	inline Chunk(){}
 	inline Chunk(const Chunk&){}
 };

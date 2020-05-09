@@ -22,7 +22,7 @@ class vector_file : public file{
 	vector_file& operator=(vector_file&&) = delete;
 	
 private:
-	std::vector<std::uint8_t> data;
+	std::vector<uint8_t> data;
 	mutable size_t idx;
 	
 public:
@@ -70,9 +70,9 @@ protected:
 	
 	void close_internal()const noexcept override{}
 	
-	size_t read_internal(utki::span<std::uint8_t> buf)const override;
+	size_t read_internal(utki::span<uint8_t> buf)const override;
 	
-	size_t write_internal(const utki::span<std::uint8_t> buf)override;
+	size_t write_internal(const utki::span<uint8_t> buf)override;
 	
 	size_t seek_forward_internal(size_t numBytesToSeek)const override;
 	

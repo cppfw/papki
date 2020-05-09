@@ -30,7 +30,7 @@ int ZCALLBACK UnzipClose(voidpf opaque, voidpf stream){
 
 uLong ZCALLBACK UnzipRead(voidpf opaque, voidpf stream, void* buf, uLong size){
 	papki::file* f = reinterpret_cast<papki::file*>(stream);
-	return uLong(f->read(utki::span<std::uint8_t>(reinterpret_cast<std::uint8_t*>(buf), size)));
+	return uLong(f->read(utki::span<uint8_t>(reinterpret_cast<uint8_t*>(buf), size)));
 }
 
 uLong ZCALLBACK UnzipWrite(voidpf opaque, voidpf stream, const void* buf, uLong size){
@@ -130,7 +130,7 @@ void zip_file::close_internal()const noexcept{
 	}
 }
 
-size_t zip_file::read_internal(utki::span<std::uint8_t> buf)const{
+size_t zip_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(buf.size() <= unsigned(-1))
 	int numBytesRead = unzReadCurrentFile(this->handle, buf.begin(), unsigned(buf.size()));
 	if(numBytesRead < 0){

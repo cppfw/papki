@@ -14,7 +14,7 @@ void Run(){
 	ASSERT_ALWAYS(f.size() == 0)
 
 	{
-		std::uint8_t buf[] = {1, 2, 3, 4};
+		uint8_t buf[] = {1, 2, 3, 4};
 		auto b = utki::make_span(buf, sizeof(buf));
 		
 		papki::File::Guard fileGuard(f, papki::File::mode::create);
@@ -23,7 +23,7 @@ void Run(){
 	}
 	
 	{
-		std::array<std::uint8_t, 4> b;
+		std::array<uint8_t, 4> b;
 		
 		papki::File::Guard fileGuard(f, papki::File::mode::read);
 		

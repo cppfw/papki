@@ -14,7 +14,7 @@ void span_file::open_internal(mode mode){
 
 
 
-size_t span_file::read_internal(utki::span<std::uint8_t> buf)const {
+size_t span_file::read_internal(utki::span<uint8_t> buf)const {
 	ASSERT(this->ptr <= this->data.end())
 	size_t numBytesRead = std::min(buf.sizeInBytes(), size_t(this->data.end() - this->ptr));
 	memcpy(&*buf.begin(), &*this->ptr, numBytesRead);
@@ -25,7 +25,7 @@ size_t span_file::read_internal(utki::span<std::uint8_t> buf)const {
 
 
 
-size_t span_file::write_internal(const utki::span<std::uint8_t> buf){
+size_t span_file::write_internal(const utki::span<uint8_t> buf){
 	ASSERT(this->ptr <= this->data.end())
 	size_t numBytesWritten = std::min(buf.sizeInBytes(), size_t(this->data.end() - this->ptr));
 	memcpy(&*this->ptr, &*buf.begin(), numBytesWritten);
