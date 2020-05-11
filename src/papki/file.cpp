@@ -42,7 +42,7 @@ size_t file::read(utki::span<uint8_t> buf)const{
 
 
 
-size_t file::write(const utki::span<uint8_t> buf){
+size_t file::write(utki::span<const uint8_t> buf){
 	if(!this->is_open()){
 		throw utki::invalid_state("Cannot write, file is not opened");
 	}

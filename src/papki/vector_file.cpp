@@ -15,7 +15,7 @@ void vector_file::open_internal(mode mode){
 
 size_t vector_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(this->idx <= this->data.size())
-	size_t numBytesRead = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
+	size_t numBytesRead = std::min(buf.size_bytes(), this->data.size() - this->idx);
 	memcpy(buf.begin(), &this->data[idx], numBytesRead);
 	this->idx += numBytesRead;
 	ASSERT(this->idx <= this->data.size())
@@ -24,16 +24,16 @@ size_t vector_file::read_internal(utki::span<uint8_t> buf)const{
 
 
 
-size_t vector_file::write_internal(const utki::span<uint8_t> buf){
+size_t vector_file::write_internal(utki::span<const uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
 	size_t numBytesTillEOF = this->data.size() - this->idx;
-	if(numBytesTillEOF < buf.sizeInBytes()){
-		size_t numBytesToGrow = buf.sizeInBytes() - numBytesTillEOF;
+	if(numBytesTillEOF < buf.size_bytes()){
+		size_t numBytesToGrow = buf.size_bytes() - numBytesTillEOF;
 		this->data.resize(this->data.size() + numBytesToGrow);
 	}
 	
-	size_t numBytesWritten = std::min(buf.sizeInBytes(), this->data.size() - this->idx);
+	size_t numBytesWritten = std::min(buf.size_bytes(), this->data.size() - this->idx);
 	memcpy(&this->data[this->idx], buf.begin(), numBytesWritten);
 	this->idx += numBytesWritten;
 	ASSERT(this->idx <= this->data.size())

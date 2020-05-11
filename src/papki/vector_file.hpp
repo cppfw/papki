@@ -72,7 +72,7 @@ protected:
 	
 	size_t read_internal(utki::span<uint8_t> buf)const override;
 	
-	size_t write_internal(const utki::span<uint8_t> buf)override;
+	size_t write_internal(utki::span<const uint8_t> buf)override;
 	
 	size_t seek_forward_internal(size_t numBytesToSeek)const override;
 	

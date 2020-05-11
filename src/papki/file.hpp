@@ -296,7 +296,7 @@ public:
 	 *         the only reasonable case when less data is written is when there is no more free space
 	 *         in the file system.
 	 */
-	size_t write(const utki::span<uint8_t> buf);
+	size_t write(utki::span<const uint8_t> buf);
 
 	/**
 	 * @brief Write data to file.
@@ -306,7 +306,7 @@ public:
 	 *         the only reasonable case when less data is written is when there is no more free space
 	 *         in the file system.
 	 */
-	size_t write(const utki::span<char> buf){
+	size_t write(utki::span<const char> buf){
 		return this->write(utki::make_span(reinterpret_cast<const uint8_t*>(buf.data()), buf.size()));
 	}
 
@@ -319,7 +319,7 @@ protected:
 	 * @param buf - buffer containing the data to write.
 	 * @return number of bytes actually written.
 	 */
-	virtual size_t write_internal(const utki::span<uint8_t> buf){
+	virtual size_t write_internal(utki::span<const uint8_t> buf){
 		throw std::runtime_error("writeInternal(): unsupported");
 	}
 	

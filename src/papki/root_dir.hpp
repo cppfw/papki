@@ -61,7 +61,7 @@ private:
 		return this->baseFile->read(buf);
 	}
 	
-	size_t write_internal(const utki::span<uint8_t> buf)override{
+	size_t write_internal(utki::span<const uint8_t> buf)override{
 		return this->baseFile->write(buf);
 	}
 	
