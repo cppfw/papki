@@ -24,6 +24,8 @@ private:
 	span_file& operator=(span_file&&) = delete;
 	
 private:
+	bool is_ready_only = false;
+
 	utki::span<uint8_t> data;
 	mutable decltype(data)::iterator ptr;
 	
@@ -37,6 +39,11 @@ public:
 	span_file(utki::span<uint8_t> data) :
 			data(data)
 	{}
+
+	span_file(utki::span<const uint8_t> data) :
+			is_ready_only(true),
+			data(const_cast<uint8_t*>(data.data()), data.size())
+	{}
 	
 	~span_file()noexcept override{}
 
@@ -45,7 +52,6 @@ public:
 	}
 
 protected:
-
 	void open_internal(mode io_mode)override;
 	
 	void close_internal()const noexcept override{}
