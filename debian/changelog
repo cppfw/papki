@@ -1,3 +1,9 @@
+libpapki (1.0.78) unstable; urgency=medium
+
+  * proper usage of const span
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 11 May 2020 03:44:49 +0300
+
 libpapki (1.0.77) unstable; urgency=medium
 
   * added file::write(span<char>) function
