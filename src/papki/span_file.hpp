@@ -44,6 +44,10 @@ public:
 			is_ready_only(true),
 			data(const_cast<uint8_t*>(data.data()), data.size())
 	{}
+
+	span_file(utki::span<const char> data) :
+			span_file(utki::make_span(reinterpret_cast<const uint8_t*>(data.data()), data.size()))
+	{}
 	
 	~span_file()noexcept override{}
 
