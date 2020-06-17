@@ -64,7 +64,7 @@ public:
 	 * assure that.
 	 */
 	virtual ~file()noexcept{
-		ASSERT(!this->isOpened())
+		ASSERT(!this->is_open())
 	}
 
 	/**
@@ -310,6 +310,18 @@ public:
 		return this->write(utki::make_span(reinterpret_cast<const uint8_t*>(buf.data()), buf.size()));
 	}
 
+	/**
+	 * @brief Write string to a file.
+	 * Same as write(span<const char>) but for string.
+	 * @param str - string to write to a file.
+	 * @return Number of bytes actually written. Normally, should always write all the passed data,
+	 *         the only reasonable case when less data is written is when there is no more free space
+	 *         in the file system.
+	 */
+	size_t write(const std::string& str){
+		return this->write(utki::make_span(str));
+	}
+
 protected:
 	/**
 	 * @brief Write data to file.
@@ -320,7 +332,7 @@ protected:
 	 * @return number of bytes actually written.
 	 */
 	virtual size_t write_internal(utki::span<const uint8_t> buf){
-		throw std::runtime_error("writeInternal(): unsupported");
+		throw std::runtime_error("write_internal(): unsupported");
 	}
 	
 public:
@@ -336,7 +348,7 @@ public:
 	 */
 	size_t seek_forward(size_t numBytesToSeek)const{
 		if(!this->isOpened()){
-			throw utki::invalid_state("seekForward(): file is not opened");
+			throw utki::invalid_state("seek_forward(): file is not opened");
 		}
 		size_t ret = this->seek_forward_internal(numBytesToSeek);
 		this->curPos_var += ret;
@@ -372,7 +384,7 @@ public:
 	 */
 	size_t seek_backward(size_t numBytesToSeek)const{
 		if(!this->is_open()){
-			throw utki::invalid_state("seekBackward(): file is not opened");
+			throw utki::invalid_state("seek_backward(): file is not opened");
 		}
 		size_t ret = this->seek_backward_internal(numBytesToSeek);
 		ASSERT(ret <= this->curPos_var)
@@ -406,7 +418,7 @@ public:
 	 */
 	void rewind()const{
 		if(!this->is_open()){
-			throw utki::invalid_state("Rewind(): file is not opened");
+			throw utki::invalid_state("rewind(): file is not opened");
 		}
 		this->rewind_internal();
 		this->curPos_var = 0;
