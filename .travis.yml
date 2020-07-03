@@ -67,7 +67,8 @@ env:
   - OS_REL=buster OS=debian DOCKER_IMAGE=i386/$OS:$OS_REL PACKAGE_TYPE=deb
 # Raspbian
   - OS_REL=stretch OS=raspbian DOCKER_IMAGE=igagis/$OS:$OS_REL PACKAGE_TYPE=deb
-  - OS_REL=buster OS=raspbian DOCKER_IMAGE=igagis/$OS:$OS_REL PACKAGE_TYPE=deb
+  # there is a weird error when building raspbian buster on travis-ci, perhaps some bug in qemu
+  # - OS_REL=buster OS=raspbian DOCKER_IMAGE=igagis/$OS:$OS_REL PACKAGE_TYPE=deb
 
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
@@ -85,7 +86,6 @@ before_install:
 - if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
     brew install prorab prorab-extra libutki;
   fi
-# Force bundler 1.12.5 because version 1.13 has issues, see https://github.com/fastlane/fastlane/issues/6065#issuecomment-246044617
 - if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
     sudo gem install cocoapods &&
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
