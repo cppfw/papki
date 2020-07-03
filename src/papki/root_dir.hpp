@@ -24,16 +24,11 @@ public:
 			throw std::invalid_argument("root_dir(): passed in base file pointer is null");
 		}
 		this->file::set_path_internal(this->baseFile->path());
-		this->baseFile->setPath(this->rootDir + this->path());
+		this->baseFile->set_path(this->rootDir + this->path());
 	}
 	
 	static std::unique_ptr<const root_dir> make(std::unique_ptr<const file> baseFile, const std::string& rootDir){
 		return utki::make_unique<const root_dir>(std::unique_ptr<file>(const_cast<file*>(baseFile.release())), rootDir);
-	}
-
-	//TODO: deprecated, remove.
-	static std::unique_ptr<const root_dir> makeUniqueConst(std::unique_ptr<const file> baseFile, const std::string& rootDir){
-		return make(std::move(baseFile), rootDir);
 	}
 	
 	root_dir(const root_dir&) = delete;
@@ -42,7 +37,7 @@ public:
 private:
 	void set_path_internal(const std::string& pathName)const override{
 		this->file::set_path_internal(pathName);
-		this->baseFile->setPath(this->rootDir + pathName);
+		this->baseFile->set_path(this->rootDir + pathName);
 	}
 	
 	void open_internal(mode io_mode)override{
@@ -66,11 +61,11 @@ private:
 	}
 	
 	size_t seek_forward_internal(size_t numBytesToSeek)const override{
-		return this->baseFile->seekForward(numBytesToSeek);
+		return this->baseFile->seek_forward(numBytesToSeek);
 	}
 	
 	size_t seek_backward_internal(size_t numBytesToSeek)const override{
-		return this->baseFile->seekBackward(numBytesToSeek);
+		return this->baseFile->seek_backward(numBytesToSeek);
 	}
 	
 	void rewind_internal()const override{

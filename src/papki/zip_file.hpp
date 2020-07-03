@@ -19,15 +19,15 @@ public:
 
 	~zip_file()noexcept;
 
-	void open_internal(papki::File::E_Mode mode) override;
+	void open_internal(papki::file::mode mode) override;
 	void close_internal()const noexcept override;
 	size_t read_internal(utki::span<uint8_t> buf)const override;
 	bool exists() const override;
 	std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
 	
-	std::unique_ptr<papki::File> spawn()override{
+	std::unique_ptr<papki::file> spawn()override{
 		std::unique_ptr<papki::file> zf = this->zipFile->spawn();
-		zf->setPath(this->zipFile->path());
+		zf->set_path(this->zipFile->path());
 		return std::make_unique<zip_file>(std::move(zf));
 	}
 };

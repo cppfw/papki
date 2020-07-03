@@ -3,13 +3,11 @@
 
 #if M_OS == M_OS_WINDOWS
 #	include <utki/windows.hpp>
-
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 #	include <dirent.h>
 #	include <sys/stat.h>
 #	include <cerrno>
 #	include <cstring>
-
 #endif
 
 #include <vector>
@@ -18,26 +16,22 @@
 
 #include "fs_file.hpp"
 
-
-
 using namespace papki;
 
-
-
 void fs_file::open_internal(mode mode){
-	if(this->isDir()){
-		throw utki::invalid_state("path refers to a directory, directories can't be opened");
+	if(this->is_dir()){
+		throw std::logic_error("path refers to a directory, directories can't be opened");
 	}
 
 	const char* modeStr;
 	switch(mode){
-		case File::mode::write:
+		case file::mode::write:
 			modeStr = "r+b";
 			break;
-		case File::mode::create:
+		case file::mode::create:
 			modeStr = "w+b";
 			break;
-		case File::mode::read:
+		case file::mode::read:
 			modeStr = "rb";
 			break;
 		default:
@@ -52,7 +46,7 @@ void fs_file::open_internal(mode mode){
 	this->handle = fopen(this->path().c_str(), modeStr);
 #endif
 	if(!this->handle){
-		TRACE(<< "fs_file::Open(): Path() = " << this->path().c_str() << std::endl)
+		TRACE(<< "fs_file::open(): path() = " << this->path().c_str() << std::endl)
 		std::stringstream ss;
 		ss << "fopen(" << this->path().c_str() << ") failed";
 		throw std::system_error(errno, std::generic_category(), ss.str());
@@ -71,7 +65,7 @@ size_t fs_file::read_internal(utki::span<uint8_t> buf)const{
 	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
 	if(numBytesRead != buf.size()){ // something happened
 		if(!feof(this->handle)){
-			throw std::runtime_error("fread() error");//if it is not an EndOfFile then it is error
+			throw std::runtime_error("fread() error"); // if it is not an EndOfFile then it is error
 		}
 	}
 	return numBytesRead;
@@ -80,21 +74,19 @@ size_t fs_file::read_internal(utki::span<uint8_t> buf)const{
 size_t fs_file::write_internal(utki::span<const uint8_t> buf){
 	ASSERT(this->handle)
 	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
-	if(bytesWritten != buf.size()){//something bad has happened
+	if(bytesWritten != buf.size()){ // something bad has happened
 		throw std::runtime_error("fwrite error");
 	}
 
 	return bytesWritten;
 }
 
-
-
 size_t fs_file::seek_backward_internal(size_t numBytesToSeek)const{
 	ASSERT(this->handle)
 
-	//NOTE: fseek() accepts 'long int' as offset argument which is signed and can be
-	//      less than size_t value passed as argument to this function.
-	//      Therefore, do several seek operations with smaller offset if necessary.
+	// NOTE: fseek() accepts 'long int' as offset argument which is signed and can be
+	//       less than size_t value passed as argument to this function.
+	//       Therefore, do several seek operations with smaller offset if necessary.
 
 	typedef long int T_FSeekOffset;
 	const std::size_t DMax = std::size_t(
@@ -103,7 +95,7 @@ size_t fs_file::seek_backward_internal(size_t numBytesToSeek)const{
 	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
 	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
 
-	utki::clampTop(numBytesToSeek, this->curPos());
+	numBytesToSeek = std::min(numBytesToSeek, this->cur_pos()); // clamp top
 
 	for(size_t numBytesLeft = numBytesToSeek; numBytesLeft != 0;){
 		ASSERT(numBytesLeft <= numBytesToSeek)
@@ -131,8 +123,8 @@ size_t fs_file::seek_backward_internal(size_t numBytesToSeek)const{
 }
 
 void fs_file::rewind_internal()const{
-	if(!this->isOpened()){
-		throw utki::invalid_state("cannot rewind, file is not opened");
+	if(!this->is_open()){
+		throw std::logic_error("cannot rewind, file is not opened");
 	}
 
 	ASSERT(this->handle)
@@ -184,11 +176,11 @@ bool fs_file::exists()const{
 
 void fs_file::make_dir(){
 	if(this->is_open()){
-		throw utki::invalid_state("cannot make directory when file is opened");
+		throw std::logic_error("cannot make directory when file is opened");
 	}
 
 	if(this->path().size() == 0 || this->path()[this->path().size() - 1] != '/'){
-		throw utki::invalid_state("invalid directory name, should end with '/'");
+		throw std::logic_error("invalid directory name, should end with '/'");
 	}
 
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
@@ -257,8 +249,8 @@ std::string fs_file::get_home_dir() {
 
 
 std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
-	if(!this->isDir()){
-		throw utki::invalid_state("fs_file::list_dir(): this is not a directory");
+	if(!this->is_dir()){
+		throw std::logic_error("fs_file::list_dir(): this is not a directory");
 	}
 
 	std::vector<std::string> files;
@@ -378,7 +370,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 
 uint64_t fs_file::size()const{
 	if(this->is_dir()){
-		throw utki::invalid_state("method size() is called on directory");
+		throw std::logic_error("method size() is called on directory");
 	}
 
 #if M_OS == M_OS_WINDOWS
@@ -415,6 +407,6 @@ uint64_t fs_file::size()const{
 #endif
 }
 
-std::unique_ptr<File> fs_file::spawn(){
+std::unique_ptr<file> fs_file::spawn(){
 	return utki::make_unique<fs_file>();
 }

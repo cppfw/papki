@@ -11,8 +11,8 @@
 namespace papki{
 
 /**
- * @brief Native OS file system implementation of File interface.
- * Implementation of a ting::File interface for native file system of the OS.
+ * @brief Native OS file system implementation of file interface.
+ * Implementation of a ting::file interface for native file system of the OS.
  */
 class fs_file : public file{
 	mutable FILE* handle = nullptr;
@@ -41,7 +41,7 @@ public:
 	 * That means that all file operations like opening the file and other will be 
 	 * performed on the actual file/directory referred by the final path which is a concatenation of
 	 * the root directory and the path returned by Path() method. 
-     * @param pathName - initial path to set passed to File constructor.
+     * @param pathName - initial path to set passed to file constructor.
      */
 	fs_file(const std::string& pathName = std::string()) :
 			file(pathName)
@@ -69,14 +69,9 @@ public:
      */
 	static std::string get_home_dir();
 
-	// TODO: deprecated, remove.
-	static std::string getHomeDir(){
-		return get_home_dir();
-	}
-
 	virtual std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
 	
-	virtual std::unique_ptr<File> spawn()override;
+	virtual std::unique_ptr<file> spawn()override;
 };
 
 

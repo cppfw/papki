@@ -51,7 +51,7 @@ public:
 	
 	~span_file()noexcept override{}
 
-	virtual std::unique_ptr<File> spawn()override{
+	virtual std::unique_ptr<file> spawn()override{
 		throw std::runtime_error("span_file::spawn(): spawning is not supported.");
 	}
 

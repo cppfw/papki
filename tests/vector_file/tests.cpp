@@ -1,5 +1,5 @@
 #include <utki/debug.hpp>
-#include "../../src/papki/MemoryFile.hpp"
+#include "../../src/papki/vector_file.hpp"
 
 #include "tests.hpp"
 
@@ -17,7 +17,7 @@ void Run(){
 		uint8_t buf[] = {1, 2, 3, 4};
 		auto b = utki::make_span(buf, sizeof(buf));
 		
-		papki::File::Guard fileGuard(f, papki::File::mode::create);
+		papki::file::guard fileGuard(f, papki::file::mode::create);
 		
 		f.write(b);
 	}
@@ -25,7 +25,7 @@ void Run(){
 	{
 		std::array<uint8_t, 4> b;
 		
-		papki::File::Guard fileGuard(f, papki::File::mode::read);
+		papki::file::guard fileGuard(f, papki::file::mode::read);
 		
 		f.read(utki::make_span(b));
 		

@@ -3,11 +3,7 @@
 
 #include "file.hpp"
 
-
-
 using namespace papki;
-
-
 
 bool file::is_dir()const noexcept{
 	if(this->path().size() == 0){
@@ -22,17 +18,13 @@ bool file::is_dir()const noexcept{
 	return false;
 }
 
-
-
 std::vector<std::string> file::list_dir(size_t maxEntries)const{
 	throw std::runtime_error("file::list_dir(): not supported for this file instance");
 }
 
-
-
 size_t file::read(utki::span<uint8_t> buf)const{
-	if(!this->isOpened()){
-		throw utki::invalid_state("Cannot read, file is not opened");
+	if(!this->is_open()){
+		throw std::logic_error("Cannot read, file is not opened");
 	}
 	
 	size_t ret = this->read_internal(buf);
@@ -40,15 +32,13 @@ size_t file::read(utki::span<uint8_t> buf)const{
 	return ret;
 }
 
-
-
 size_t file::write(utki::span<const uint8_t> buf){
 	if(!this->is_open()){
-		throw utki::invalid_state("Cannot write, file is not opened");
+		throw std::logic_error("Cannot write, file is not opened");
 	}
 
 	if(this->ioMode != mode::write){
-		throw utki::invalid_state("file is opened, but not in write mode");
+		throw std::logic_error("file is opened, but not in write mode");
 	}
 	
 	size_t ret = this->write_internal(buf);
@@ -56,54 +46,34 @@ size_t file::write(utki::span<const uint8_t> buf){
 	return ret;
 }
 
-
-
 size_t file::seek_forward_internal(size_t numBytesToSeek)const{
-	std::array<uint8_t, 0x1000> buf;//4kb buffer
+	std::array<uint8_t, 0x1000> buf; // 4kb buffer
 	
 	size_t bytesRead = 0;
 	for(; bytesRead != numBytesToSeek;){
 		size_t curNumToRead = numBytesToSeek - bytesRead;
-		utki::clampTop(curNumToRead, buf.size());
+		curNumToRead = std::min(curNumToRead, buf.size()); // clamp top
 		size_t res = this->read(utki::make_span(&*buf.begin(), curNumToRead));
 		ASSERT(bytesRead < numBytesToSeek)
 		ASSERT(numBytesToSeek >= res)
 		ASSERT(bytesRead <= numBytesToSeek - res)
 		bytesRead += res;
 		
-		if(res != curNumToRead){//if end of file reached
+		if(res != curNumToRead){ // if end of file reached
 			break;
 		}
 	}
-	this->curPos_var -= bytesRead;//make correction to curPos, since we were using Read()
+	this->curPos_var -= bytesRead; // make correction to curPos, since we were using read()
 	return bytesRead;
 }
-
-
 
 void file::make_dir(){
 	throw std::runtime_error("Make directory is not supported");
 }
 
-
-
-namespace{
-const size_t DReadBlockSize = 4 * 1024;
-
-//Define a class derived from std::array. This is just to define custom
-//copy constructor which will do nothing to avoid unnecessary buffer copying when
-//inserting new element to the list of chunks.
-struct Chunk : public std::array<uint8_t, DReadBlockSize>{
-	inline Chunk(){}
-	inline Chunk(const Chunk&){}
-};
-}
-
-
-
 std::vector<uint8_t> file::load(size_t max_bytes_to_load)const{
 	if(this->is_open()){
-		throw utki::invalid_state("file::load(): file should not be opened");
+		throw std::logic_error("file::load(): file should not be opened");
 	}
 
 	std::vector<uint8_t> ret;
@@ -128,12 +98,10 @@ std::vector<uint8_t> file::load(size_t max_bytes_to_load)const{
 	return ret;
 }
 
-
-
 bool file::exists()const{
 	if(this->is_dir()){
 		// TODO: implement checking for directory existance
-		throw utki::invalid_state("file::exists(): path is a directory, checking for directory existence is not yet supported");
+		throw std::logic_error("file::exists(): path is a directory, checking for directory existence is not yet supported");
 	}
 
 	if(this->is_open()){
@@ -150,10 +118,9 @@ bool file::exists()const{
 	return true; // file open succeeded => file exists
 }
 
-
 uint64_t file::size()const{
 	if(this->is_open()){
-		throw utki::invalid_state("file must not be open when calling file::size() method");
+		throw std::logic_error("file must not be open when calling file::size() method");
 	}
 
 	file::guard file_guard(*this, file::mode::read);
@@ -161,28 +128,25 @@ uint64_t file::size()const{
 	return this->seek_forward(~0);
 }
 
-
 file::guard::guard(const file& f, mode io_mode) :
 		f(f)
 {
-	if(this->f.isOpened()){
-		throw utki::invalid_state("file::guard::guard(): file is already opened");
+	if(this->f.is_open()){
+		throw std::logic_error("file::guard::guard(): file is already opened");
 	}
 
 	const_cast<file&>(this->f).open(io_mode);
 }
 
-
 file::guard::guard(const file& f) :
 		f(f)
 {
-	if(this->f.isOpened()){
-		throw utki::invalid_state("file::guard::guard(): file is already opened");
+	if(this->f.is_open()){
+		throw std::logic_error("file::guard::guard(): file is already opened");
 	}
 
 	this->f.open();
 }
-
 
 file::guard::~guard(){
 	this->f.close();

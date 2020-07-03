@@ -11,15 +11,15 @@
 namespace TestSeekForward{
 void Run(){
 	papki::fs_file f("test.file.txt");
-	ASSERT_ALWAYS(!f.isDir())
-	ASSERT_ALWAYS(!f.isOpened())
+	ASSERT_ALWAYS(!f.is_dir())
+	ASSERT_ALWAYS(!f.is_open())
 	
 	for(unsigned numToSeek = 0; numToSeek < 0x1000; numToSeek += (0x1000 / 4)){
 		std::array<uint8_t, 1> testByte;
 		{
 			std::vector<uint8_t> buf(numToSeek);
 			
-			papki::File::Guard fileGuard(f, papki::File::mode::read);
+			papki::file::guard fileGuard(f, papki::file::mode::read);
 			
 			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res == buf.size())
@@ -31,9 +31,9 @@ void Run(){
 		}
 		
 		{
-			papki::File::Guard fileGuard(f, papki::File::mode::read);
+			papki::file::guard fileGuard(f, papki::file::mode::read);
 
-			f.file::seekForward(numToSeek);
+			f.file::seek_forward(numToSeek);
 
 			std::array<uint8_t, 1> buf;
 
@@ -44,9 +44,9 @@ void Run(){
 		}
 
 		{
-			papki::File::Guard fileGuard(f, papki::File::mode::read);
+			papki::file::guard fileGuard(f, papki::file::mode::read);
 
-			f.seekForward(numToSeek);
+			f.seek_forward(numToSeek);
 
 			std::array<uint8_t, 1> buf;
 
@@ -55,7 +55,7 @@ void Run(){
 
 			ASSERT_ALWAYS(buf[0] == testByte[0])
 		}
-	}//~for
+	}
 }
 }
 
@@ -64,7 +64,7 @@ void Run(){
 namespace TestListDirContents{
 void Run(){
 	papki::fs_file curDir("./");
-	papki::File& f = curDir;
+	papki::file& f = curDir;
 	
 	std::vector<std::string> r = f.list_dir();
 	ASSERT_ALWAYS(r.size() >= 3)
@@ -85,7 +85,7 @@ void Run(){
 
 namespace TestHomeDir{
 void Run(){
-	std::string hd = papki::fs_file::getHomeDir();
+	std::string hd = papki::fs_file::get_home_dir();
 	
 	ASSERT_ALWAYS(hd.size() != 0) // There is always a trailing '/' character, so make sure there is something else besides that.
 	ASSERT_ALWAYS(papki::is_dir(hd))
@@ -99,32 +99,32 @@ void Run(){
 namespace TestLoadWholeFileToMemory{
 void Run(){
 	papki::root_dir f(utki::make_unique<papki::fs_file>(), "");
-	f.setPath("test.file.txt");
-	ASSERT_ALWAYS(!f.isDir())
-	ASSERT_ALWAYS(!f.isOpened())
+	f.set_path("test.file.txt");
+	ASSERT_ALWAYS(!f.is_dir())
+	ASSERT_ALWAYS(!f.is_open())
 	
 	{
-		std::vector<uint8_t> r = f.loadWholeFileIntoMemory();
+		std::vector<uint8_t> r = f.load();
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 	
 	{
-		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(66874);
+		std::vector<uint8_t> r = f.load(66874);
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 	
 	{
-		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(4096);
+		std::vector<uint8_t> r = f.load(4096);
 		ASSERT_ALWAYS(r.size() == 4096)
 	}
 	
 	{
-		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(35);
+		std::vector<uint8_t> r = f.load(35);
 		ASSERT_ALWAYS(r.size() == 35)
 	}
 	
 	{
-		std::vector<uint8_t> r = f.loadWholeFileIntoMemory(1000000);
+		std::vector<uint8_t> r = f.load(1000000);
 		ASSERT_ALWAYS(r.size() == 66874)
 	}
 }

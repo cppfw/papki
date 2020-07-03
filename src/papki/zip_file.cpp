@@ -49,14 +49,14 @@ long ZCALLBACK UnzipSeek(voidpf  opaque, voidpf stream, uLong offset, int origin
 	
 	switch(origin){
 		case ZLIB_FILEFUNC_SEEK_CUR:
-			f->seekForward(offset);
+			f->seek_forward(offset);
 			return 0;
 		case ZLIB_FILEFUNC_SEEK_END:
-			f->seekForward(size_t(-1));
+			f->seek_forward(std::numeric_limits<size_t>::max());
 			return 0;
 		case ZLIB_FILEFUNC_SEEK_SET:
 			f->rewind();
-			f->seekForward(offset);
+			f->seek_forward(offset);
 			return 0;
 		default:
 			return -1;
@@ -65,7 +65,7 @@ long ZCALLBACK UnzipSeek(voidpf  opaque, voidpf stream, uLong offset, int origin
 
 long ZCALLBACK UnzipTell(voidpf opaque, voidpf stream){
 	papki::file* f = reinterpret_cast<papki::file*>(stream);
-	return long(f->curPos());
+	return long(f->cur_pos());
 }
 
 }
@@ -150,7 +150,7 @@ bool zip_file::exists()const{
 		return false;
 	}
 
-	if(this->isOpened()){
+	if(this->is_open()){
 		return true;
 	}
 	
@@ -159,14 +159,14 @@ bool zip_file::exists()const{
 
 std::vector<std::string> zip_file::list_dir(size_t maxEntries)const{
 	if(!this->is_dir()){
-		throw utki::invalid_state("zip_file::list_dir(): this is not a directory");
+		throw std::logic_error("zip_file::list_dir(): this is not a directory");
 	}
 
 	// if path refers to directory then there should be no files opened
 	ASSERT(!this->is_open())
 
 	if(!this->handle){
-		throw utki::invalid_state("zip_file::list_dir(): zip file is not opened");
+		throw std::logic_error("zip_file::list_dir(): zip file is not opened");
 	}
 
 	std::vector<std::string> files;

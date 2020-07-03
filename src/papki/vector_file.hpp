@@ -55,14 +55,9 @@ public:
      */
 	decltype(data) reset_data(){
 		if(this->is_open()){
-			throw utki::invalid_state("vector_file::reset_data(): could not reset data while file is opened");
+			throw std::logic_error("vector_file::reset_data(): could not reset data while file is opened");
 		}
 		return std::move(this->data);
-	}
-
-	//TODO: deprecated, remove.
-	decltype(data) resetData(){
-		return this->reset_data();
 	}
 	
 protected:
