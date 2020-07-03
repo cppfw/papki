@@ -211,7 +211,7 @@ std::string fs_file::get_home_dir() {
 		char* buf = nullptr;
 		size_t size = 0;
 
-		utki::ScopeExit scopeExit([&buf](){
+		utki::scope_exit scopeExit([&buf](){
 			free(buf);
 		});
 
@@ -270,7 +270,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 
 		// create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
 		{
-			utki::ScopeExit scopeExit([h]() {
+			utki::scope_exit scopeExit([h]() {
 				FindClose(h);
 			});
 
