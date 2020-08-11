@@ -1,3 +1,9 @@
+libpapki (1.0.84) unstable; urgency=medium
+
+  * deploy to raspbian buster
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 11 Aug 2020 13:44:05 +0300
+
 libpapki (1.0.83) unstable; urgency=medium
 
   * remove deprecated stuff
