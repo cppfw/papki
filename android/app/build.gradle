@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "io.github.igagis.papki_test"
+        applicationId "io.github.cppfw.papki_test"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -20,11 +20,11 @@ android {
 
 repositories {
     maven {
-        url 'https://dl.bintray.com/igagis/android/'
+        url 'https://dl.bintray.com/cppfw/android/'
     }
 }
 dependencies {
-    implementation 'io.github.igagis:libutki:1.1.4+'
+    implementation 'io.github.cppfw:libutki:1.1.4+'
 }
 
 

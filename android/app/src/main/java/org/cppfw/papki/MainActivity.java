@@ -1,4 +1,4 @@
-package org.igagis.papki;
+package org.cppfw.papki;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -18,9 +18,9 @@ nuget{
 		title: C++ file system library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/igagis/papki/master/LICENSE";
-		projectUrl: "https://github.com/igagis/papki";
-		iconUrl: "https://github.com/igagis/papki/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/papki/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/papki";
+		iconUrl: "https://github.com/cppfw/papki/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ file system library;
 
