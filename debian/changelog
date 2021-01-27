@@ -1,3 +1,9 @@
+libpapki (1.0.90) unstable; urgency=medium
+
+  * const file::spawn() overloads
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 28 Jan 2021 00:55:33 +0200
+
 libpapki (1.0.89) unstable; urgency=medium
 
   * file::spawn(std::string) overload
