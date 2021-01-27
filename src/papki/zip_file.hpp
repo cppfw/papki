@@ -25,7 +25,7 @@ public:
 	bool exists() const override;
 	std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
 	
-	std::unique_ptr<papki::file> spawn()override{
+	std::unique_ptr<papki::file> spawn()const override{
 		std::unique_ptr<papki::file> zf = this->zipFile->spawn();
 		zf->set_path(this->zipFile->path());
 		return std::make_unique<zip_file>(std::move(zf));

@@ -407,6 +407,6 @@ uint64_t fs_file::size()const{
 #endif
 }
 
-std::unique_ptr<file> fs_file::spawn(){
+std::unique_ptr<file> fs_file::spawn()const{
 	return utki::make_unique<fs_file>();
 }

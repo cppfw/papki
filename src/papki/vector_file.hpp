@@ -42,11 +42,9 @@ public:
 		return this->data.size();
 	}
 	
-
-	virtual std::unique_ptr<file> spawn()override{
+	virtual std::unique_ptr<file> spawn()const override{
 		return utki::make_unique<vector_file>();
 	}
-
 	
 	/**
 	 * @brief Clear the data of the file.

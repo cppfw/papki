@@ -64,17 +64,25 @@ public:
 	 * @brief Set the path for this file instance.
 	 * @param pathname - the path to a file or directory.
 	 */
-	void set_path(const std::string& pathname)const{
+	void set_path(std::string&& pathname)const{
 		if(this->is_open()){
 			throw std::logic_error("papki::file::set_path(): cannot set path when file is opened");
 		}
 
-		this->set_path_internal(pathname);
+		this->set_path_internal(std::move(pathname));
+	}
+
+	/**
+	 * @brief Set the path for this file instance.
+	 * @param pathname - the path to a file or directory.
+	 */
+	void set_path(const std::string& pathname)const{
+		this->set_path(std::string(pathname));
 	}
 
 protected:
-	virtual void set_path_internal(const std::string& pathname)const{
-		this->path_var = pathname;
+	virtual void set_path_internal(std::string&& pathname)const{
+		this->path_var = std::move(pathname);
 	}
 
 public:
@@ -436,10 +444,16 @@ public:
 	 * initial state.
 	 * @return Newly spawned file object.
 	 */
-	virtual std::unique_ptr<file> spawn() = 0;
+	virtual std::unique_ptr<file> spawn()const = 0;
 	
-	std::unique_ptr<const file> spawn()const{
-		return const_cast<file*>(this)->spawn();
+	std::unique_ptr<file> spawn(std::string&& path)const{
+		auto ret = this->spawn();
+		ret->set_path(std::move(path));
+		return ret;
+	}
+
+	std::unique_ptr<file> spawn(const std::string& path)const{
+		return this->spawn(std::string(path));
 	}
 	
 public:

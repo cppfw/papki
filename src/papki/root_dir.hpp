@@ -23,7 +23,7 @@ public:
 		if(!this->baseFile){
 			throw std::invalid_argument("root_dir(): passed in base file pointer is null");
 		}
-		this->file::set_path_internal(this->baseFile->path());
+		this->file::set_path_internal(std::string(this->baseFile->path()));
 		this->baseFile->set_path(this->rootDir + this->path());
 	}
 	
@@ -35,9 +35,9 @@ public:
 	root_dir& operator=(const root_dir&) = delete;
 	
 private:
-	void set_path_internal(const std::string& pathName)const override{
-		this->file::set_path_internal(pathName);
-		this->baseFile->set_path(this->rootDir + pathName);
+	void set_path_internal(std::string&& pathName)const override{
+		this->file::set_path_internal(std::move(pathName));
+		this->baseFile->set_path(this->rootDir + this->path());
 	}
 	
 	void open_internal(mode io_mode)override{
@@ -80,7 +80,7 @@ private:
 		return this->baseFile->exists();
 	}
 	
-	std::unique_ptr<file> spawn()override{
+	std::unique_ptr<file> spawn()const override{
 		return utki::make_unique<root_dir>(this->baseFile->spawn(), this->rootDir);
 	}
 };
