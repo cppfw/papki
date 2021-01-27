@@ -80,7 +80,7 @@ private:
 		return this->baseFile->exists();
 	}
 	
-	std::unique_ptr<file> spawn()const override{
+	std::unique_ptr<file> spawn()override{
 		return utki::make_unique<root_dir>(this->baseFile->spawn(), this->rootDir);
 	}
 };

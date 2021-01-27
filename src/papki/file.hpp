@@ -444,16 +444,30 @@ public:
 	 * initial state.
 	 * @return Newly spawned file object.
 	 */
-	virtual std::unique_ptr<file> spawn()const = 0;
+	virtual std::unique_ptr<file> spawn() = 0;
 	
-	std::unique_ptr<file> spawn(std::string&& path)const{
+	// NOTE: it must not be possible to modify the const file by spawning non-const file
+	//       object and setting the same path to it, so make const spawn() overloads
+	std::unique_ptr<const file> spawn()const{
+		return const_cast<file*>(this)->spawn();
+	}
+
+	std::unique_ptr<file> spawn(std::string&& path){
 		auto ret = this->spawn();
 		ret->set_path(std::move(path));
 		return ret;
 	}
 
-	std::unique_ptr<file> spawn(const std::string& path)const{
+	std::unique_ptr<const file> spawn(std::string&& path)const{
+		return const_cast<file*>(this)->spawn(std::move(path));
+	}
+
+	std::unique_ptr<file> spawn(const std::string& path){
 		return this->spawn(std::string(path));
+	}
+
+	std::unique_ptr<const file> spawn(const std::string& path)const{
+		return const_cast<file*>(this)->spawn(std::string(path));
 	}
 	
 public:
