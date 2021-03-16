@@ -515,23 +515,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\papki\file.cpp" />
-    <ClCompile Include="..\..\src\papki\fs_file.cpp" />
-    <ClCompile Include="..\..\src\papki\span_file.cpp" />
-    <ClCompile Include="..\..\src\papki\unzip\ioapi.cpp" />
-    <ClCompile Include="..\..\src\papki\unzip\unzip.cpp" />
-    <ClCompile Include="..\..\src\papki\util.cpp" />
-    <ClCompile Include="..\..\src\papki\vector_file.cpp" />
-    <ClCompile Include="..\..\src\papki\zip_file.cpp" />
+    <ClCompile Include="..\..\src\**\*.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\papki\file.hpp" />
-    <ClInclude Include="..\..\src\papki\fs_file.hpp" />
-    <ClInclude Include="..\..\src\papki\root_dir.hpp" />
-    <ClInclude Include="..\..\src\papki\span_file.hpp" />
-    <ClInclude Include="..\..\src\papki\util.hpp" />
-    <ClInclude Include="..\..\src\papki\vector_file.hpp" />
-    <ClInclude Include="..\..\src\papki\zip_file.hpp" />
+    <ClInclude Include="..\..\src\**\*.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
