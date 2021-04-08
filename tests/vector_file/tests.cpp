@@ -9,9 +9,9 @@
 namespace TestBasicMemoryFile{
 void Run(){
 	papki::vector_file f;
-	ASSERT_ALWAYS(!f.is_dir())
-	ASSERT_ALWAYS(!f.is_open())
-	ASSERT_ALWAYS(f.size() == 0)
+	utki::assert(!f.is_dir(), SL);
+	utki::assert(!f.is_open(), SL);
+	utki::assert(f.size() == 0, SL);
 
 	{
 		uint8_t buf[] = {1, 2, 3, 4};
@@ -29,10 +29,10 @@ void Run(){
 		
 		f.read(utki::make_span(b));
 		
-		ASSERT_ALWAYS(b[0] == 1)
-		ASSERT_ALWAYS(b[1] == 2)
-		ASSERT_ALWAYS(b[2] == 3)
-		ASSERT_ALWAYS(b[3] == 4)
+		utki::assert(b[0] == 1, SL);
+		utki::assert(b[1] == 2, SL);
+		utki::assert(b[2] == 3, SL);
+		utki::assert(b[3] == 4, SL);
 	}
 }
 }

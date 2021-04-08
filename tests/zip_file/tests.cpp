@@ -9,67 +9,67 @@ void run(){
 	// list directory contents
 	{
 		papki::zip_file zip_f(std::make_unique<papki::fs_file>("test.zip"));
-		ASSERT_ALWAYS(!zip_f.is_dir());
-		ASSERT_ALWAYS(!zip_f.is_open())
+		utki::assert(!zip_f.is_dir(), SL);
+		utki::assert(!zip_f.is_open(), SL);
 
 		zip_f.set_path("./");
-		ASSERT_ALWAYS(zip_f.is_dir());
-		ASSERT_ALWAYS(!zip_f.is_open())
+		utki::assert(zip_f.is_dir(), SL);
+		utki::assert(!zip_f.is_open(), SL);
 
 		{
 			auto contents = zip_f.list_dir();
 
-			ASSERT_ALWAYS(contents.size() == 3)
+			utki::assert(contents.size() == 3, SL);
 
 			// for(auto& f : contents){
 			// 	TRACE_ALWAYS(<< f << std::endl)
 			// }
 			
-			ASSERT_ALWAYS(contents[0] == "test1.txt")
-			ASSERT_ALWAYS(contents[1] == "dir1/")
-			ASSERT_ALWAYS(contents[2] == "dir2/")
+			utki::assert(contents[0] == "test1.txt", SL);
+			utki::assert(contents[1] == "dir1/", SL);
+			utki::assert(contents[2] == "dir2/", SL);
 		}
 
 		zip_f.set_path("dir1/");
-		ASSERT_ALWAYS(zip_f.is_dir());
-		ASSERT_ALWAYS(!zip_f.is_open())
+		utki::assert(zip_f.is_dir(), SL);
+		utki::assert(!zip_f.is_open(), SL);
 		{
 			auto contents = zip_f.list_dir();
 
-			ASSERT_ALWAYS(contents.size() == 1)
+			utki::assert(contents.size() == 1, SL);
 
 			// for(auto& f : contents){
 			// 	TRACE_ALWAYS(<< f << std::endl)
 			// }
 			
-			ASSERT_ALWAYS(contents[0] == "test2.txt")
+			utki::assert(contents[0] == "test2.txt", SL);
 		}
 
 		zip_f.set_path("dir2/");
-		ASSERT_ALWAYS(zip_f.is_dir());
-		ASSERT_ALWAYS(!zip_f.is_open())
+		utki::assert(zip_f.is_dir(), SL);
+		utki::assert(!zip_f.is_open(), SL);
 		{
 			auto contents = zip_f.list_dir();
 
-			ASSERT_ALWAYS(contents.size() == 1)
+			utki::assert(contents.size() == 1, SL);
 
 			// for(auto& f : contents){
 			// 	TRACE_ALWAYS(<< f << std::endl)
 			// }
 			
-			ASSERT_ALWAYS(contents[0] == "test3.txt")
+			utki::assert(contents[0] == "test3.txt", SL);
 		}
 	}
 
 	// reading file
 	{
 		papki::zip_file zip_f(std::make_unique<papki::fs_file>("test.zip"), "dir1/test2.txt");
-		ASSERT_ALWAYS(!zip_f.is_dir())
-		ASSERT_ALWAYS(!zip_f.is_open())
+		utki::assert(!zip_f.is_dir(), SL);
+		utki::assert(!zip_f.is_open(), SL);
 
 		auto contents = zip_f.load();
 
-		ASSERT_ALWAYS(!contents.empty())
+		utki::assert(!contents.empty(), SL);
 
 		std::string str(reinterpret_cast<char*>(contents.data()), contents.size());
 

@@ -11,8 +11,8 @@
 namespace TestSeekForward{
 void Run(){
 	papki::fs_file f("test.file.txt");
-	ASSERT_ALWAYS(!f.is_dir())
-	ASSERT_ALWAYS(!f.is_open())
+	utki::assert(!f.is_dir(), SL);
+	utki::assert(!f.is_open(), SL);
 	
 	for(unsigned numToSeek = 0; numToSeek < 0x1000; numToSeek += (0x1000 / 4)){
 		std::array<uint8_t, 1> testByte;
@@ -22,10 +22,10 @@ void Run(){
 			papki::file::guard fileGuard(f, papki::file::mode::read);
 			
 			auto res = f.read(utki::make_span(buf));
-			ASSERT_ALWAYS(res == buf.size())
+			utki::assert(res == buf.size(), SL);
 			
 			res = f.read(utki::make_span(testByte));
-			ASSERT_ALWAYS(res == testByte.size())
+			utki::assert(res == testByte.size(), SL);
 			
 //			TRACE_ALWAYS(<< "testByte = " << unsigned(testByte[0]) << std::endl)
 		}
@@ -38,9 +38,9 @@ void Run(){
 			std::array<uint8_t, 1> buf;
 
 			auto res = f.read(utki::make_span(buf));
-			ASSERT_ALWAYS(res == 1)
+			utki::assert(res == 1, SL);
 
-			ASSERT_ALWAYS(buf[0] == testByte[0])
+			utki::assert(buf[0] == testByte[0], SL);
 		}
 
 		{
@@ -51,9 +51,9 @@ void Run(){
 			std::array<uint8_t, 1> buf;
 
 			auto res = f.read(utki::make_span(buf));
-			ASSERT_ALWAYS(res == 1)
+			utki::assert(res == 1, SL);
 
-			ASSERT_ALWAYS(buf[0] == testByte[0])
+			utki::assert(buf[0] == testByte[0], SL);
 		}
 	}
 }
@@ -67,17 +67,17 @@ void Run(){
 	papki::file& f = curDir;
 	
 	std::vector<std::string> r = f.list_dir();
-	ASSERT_ALWAYS(r.size() >= 3)
+	utki::assert(r.size() >= 3, SL);
 //	TRACE_ALWAYS(<< "list = " << r << std::endl)
 	
 	std::vector<std::string> r1 = f.list_dir(1);
-	ASSERT_ALWAYS(r1.size() == 1)
-	ASSERT_ALWAYS(r[0] == r1[0])
+	utki::assert(r1.size() == 1, SL);
+	utki::assert(r[0] == r1[0], SL);
 	
 	std::vector<std::string> r2 = f.list_dir(2);
-	ASSERT_ALWAYS(r2.size() == 2)
-	ASSERT_ALWAYS(r[0] == r2[0])
-	ASSERT_ALWAYS(r[1] == r2[1])
+	utki::assert(r2.size() == 2, SL);
+	utki::assert(r[0] == r2[0], SL);
+	utki::assert(r[1] == r2[1], SL);
 }
 }
 
@@ -87,10 +87,10 @@ namespace TestHomeDir{
 void Run(){
 	std::string hd = papki::fs_file::get_home_dir();
 	
-	ASSERT_ALWAYS(hd.size() != 0) // There is always a trailing '/' character, so make sure there is something else besides that.
-	ASSERT_ALWAYS(papki::is_dir(hd))
+	utki::assert(hd.size() != 0, SL); // There is always a trailing '/' character, so make sure there is something else besides that.
+	utki::assert(papki::is_dir(hd), SL);
 	
-	TRACE_ALWAYS(<< "\tHome dir = " << hd << std::endl)
+	utki::log([&](auto&o){o << "\tHome dir = " << hd << std::endl;});
 }
 }
 
@@ -100,32 +100,32 @@ namespace TestLoadWholeFileToMemory{
 void Run(){
 	papki::root_dir f(utki::make_unique<papki::fs_file>(), "");
 	f.set_path("test.file.txt");
-	ASSERT_ALWAYS(!f.is_dir())
-	ASSERT_ALWAYS(!f.is_open())
+	utki::assert(!f.is_dir(), SL);
+	utki::assert(!f.is_open(), SL);
 	
 	{
 		std::vector<uint8_t> r = f.load();
-		ASSERT_ALWAYS(r.size() == 66874)
+		utki::assert(r.size() == 66874, SL);
 	}
 	
 	{
 		std::vector<uint8_t> r = f.load(66874);
-		ASSERT_ALWAYS(r.size() == 66874)
+		utki::assert(r.size() == 66874, SL);
 	}
 	
 	{
 		std::vector<uint8_t> r = f.load(4096);
-		ASSERT_ALWAYS(r.size() == 4096)
+		utki::assert(r.size() == 4096, SL);
 	}
 	
 	{
 		std::vector<uint8_t> r = f.load(35);
-		ASSERT_ALWAYS(r.size() == 35)
+		utki::assert(r.size() == 35, SL);
 	}
 	
 	{
 		std::vector<uint8_t> r = f.load(1000000);
-		ASSERT_ALWAYS(r.size() == 66874)
+		utki::assert(r.size() == 66874, SL);
 	}
 }
 }

@@ -11,11 +11,11 @@ int main(int argc, char *argv[]){
 
 		auto res = file.load();
 
-		ASSERT_ALWAYS(span.size() == res.size())
+		utki::assert(span.size() == res.size(), SL);
 		auto i = span.begin();
 		auto j = res.begin();
 		for(; i != span.end(); ++i, ++j){
-			ASSERT_ALWAYS(*i == *j)
+			utki::assert(*i == *j, SL);
 		}
 	}
 
@@ -29,11 +29,11 @@ int main(int argc, char *argv[]){
 
 		auto res = file.load();
 
-		ASSERT_ALWAYS(span.size() == res.size())
+		utki::assert(span.size() == res.size(), SL);
 		auto i = span.begin();
 		auto j = res.begin();
 		for(; i != span.end(); ++i, ++j){
-			ASSERT_ALWAYS(*i == *j)
+			utki::assert(*i == *j, SL);
 		}
 	}
 	return 0;
