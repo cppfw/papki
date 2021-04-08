@@ -20,10 +20,6 @@ void run(){
 			auto contents = zip_f.list_dir();
 
 			utki::assert(contents.size() == 3, SL);
-
-			// for(auto& f : contents){
-			// 	TRACE_ALWAYS(<< f << std::endl)
-			// }
 			
 			utki::assert(contents[0] == "test1.txt", SL);
 			utki::assert(contents[1] == "dir1/", SL);
@@ -37,10 +33,6 @@ void run(){
 			auto contents = zip_f.list_dir();
 
 			utki::assert(contents.size() == 1, SL);
-
-			// for(auto& f : contents){
-			// 	TRACE_ALWAYS(<< f << std::endl)
-			// }
 			
 			utki::assert(contents[0] == "test2.txt", SL);
 		}
@@ -52,10 +44,6 @@ void run(){
 			auto contents = zip_f.list_dir();
 
 			utki::assert(contents.size() == 1, SL);
-
-			// for(auto& f : contents){
-			// 	TRACE_ALWAYS(<< f << std::endl)
-			// }
 			
 			utki::assert(contents[0] == "test3.txt", SL);
 		}
@@ -73,9 +61,7 @@ void run(){
 
 		std::string str(reinterpret_cast<char*>(contents.data()), contents.size());
 
-		// TRACE(<< "f = " << str << std::endl)
-
-		ASSERT_INFO_ALWAYS(str == "test file #2.\n", "str = " << str)
+		utki::assert(str == "test file #2.\n", [&](auto&o){o << "str = " << str;}, SL);
 	}
 }
 }

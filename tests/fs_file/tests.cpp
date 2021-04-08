@@ -26,8 +26,6 @@ void Run(){
 			
 			res = f.read(utki::make_span(testByte));
 			utki::assert(res == testByte.size(), SL);
-			
-//			TRACE_ALWAYS(<< "testByte = " << unsigned(testByte[0]) << std::endl)
 		}
 		
 		{
@@ -68,7 +66,6 @@ void Run(){
 	
 	std::vector<std::string> r = f.list_dir();
 	utki::assert(r.size() >= 3, SL);
-//	TRACE_ALWAYS(<< "list = " << r << std::endl)
 	
 	std::vector<std::string> r1 = f.list_dir(1);
 	utki::assert(r1.size() == 1, SL);

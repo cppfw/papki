@@ -34,7 +34,7 @@ uLong ZCALLBACK UnzipRead(voidpf opaque, voidpf stream, void* buf, uLong size){
 }
 
 uLong ZCALLBACK UnzipWrite(voidpf opaque, voidpf stream, const void* buf, uLong size){
-	ASSERT_INFO(false, "Writing ZIP files is not supported")
+	ASSERT(false, [](auto&o){o << "Writing ZIP files is not supported";})
 	return 0;
 }
 
@@ -125,8 +125,7 @@ void zip_file::open_internal(mode mode) {
 
 void zip_file::close_internal()const noexcept{
 	if(unzCloseCurrentFile(this->handle) == UNZ_CRCERROR){
-		TRACE(<< "[WARNING] zip_file::Close(): CRC is not good" << std::endl)
-		ASSERT(false)
+		ASSERT(false, [](auto&o){o << "zip_file::close(): CRC is not good" << std::endl;})
 	}
 }
 
@@ -213,8 +212,6 @@ std::vector<std::string> zip_file::list_dir(size_t maxEntries)const{
 
 			ASSERT(filename.size() > cur_path.size())
 			std::string subfilename(filename, cur_path.size(), filename.size() - cur_path.size());
-
-			// TRACE(<< "subfilename = " << subfilename << std::endl)
 
 			size_t slash_pos = subfilename.find_first_of('/');
 

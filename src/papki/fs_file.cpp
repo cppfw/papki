@@ -46,7 +46,7 @@ void fs_file::open_internal(mode mode){
 	this->handle = fopen(this->path().c_str(), modeStr);
 #endif
 	if(!this->handle){
-		TRACE(<< "fs_file::open(): path() = " << this->path().c_str() << std::endl)
+		LOG([&](auto&o){o << "fs_file::open(): path() = " << this->path().c_str() << std::endl;})
 		std::stringstream ss;
 		ss << "fopen(" << this->path().c_str() << ") failed";
 		throw std::system_error(errno, std::generic_category(), ss.str());
@@ -184,7 +184,6 @@ void fs_file::make_dir(){
 	}
 
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
-//	TRACE(<< "creating directory = " << this->Path() << std::endl)
 	umask(0); // clear umask for proper permissions of newly created directory
 	if(mkdir(this->path().c_str(), 0755) != 0){
 		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
@@ -260,7 +259,7 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 		std::string pattern = this->path();
 		pattern += '*';
 
-		TRACE(<< "fs_file::list_dir(): pattern = " << pattern << std::endl)
+		LOG([&](auto&o){o << "fs_file::list_dir(): pattern = " << pattern << std::endl;})
 
 		WIN32_FIND_DATA wfd;
 		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
@@ -322,7 +321,10 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 				int ret;
 				do{
 					ret = closedir(this->pdir);
-					ASSERT_INFO(ret == 0 || errno == EINTR, "fs_file::list_dir(): closedir() failed: " << strerror(errno))
+					ASSERT(
+							ret == 0 || errno == EINTR,
+							[](auto&o){o << "fs_file::list_dir(): closedir() failed: " << strerror(errno);}
+						)
 				}while(ret != 0 && errno == EINTR);
 			}
 		} dirCloser(pdir);
@@ -334,7 +336,6 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 				continue; // do not add ./ and ../ directories, we are not interested in them
 
 			struct stat fileStats;
-			//TRACE(<< s << std::endl)
 			if(stat((this->path() + s).c_str(), &fileStats) < 0){
 				std::stringstream ss;
 				ss << "fs_file::list_dir(): stat() failure, error code = " << strerror(errno);
@@ -388,7 +389,7 @@ uint64_t fs_file::size()const{
 	}
 	utki::scope_exit hfile_scope_exit([&hfile](){
 		if(CloseHandle(hfile) == 0){
-			TRACE(<< "ERROR: CloseHandle() failed" << std::endl)
+			LOG([](auto&o){o << "ERROR: CloseHandle() failed" << std::endl;})
 		}
 	});
 	LARGE_INTEGER size;
