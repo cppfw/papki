@@ -512,24 +512,37 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\papki\file.cpp" />
+    <ClCompile Include="..\..\src\papki\fs_file.cpp" />
+    <ClCompile Include="..\..\src\papki\span_file.cpp" />
+    <ClCompile Include="..\..\src\papki\unzip\ioapi.cpp" />
+    <ClCompile Include="..\..\src\papki\unzip\unzip.cpp" />
+    <ClCompile Include="..\..\src\papki\util.cpp" />
+    <ClCompile Include="..\..\src\papki\vector_file.cpp" />
+    <ClCompile Include="..\..\src\papki\zip_file.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\papki\file.hpp" />
+    <ClInclude Include="..\..\src\papki\fs_file.hpp" />
+    <ClInclude Include="..\..\src\papki\root_dir.hpp" />
+    <ClInclude Include="..\..\src\papki\span_file.hpp" />
+    <ClInclude Include="..\..\src\papki\util.hpp" />
+    <ClInclude Include="..\..\src\papki\vector_file.hpp" />
+    <ClInclude Include="..\..\src\papki\zip_file.hpp" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\**\*.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\**\*.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libutki.1.1.116\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.116\build\native\libutki.targets')" />
-    <Import Project="..\packages\zlib_static.1.2.11.7\build\native\zlib_static.targets" Condition="Exists('..\packages\zlib_static.1.2.11.7\build\native\zlib_static.targets')" />
+    <Import Project="..\packages\libutki.1.1.122\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.122\build\native\libutki.targets')" />
+    <Import Project="..\packages\zlib_static.1.2.11.8\build\native\zlib_static.targets" Condition="Exists('..\packages\zlib_static.1.2.11.8\build\native\zlib_static.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libutki.1.1.116\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.116\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib_static.1.2.11.7\build\native\zlib_static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib_static.1.2.11.7\build\native\zlib_static.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.1.122\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.122\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib_static.1.2.11.8\build\native\zlib_static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib_static.1.2.11.8\build\native\zlib_static.targets'))" />
   </Target>
 </Project>

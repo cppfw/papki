@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\src\papki\file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -65,5 +62,8 @@
     <ClInclude Include="..\..\src\papki\zip_file.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
