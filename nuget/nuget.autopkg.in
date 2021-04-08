@@ -31,7 +31,7 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.1.111;
+			libutki/1.1.122;
 			zlib_static/1.2.11.7;
 		};
 	}
