@@ -1,14 +1,14 @@
-prorab-lib-path-run = (cd $(d) && \
+prorab-lib-path-run = \
         $(if $(filter $(os),windows), \
-                cmd //C 'set PATH=$1;%PATH% && $2', \
+                cmd //C 'set PATH=$1;%PATH%; cd $(d) && $(subst /,\\,$2)', \
                 $(if $(filter $(os),macosx), \
-                        DYLD_LIBRARY_PATH=$1 $2, \
+                        (export DYLD_LIBRARY_PATH=$1; cd $(d) && $2), \
                         $(if $(filter $(os),linux), \
-                                LD_LIBRARY_PATH=$1 $2, \
+                                (export LD_LIBRARY_PATH=$1; cd $(d) && $2), \
                                 $(error "unknown OS") \
                             ) \
                     ) \
-            ) )
+            )
 
 define this_rule
 test:: $(prorab_this_name)
