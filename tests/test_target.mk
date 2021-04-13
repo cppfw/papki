@@ -1,6 +1,6 @@
 prorab-lib-path-run = \
         $(if $(filter $(os),windows), \
-                cmd //C 'set PATH=$1;%PATH%; cd $(d) && $(subst /,\\,$2)', \
+                (cd $(d) && cmd //C 'set PATH=$1;%PATH%; $(subst /,\\,$2)'), \
                 $(if $(filter $(os),macosx), \
                         (export DYLD_LIBRARY_PATH=$1; cd $(d) && $2), \
                         $(if $(filter $(os),linux), \
