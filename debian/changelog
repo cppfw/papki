@@ -1,3 +1,9 @@
+libpapki (1.0.96) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 21 Apr 2021 00:33:25 +0300
+
 libpapki (1.0.95) unstable; urgency=medium
 
   * deploy to conan
