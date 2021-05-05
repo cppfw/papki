@@ -13,6 +13,7 @@
 #include <vector>
 #include <cstdlib>
 #include <sstream>
+#include <filesystem>
 
 #include "fs_file.hpp"
 
@@ -246,14 +247,23 @@ std::string fs_file::get_home_dir() {
 	return ret;
 }
 
-
-std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
+std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 	if(!this->is_dir()){
 		throw std::logic_error("fs_file::list_dir(): this is not a directory");
 	}
 
 	std::vector<std::string> files;
 
+	std::filesystem::directory_iterator iter(this->path());
+
+	for(const auto& p : iter){
+		files.push_back(p.path());
+		if(files.size() == max_size){
+			break;
+		}
+	}
+
+#if 0
 #if M_OS == M_OS_WINDOWS
 	{
 		std::string pattern = this->path();
@@ -365,6 +375,8 @@ std::vector<std::string> fs_file::list_dir(size_t maxEntries)const{
 #	error "fs_file::list_dir(): is not implemented yet for this os"
 
 #endif
+#endif
+
 	return files;
 }
 

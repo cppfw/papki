@@ -232,10 +232,10 @@ public:
 	 * @brief Get list of files and subdirectories of a directory.
 	 * If this file instance holds a path to a directory then this method
 	 * can be used to obtain the contents of the directory.
-	 * @param maxEntries - maximum number of entries in the returned list. 0 means no limit.
+	 * @param max_size - maximum size of the returned list.
 	 * @return The array of string objects representing the directory entries.
 	 */
-	virtual std::vector<std::string> list_dir(size_t maxEntries = 0)const;
+	virtual std::vector<std::string> list_dir(size_t max_size = std::numeric_limits<size_t>::max())const;
 
 	/**
 	 * @brief Read data from file.
