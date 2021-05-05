@@ -1,3 +1,9 @@
+libpapki (1.0.97) unstable; urgency=medium
+
+  * implement fs_file::list_dir() using std::filesystem
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 06 May 2021 01:05:11 +0300
+
 libpapki (1.0.96) unstable; urgency=medium
 
   * relink to latest utki
