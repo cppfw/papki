@@ -15,6 +15,10 @@ this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
 this_cxxflags_test += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
 this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
 
-this_ldlibs += -lz -lstdc++fs
+this_ldlibs += -lz
+
+ifneq ($(os),macosx)
+    this_ldlibs += -lstdc++fs
+endif
 
 $(eval $(prorab-build-lib))
