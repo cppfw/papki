@@ -257,7 +257,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 	std::filesystem::directory_iterator iter(this->path());
 
 	for(const auto& p : iter){
-		files.push_back(p.path());
+		files.push_back(p.path().string());
 		if(files.size() == max_size){
 			break;
 		}
