@@ -5,5 +5,5 @@ project 'papki/papki.xcodeproj'
 platform :ios, '8.0'
 
 target "papki" do
-	pod 'utki', '>= 1.1.138'
+	pod 'utki', '>= 1.1.139'
 end
