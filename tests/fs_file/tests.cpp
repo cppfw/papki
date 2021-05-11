@@ -65,6 +65,9 @@ void Run(){
 	papki::file& f = curDir;
 	
 	std::vector<std::string> r = f.list_dir();
+	for(const auto& e : r){
+		LOG([&](auto& o){o << "e = " << e << '\n';})
+	}
 	utki::assert(r.size() >= 3, SL);
 	
 	std::vector<std::string> r1 = f.list_dir(1);

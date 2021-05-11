@@ -253,7 +253,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 	std::filesystem::directory_iterator iter(this->path());
 
 	for(const auto& p : iter){
-		std::string name = p.path().string();
+		std::string name = papki::not_dir(p.path().string());
 		
 		if(p.is_directory()){
 			name += "/";
@@ -264,6 +264,120 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 			break;
 		}
 	}
+
+#if 0 // TODO: remove commented code when std::filesystem-based implementation is stable enough
+#if M_OS == M_OS_WINDOWS
+	{
+		std::string pattern = this->path();
+		pattern += '*';
+
+		LOG([&](auto&o){o << "fs_file::list_dir(): pattern = " << pattern << std::endl;})
+
+		WIN32_FIND_DATA wfd;
+		HANDLE h = FindFirstFile(pattern.c_str(), &wfd);
+		if (h == INVALID_HANDLE_VALUE) {
+			throw std::system_error(GetLastError(), std::generic_category(), "FindFirstFile() failed");
+		}
+
+		// create Find Closer to automatically call FindClose on exit from the function in case of exceptions etc...
+		{
+			utki::scope_exit scopeExit([h]() {
+				FindClose(h);
+			});
+
+			do {
+				std::string s(wfd.cFileName);
+				ASSERT(s.size() > 0)
+
+				// do not add ./ and ../ directories, we are not interested in them
+				if (s == "." || s == "..") {
+					continue;
+				}
+
+				if (((wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) && s[s.size() - 1] != '/') {
+					s += '/';
+				}
+				files.push_back(s);
+
+				if (files.size() == maxEntries) {
+					break;
+				}
+			} while (FindNextFile(h, &wfd) != 0);
+
+			auto error = GetLastError();
+
+			if(error != ERROR_SUCCESS && error != ERROR_NO_MORE_FILES) {
+				throw std::system_error(error, std::generic_category(), "list_dir(): find next file failed");
+			}
+		}
+	}
+#elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+	{
+		DIR *pdir = opendir(this->path().c_str());
+
+		if(!pdir){
+			std::stringstream ss;
+			ss << "fs_file::list_dir(): opendir() failure, error code = " << strerror(errno);
+			throw std::system_error(errno, std::generic_category(), ss.str());
+		}
+
+		// create DirentCloser to automatically call closedir on exit from the function in case of exceptions etc...
+		struct DirCloser{
+			DIR *pdir;
+
+			DirCloser(DIR *pDirToClose) :
+					pdir(pDirToClose)
+			{}
+
+			~DirCloser(){
+				int ret;
+				do{
+					ret = closedir(this->pdir);
+					ASSERT(
+							ret == 0 || errno == EINTR,
+							[](auto&o){o << "fs_file::list_dir(): closedir() failed: " << strerror(errno);}
+						)
+				}while(ret != 0 && errno == EINTR);
+			}
+		} dirCloser(pdir);
+
+		errno = 0;
+		while(dirent *pent = readdir(pdir)){
+			std::string s(pent->d_name);
+			if(s == "." || s == "..")
+				continue; // do not add ./ and ../ directories, we are not interested in them
+
+			struct stat fileStats;
+			if(stat((this->path() + s).c_str(), &fileStats) < 0){
+				std::stringstream ss;
+				ss << "fs_file::list_dir(): stat() failure, error code = " << strerror(errno);
+				throw std::system_error(errno, std::system_category(), ss.str());
+			}
+
+			if(fileStats.st_mode & S_IFDIR) // if this entry is a directory append '/' symbol to its end
+				s += "/";
+
+			files.push_back(s);
+
+			if(files.size() == maxEntries){
+				break;
+			}
+		}
+
+		// check if we exited the while() loop because of readdir() failed
+		if(errno != 0){
+			std::stringstream ss;
+			ss << "fs_file::list_dir(): readdir() failure, error code = " << strerror(errno);
+			throw std::system_error(errno, std::system_category(), ss.str());
+		}
+	}
+
+#else
+
+#	error "fs_file::list_dir(): is not implemented yet for this os"
+
+#endif
+#endif
 
 	return files;
 }
