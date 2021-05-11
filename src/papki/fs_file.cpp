@@ -173,8 +173,6 @@ bool fs_file::exists()const{
 	}
 }
 
-
-
 void fs_file::make_dir(){
 	if(this->is_open()){
 		throw std::logic_error("cannot make directory when file is opened");
@@ -200,8 +198,6 @@ void fs_file::make_dir(){
 	throw std::runtime_error("creating directory is not supported");
 #endif
 }
-
-
 
 std::string fs_file::get_home_dir() {
 	std::string ret;
@@ -257,7 +253,13 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 	std::filesystem::directory_iterator iter(this->path());
 
 	for(const auto& p : iter){
-		files.push_back(p.path().string());
+		std::string name = p.path().string();
+		
+		if(p.is_directory()){
+			name += "/";
+		}
+		
+		files.push_back(name);
 		if(files.size() == max_size){
 			break;
 		}
@@ -265,7 +267,6 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 
 	return files;
 }
-
 
 uint64_t fs_file::size()const{
 	if(this->is_dir()){
