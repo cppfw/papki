@@ -37,7 +37,7 @@ size_t file::write(utki::span<const uint8_t> buf){
 		throw std::logic_error("Cannot write, file is not opened");
 	}
 
-	if(this->ioMode != mode::write){
+	if(this->io_mode != mode::write){
 		throw std::logic_error("file is opened, but not in write mode");
 	}
 	

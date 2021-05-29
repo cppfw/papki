@@ -35,7 +35,7 @@ public:
 	};
 
 protected:
-	mode ioMode; // mode only matters when file is opened
+	mode io_mode; // mode only matters when file is opened
 
 	/**
 	 * @brief Constructor.
@@ -161,9 +161,9 @@ public:
 		
 		//set open mode
 		if(io_mode == mode::create){
-			this->ioMode = mode::write;
+			this->io_mode = mode::write;
 		}else{
-			this->ioMode = io_mode;
+			this->io_mode = io_mode;
 		}
 
 		this->isOpened_var = true;
@@ -396,7 +396,7 @@ protected:
 	 * Derived class may override this function with its own implementation.
 	 */
 	virtual void rewind_internal()const{
-		mode m = this->ioMode;
+		mode m = this->io_mode;
 		this->close();
 		const_cast<file*>(this)->open(m);
 	}
