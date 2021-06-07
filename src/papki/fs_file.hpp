@@ -12,7 +12,7 @@ namespace papki{
 
 /**
  * @brief Native OS file system implementation of file interface.
- * Implementation of a ting::file interface for native file system of the OS.
+ * Implementation of a papki::file interface for native file system of the OS.
  */
 class fs_file : public file{
 	mutable FILE* handle = nullptr;
@@ -29,7 +29,7 @@ protected:
 	// NOTE: use default implementation of seek_forward() because of the problems with
 	//       fseek(), as it can set file pointer beyond the end of file.
 	
-	size_t seek_backward_internal(size_t numBytesToSeek)const override;
+	size_t seek_backward_internal(size_t num_bytes_to_seek)const override;
 	
 	void rewind_internal()const override;
 	
@@ -37,19 +37,19 @@ public:
 	/**
 	 * @brief Constructor.
 	 * A root directory can be set which holds the file system subtree. The file path
-	 * set by SetPath() method will refer to a file path relative to the root directory.
+	 * set by set_path() method will refer to a file path relative to the root directory.
 	 * That means that all file operations like opening the file and other will be 
 	 * performed on the actual file/directory referred by the final path which is a concatenation of
-	 * the root directory and the path returned by Path() method. 
-     * @param pathName - initial path to set passed to file constructor.
+	 * the root directory and the path returned by path() method. 
+     * @param path_name - initial path to set passed to file constructor.
      */
-	fs_file(const std::string& pathName = std::string()) :
-			file(pathName)
+	fs_file(const std::string& path_name = std::string()) :
+			file(path_name)
 	{}
 	
 	/**
 	 * @brief Destructor.
-	 * This destructor calls the Close() method.
+	 * This destructor calls the close() method.
 	 */
 	virtual ~fs_file()noexcept{
 		this->close();
@@ -69,11 +69,9 @@ public:
      */
 	static std::string get_home_dir();
 
-	virtual std::vector<std::string> list_dir(size_t maxEntries = 0)const override;
+	virtual std::vector<std::string> list_dir(size_t max_entries = 0)const override;
 	
 	virtual std::unique_ptr<file> spawn()override;
 };
-
-
 
 }

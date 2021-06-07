@@ -18,7 +18,7 @@ bool file::is_dir()const noexcept{
 	return false;
 }
 
-std::vector<std::string> file::list_dir(size_t maxEntries)const{
+std::vector<std::string> file::list_dir(size_t max_entries)const{
 	throw std::runtime_error("file::list_dir(): not supported for this file instance");
 }
 
@@ -28,7 +28,7 @@ size_t file::read(utki::span<uint8_t> buf)const{
 	}
 	
 	size_t ret = this->read_internal(buf);
-	this->curPos_var += ret;
+	this->current_pos += ret;
 	return ret;
 }
 
@@ -42,7 +42,7 @@ size_t file::write(utki::span<const uint8_t> buf){
 	}
 	
 	size_t ret = this->write_internal(buf);
-	this->curPos_var += ret;
+	this->current_pos += ret;
 	return ret;
 }
 
@@ -63,7 +63,7 @@ size_t file::seek_forward_internal(size_t numBytesToSeek)const{
 			break;
 		}
 	}
-	this->curPos_var -= bytesRead; // make correction to curPos, since we were using read()
+	this->current_pos -= bytesRead; // make correction to curPos, since we were using read()
 	return bytesRead;
 }
 

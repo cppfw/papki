@@ -17,11 +17,11 @@ namespace papki{
  * This class represents an abstract interface to a file system.
  */
 class file{
-	mutable std::string path_var;
+	mutable std::string cur_path;
 
-	mutable bool isOpened_var = false;
+	mutable bool is_file_opened = false;
 	
-	mutable size_t curPos_var = 0;//holds current position from file beginning
+	mutable size_t current_pos = 0; // holds current position from file beginning
 	
 public:
 	
@@ -39,10 +39,10 @@ protected:
 
 	/**
 	 * @brief Constructor.
-	 * @param pathName - initial path to set to the newly created file instance.
+	 * @param path_name - initial path to set to the newly created file instance.
 	 */
-	file(const std::string& pathName = std::string()) :
-			path_var(pathName)
+	file(const std::string& path_name = std::string()) :
+			cur_path(path_name)
 	{}
 
 public:
@@ -62,27 +62,27 @@ public:
 
 	/**
 	 * @brief Set the path for this file instance.
-	 * @param pathname - the path to a file or directory.
+	 * @param path_name - the path to a file or directory.
 	 */
-	void set_path(std::string&& pathname)const{
+	void set_path(std::string&& path_name)const{
 		if(this->is_open()){
 			throw std::logic_error("papki::file::set_path(): cannot set path when file is opened");
 		}
 
-		this->set_path_internal(std::move(pathname));
+		this->set_path_internal(std::move(path_name));
 	}
 
 	/**
 	 * @brief Set the path for this file instance.
-	 * @param pathname - the path to a file or directory.
+	 * @param path_name - the path to a file or directory.
 	 */
-	void set_path(const std::string& pathname)const{
-		this->set_path(std::string(pathname));
+	void set_path(const std::string& path_name)const{
+		this->set_path(std::string(path_name));
 	}
 
 protected:
-	virtual void set_path_internal(std::string&& pathname)const{
-		this->path_var = std::move(pathname);
+	virtual void set_path_internal(std::string&& path_name)const{
+		this->cur_path = std::move(path_name);
 	}
 
 public:
@@ -92,7 +92,7 @@ public:
 	 * @return The path this file instance holds.
 	 */
 	const std::string& path()const noexcept{
-		return this->path_var;
+		return this->cur_path;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public:
 	 * @return Current position from beginning of the file
 	 */
 	size_t cur_pos()const noexcept{
-		return this->curPos_var;
+		return this->current_pos;
 	}
 
 	/**
@@ -159,16 +159,16 @@ public:
 		}
 		this->open_internal(io_mode);
 		
-		//set open mode
+		// set open mode
 		if(io_mode == mode::create){
 			this->io_mode = mode::write;
 		}else{
 			this->io_mode = io_mode;
 		}
 
-		this->isOpened_var = true;
+		this->is_file_opened = true;
 		
-		this->curPos_var = 0;
+		this->current_pos = 0;
 	};
 	
 	/**
@@ -197,7 +197,7 @@ public:
 			return;
 		}
 		this->close_internal();
-		this->isOpened_var = false;
+		this->is_file_opened = false;
 	}
 	
 protected:
@@ -214,7 +214,7 @@ public:
 	 * @return false - otherwise.
 	 */
 	bool is_open()const noexcept{
-		return this->isOpened_var;
+		return this->is_file_opened;
 	}
 
 	/**
@@ -318,16 +318,16 @@ public:
 	 * There is a default implementation of this function which uses Read() method
 	 * to skip the specified number of bytes by reading the data and wasting it away.
 	 * It will not go beyond the end of file.
-	 * @param numBytesToSeek - number of bytes to skip.
+	 * @param num_bytes_to_seek - number of bytes to skip.
 	 * @return number of bytes actually skipped.
 	 * @throw std::logic_error - if file is not opened.
 	 */
-	size_t seek_forward(size_t numBytesToSeek)const{
+	size_t seek_forward(size_t num_bytes_to_seek)const{
 		if(!this->is_open()){
 			throw std::logic_error("seek_forward(): file is not opened");
 		}
-		size_t ret = this->seek_forward_internal(numBytesToSeek);
-		this->curPos_var += ret;
+		size_t ret = this->seek_forward_internal(num_bytes_to_seek);
+		this->current_pos += ret;
 		return ret;
 	}
 
@@ -338,10 +338,10 @@ protected:
 	 * Derived class may override this function with its own implementation.
 	 * Otherwise, there is a default implementation which just reads and wastes
 	 * necessary amount of bytes.
-	 * @param numBytesToSeek - number of bytes to seek.
+	 * @param num_bytes_to_seek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
 	 */
-	virtual size_t seek_forward_internal(size_t numBytesToSeek)const;
+	virtual size_t seek_forward_internal(size_t num_bytes_to_seek)const;
 	
 public:
 
@@ -349,16 +349,16 @@ public:
 	 * @brief Seek backwards.
 	 * Seek file pointer backwards relatively to he current position. Not all file systems
 	 * support seeking backwards.
-	 * @param numBytesToSeek - number of bytes to skip.
+	 * @param num_bytes_to_seek - number of bytes to skip.
 	 * @return number of bytes actually skipped.
 	 */
-	size_t seek_backward(size_t numBytesToSeek)const{
+	size_t seek_backward(size_t num_bytes_to_seek)const{
 		if(!this->is_open()){
 			throw std::logic_error("seek_backward(): file is not opened");
 		}
-		size_t ret = this->seek_backward_internal(numBytesToSeek);
-		ASSERT(ret <= this->curPos_var)
-		this->curPos_var -= ret;
+		size_t ret = this->seek_backward_internal(num_bytes_to_seek);
+		ASSERT(ret <= this->current_pos)
+		this->current_pos -= ret;
 		return ret;
 	}
 	
@@ -367,10 +367,10 @@ protected:
 	 * @brief Seek backwards, internal implementation.
 	 * This function is called by SeekBackward() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
-	 * @param numBytesToSeek - number of bytes to seek.
+	 * @param num_bytes_to_seek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
 	 */
-	virtual size_t seek_backward_internal(size_t numBytesToSeek)const{
+	virtual size_t seek_backward_internal(size_t num_bytes_to_seek)const{
 		throw std::runtime_error("seek_backward() is unsupported");
 	}
 	
@@ -386,7 +386,7 @@ public:
 			throw std::logic_error("rewind(): file is not opened");
 		}
 		this->rewind_internal();
-		this->curPos_var = 0;
+		this->current_pos = 0;
 	}
 	
 protected:
@@ -477,21 +477,21 @@ public:
 	 * As the file guard object goes out of the scope it will close the file in its destructor.
 	 * Usage:
 	 * @code
-	 *	file& fi;//assume we have some papki::file object visible in current scope.
+	 *	file& fi; // assume we have some papki::file object visible in current scope.
 	*	...
 	*	{
-	*		//assume the 'fi' is closed.
-	*		//Let's create the file guard object. This will open the file 'fi'
-	*		// for reading by calling fi.Open(papki::file::mode::read) method.
-	*		papki::file::Guard fileGuard(fi, papki::file::mode::read);
+	*		// assume the 'fi' is closed.
+	*		// Let's create the file guard object. This will open the file 'fi'
+	*		//  for reading by calling fi.Open(papki::file::mode::read) method.
+	*		papki::file::guard file_guard(fi, papki::file::mode::read);
 	* 
 	*		...
-	*		//do some reading
-	*		fi.Read(...);
+	*		// do some reading
+	*		fi.read(...);
 	*		
-	*		//going out of scope will destroy the 'fileGuard' object. In turn,
-	*		//it will automatically close the file 'fi' in its destructor by
-	*		//calling fi.Close() method.
+	*		// going out of scope will destroy the 'file_guard' object. In turn,
+	*		// it will automatically close the file 'fi' in its destructor by
+	*		// calling fi.close() method.
 	*	}
 	* @endcode
 	*/
