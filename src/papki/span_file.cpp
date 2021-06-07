@@ -30,20 +30,20 @@ size_t span_file::write_internal(utki::span<const uint8_t> buf){
 	return numBytesWritten;
 }
 
-size_t span_file::seek_forward_internal(size_t numBytesToSeek)const{
+size_t span_file::seek_forward_internal(size_t num_bytes_to_seek)const{
 	ASSERT(this->ptr <= this->data.end())
-	numBytesToSeek = std::min(size_t(this->data.end() - this->ptr), numBytesToSeek);
-	this->ptr += numBytesToSeek;
+	num_bytes_to_seek = std::min(size_t(this->data.end() - this->ptr), num_bytes_to_seek);
+	this->ptr += num_bytes_to_seek;
 	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
-	return numBytesToSeek;
+	return num_bytes_to_seek;
 }
 
-size_t span_file::seek_backward_internal(size_t numBytesToSeek)const{
+size_t span_file::seek_backward_internal(size_t num_bytes_to_seek)const{
 	ASSERT(this->ptr >= this->data.begin())
-	numBytesToSeek = std::min(size_t(this->ptr - this->data.begin()), numBytesToSeek);
-	this->ptr -= numBytesToSeek;
+	num_bytes_to_seek = std::min(size_t(this->ptr - this->data.begin()), num_bytes_to_seek);
+	this->ptr -= num_bytes_to_seek;
 	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
-	return numBytesToSeek;
+	return num_bytes_to_seek;
 }
 
 void span_file::rewind_internal()const{

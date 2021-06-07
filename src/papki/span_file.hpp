@@ -4,10 +4,8 @@
 
 #include "file.hpp"
 
-
 namespace papki{
 
- 
 /**
  * @brief Memory buffer file.
  * A memory buffer represented as a file.
@@ -64,9 +62,9 @@ protected:
 
 	size_t write_internal(utki::span<const uint8_t> buf)override;
 	
-	size_t seek_forward_internal(size_t numBytesToSeek)const override;
+	size_t seek_forward_internal(size_t num_bytes_to_seek)const override;
 	
-	size_t seek_backward_internal(size_t numBytesToSeek)const override;
+	size_t seek_backward_internal(size_t num_bytes_to_seek)const override;
 	
 	void rewind_internal()const override;
 };
