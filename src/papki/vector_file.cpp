@@ -5,57 +5,49 @@
 
 using namespace papki;
 
-
-
 void vector_file::open_internal(mode mode){
 	this->idx = 0;
 }
 
-
-
 size_t vector_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(this->idx <= this->data.size())
-	size_t numBytesRead = std::min(buf.size_bytes(), this->data.size() - this->idx);
-	memcpy(buf.begin(), &this->data[idx], numBytesRead);
-	this->idx += numBytesRead;
+	size_t num_bytes_read = std::min(buf.size_bytes(), this->data.size() - this->idx);
+	memcpy(buf.begin(), &this->data[idx], num_bytes_read);
+	this->idx += num_bytes_read;
 	ASSERT(this->idx <= this->data.size())
-	return numBytesRead;
+	return num_bytes_read;
 }
-
-
 
 size_t vector_file::write_internal(utki::span<const uint8_t> buf){
 	ASSERT(this->idx <= this->data.size())
 	
-	size_t numBytesTillEOF = this->data.size() - this->idx;
-	if(numBytesTillEOF < buf.size_bytes()){
-		size_t numBytesToGrow = buf.size_bytes() - numBytesTillEOF;
-		this->data.resize(this->data.size() + numBytesToGrow);
+	size_t num_bytes_till_eof = this->data.size() - this->idx;
+	if(num_bytes_till_eof < buf.size_bytes()){
+		size_t num_bytes_to_grow = buf.size_bytes() - num_bytes_till_eof;
+		this->data.resize(this->data.size() + num_bytes_to_grow);
 	}
 	
-	size_t numBytesWritten = std::min(buf.size_bytes(), this->data.size() - this->idx);
-	memcpy(&this->data[this->idx], buf.begin(), numBytesWritten);
-	this->idx += numBytesWritten;
+	size_t num_bytes_written = std::min(buf.size_bytes(), this->data.size() - this->idx);
+	memcpy(&this->data[this->idx], buf.begin(), num_bytes_written);
+	this->idx += num_bytes_written;
 	ASSERT(this->idx <= this->data.size())
-	return numBytesWritten;
+	return num_bytes_written;
 }
 
-
-
-size_t vector_file::seek_forward_internal(size_t numBytesToSeek)const{
+size_t vector_file::seek_forward_internal(size_t num_bytes_to_seek)const{
 	ASSERT(this->idx <= this->data.size())
-	numBytesToSeek = std::min(this->data.size() - this->idx, numBytesToSeek);
-	this->idx += numBytesToSeek;
+	num_bytes_to_seek = std::min(this->data.size() - this->idx, num_bytes_to_seek);
+	this->idx += num_bytes_to_seek;
 	ASSERT(this->idx <= this->data.size())
-	return numBytesToSeek;
+	return num_bytes_to_seek;
 }
 
-size_t vector_file::seek_backward_internal(size_t numBytesToSeek)const{
+size_t vector_file::seek_backward_internal(size_t num_bytes_to_seek)const{
 	ASSERT(this->idx <= this->data.size())
-	numBytesToSeek = std::min(this->idx, numBytesToSeek);
-	this->idx -= numBytesToSeek;
+	num_bytes_to_seek = std::min(this->idx, num_bytes_to_seek);
+	this->idx -= num_bytes_to_seek;
 	ASSERT(this->idx <= this->data.size())
-	return numBytesToSeek;
+	return num_bytes_to_seek;
 }
 
 void vector_file::rewind_internal()const{

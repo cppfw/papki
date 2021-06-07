@@ -6,8 +6,6 @@
 
 #include <vector>
 
-
-
 namespace papki{
 
 /**
