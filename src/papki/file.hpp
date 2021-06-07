@@ -140,6 +140,7 @@ public:
 		return papki::not_dir(this->path());
 	}
 
+	// TODO: deprecated, remove
 	std::string notDir()const{
 		return this->not_dir();
 	}
@@ -334,7 +335,7 @@ public:
 protected:
 	/**
 	 * @brief Seek forward, internal implementation.
-	 * This function is called by SeekForward() after it has done some safety checks.
+	 * This function is called by seek_forward() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
 	 * Otherwise, there is a default implementation which just reads and wastes
 	 * necessary amount of bytes.
@@ -365,7 +366,7 @@ public:
 protected:
 	/**
 	 * @brief Seek backwards, internal implementation.
-	 * This function is called by SeekBackward() after it has done some safety checks.
+	 * This function is called by seek_backward() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
 	 * @param num_bytes_to_seek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
@@ -392,7 +393,7 @@ public:
 protected:
 	/**
 	 * @brief Rewind, internal implementation.
-	 * This function is called by Rewind() after it has done some safety checks.
+	 * This function is called by rewind() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
 	 */
 	virtual void rewind_internal()const{
@@ -482,7 +483,7 @@ public:
 	*	{
 	*		// assume the 'fi' is closed.
 	*		// Let's create the file guard object. This will open the file 'fi'
-	*		//  for reading by calling fi.Open(papki::file::mode::read) method.
+	*		//  for reading by calling fi.open(papki::file::mode::read) method.
 	*		papki::file::guard file_guard(fi, papki::file::mode::read);
 	* 
 	*		...
