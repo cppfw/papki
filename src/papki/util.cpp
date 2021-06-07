@@ -4,51 +4,51 @@
 
 using namespace papki;
 
-bool papki::is_dir(const std::string& pathname){
-    return pathname.length() != 0 && pathname.back() == '/';
+bool papki::is_dir(const std::string& path_name){
+    return path_name.length() != 0 && path_name.back() == '/';
 }
 
-std::string papki::not_dir(const std::string& pathname){
-    size_t slashPos = pathname.rfind('/');
+std::string papki::not_dir(const std::string& path_name){
+    size_t slashPos = path_name.rfind('/');
 	if(slashPos == std::string::npos){ // no slash found
-		return pathname;
+		return path_name;
 	}
 
 	ASSERT(slashPos > 0)
-	ASSERT(pathname.size() > 0)
-	ASSERT(pathname.size() >= slashPos + 1)
+	ASSERT(path_name.size() > 0)
+	ASSERT(path_name.size() >= slashPos + 1)
 
-	return std::string(pathname, slashPos + 1);
+	return std::string(path_name, slashPos + 1);
 }
 
-std::string papki::dir(const std::string& pathname){
-    size_t slashPos = pathname.rfind('/');
+std::string papki::dir(const std::string& path_name){
+    size_t slashPos = path_name.rfind('/');
 	if(slashPos == std::string::npos){ // no slash found
 		return std::string();
 	}
 
 	ASSERT(slashPos > 0)
-	ASSERT(pathname.size() > 0)
-	ASSERT(pathname.size() >= slashPos + 1)
+	ASSERT(path_name.size() > 0)
+	ASSERT(path_name.size() >= slashPos + 1)
 
-	return std::string(pathname, 0, slashPos + 1);
+	return std::string(path_name, 0, slashPos + 1);
 }
 
-std::string papki::suffix(const std::string& pathname){
-    size_t dotPos = pathname.rfind('.');
-	if(dotPos == std::string::npos || dotPos == 0){ // NOTE: dotPos is 0 for hidden files in *nix systems
+std::string papki::suffix(const std::string& path_name){
+    size_t dot_pos = path_name.rfind('.');
+	if(dot_pos == std::string::npos || dot_pos == 0){ // NOTE: dot_pos is 0 for hidden files in *nix systems
 		return std::string();
 	}else{
-		ASSERT(dotPos > 0)
-		ASSERT(pathname.size() > 0)
-		ASSERT(pathname.size() >= dotPos + 1)
+		ASSERT(dot_pos > 0)
+		ASSERT(path_name.size() > 0)
+		ASSERT(path_name.size() >= dot_pos + 1)
 		
-		// Check for hidden file on *nix systems
-		if(pathname[dotPos - 1] == '/'){
+		// check for hidden file on *nix systems
+		if(path_name[dot_pos - 1] == '/'){
 			return std::string();
 		}
 		
-		return std::string(pathname, dotPos + 1, pathname.size() - (dotPos + 1));
+		return std::string(path_name, dot_pos + 1, path_name.size() - (dot_pos + 1));
 	}
 	ASSERT(false)
 }
