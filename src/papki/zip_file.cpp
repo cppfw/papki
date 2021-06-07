@@ -70,12 +70,12 @@ long ZCALLBACK UnzipTell(voidpf opaque, voidpf stream){
 
 }
 
-zip_file::zip_file(std::unique_ptr<papki::file> zipFile, const std::string& path) :
+zip_file::zip_file(std::unique_ptr<papki::file> underlying_zip_file, const std::string& path) :
 		papki::file(path),
-		zipFile(std::move(zipFile))
+		underlying_zip_file(std::move(underlying_zip_file))
 {
 	zlib_filefunc_def ff;
-	ff.opaque = this->zipFile.operator->();
+	ff.opaque = this->underlying_zip_file.operator->();
 	ff.zopen_file = &UnzipOpen;
 	ff.zclose_file = &UnzipClose;
 	ff.zread_file = &UnzipRead;
@@ -84,7 +84,7 @@ zip_file::zip_file(std::unique_ptr<papki::file> zipFile, const std::string& path
 	ff.zerror_file = &UnzipError;
 	ff.ztell_file = &UnzipTell;
 	
-	this->handle = unzOpen2(this->zipFile->path().c_str(), &ff);
+	this->handle = unzOpen2(this->underlying_zip_file->path().c_str(), &ff);
 
 	if(!this->handle){
 		throw std::runtime_error("zip_file: opening zip file failed");
@@ -111,9 +111,9 @@ void zip_file::open_internal(mode mode) {
 	}
 
 	{
-		unz_file_info zipFileInfo;
+		unz_file_info zip_file_info;
 
-		if(unzGetCurrentFileInfo(this->handle, &zipFileInfo, 0, 0, 0, 0, 0, 0) != UNZ_OK){
+		if(unzGetCurrentFileInfo(this->handle, &zip_file_info, 0, 0, 0, 0, 0, 0) != UNZ_OK){
 			throw std::runtime_error("failed obtaining file info");
 		}
 	}
@@ -131,13 +131,13 @@ void zip_file::close_internal()const noexcept{
 
 size_t zip_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(buf.size() <= unsigned(-1))
-	int numBytesRead = unzReadCurrentFile(this->handle, buf.begin(), unsigned(buf.size()));
-	if(numBytesRead < 0){
+	int num_bytes_read = unzReadCurrentFile(this->handle, buf.begin(), unsigned(buf.size()));
+	if(num_bytes_read < 0){
 		throw std::runtime_error("zip_file::Read(): file reading failed");
 	}
 
-	ASSERT(numBytesRead >= 0)
-	return size_t(numBytesRead);
+	ASSERT(num_bytes_read >= 0)
+	return size_t(num_bytes_read);
 }
 
 bool zip_file::exists()const{
@@ -156,7 +156,7 @@ bool zip_file::exists()const{
 	return unzLocateFile(this->handle, this->path().c_str(), 0) == UNZ_OK;
 }
 
-std::vector<std::string> zip_file::list_dir(size_t maxEntries)const{
+std::vector<std::string> zip_file::list_dir(size_t max_entries)const{
 	if(!this->is_dir()){
 		throw std::logic_error("zip_file::list_dir(): this is not a directory");
 	}
@@ -180,13 +180,13 @@ std::vector<std::string> zip_file::list_dir(size_t maxEntries)const{
 		}
 
 		do{
-			std::array<char, 255> fileNameBuf;
+			std::array<char, 255> file_name_buf;
 
 			if(unzGetCurrentFileInfo(
 					this->handle,
 					NULL,
-					&*fileNameBuf.begin(),
-					uLong(fileNameBuf.size()),
+					&*file_name_buf.begin(),
+					uLong(file_name_buf.size()),
 					NULL,
 					0,
 					NULL,
@@ -196,9 +196,9 @@ std::vector<std::string> zip_file::list_dir(size_t maxEntries)const{
 				throw std::runtime_error("zip_file::list_dir(): unzGetCurrentFileInfo() failed.");
 			}
 
-			fileNameBuf[fileNameBuf.size() - 1] = 0; // null-terminate, just to be on a safe side
+			file_name_buf[file_name_buf.size() - 1] = 0; // null-terminate, just to be on a safe side
 
-			std::string filename(fileNameBuf.data());
+			std::string filename(file_name_buf.data());
 
 			if(filename.size() <= this->path().size()){
 				continue;
@@ -226,7 +226,7 @@ std::vector<std::string> zip_file::list_dir(size_t maxEntries)const{
 				files.push_back(std::move(subfilename));
 			}
 
-			if(files.size() == maxEntries){
+			if(files.size() == max_entries){
 				break;
 			}
 		}while((ret = unzGoToNextFile(this->handle)) == UNZ_OK);
