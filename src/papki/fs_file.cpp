@@ -24,27 +24,27 @@ void fs_file::open_internal(mode mode){
 		throw std::logic_error("path refers to a directory, directories can't be opened");
 	}
 
-	const char* modeStr;
+	const char* mode_str;
 	switch(mode){
 		case file::mode::write:
-			modeStr = "r+b";
+			mode_str = "r+b";
 			break;
 		case file::mode::create:
-			modeStr = "w+b";
+			mode_str = "w+b";
 			break;
 		case file::mode::read:
-			modeStr = "rb";
+			mode_str = "rb";
 			break;
 		default:
 			throw std::invalid_argument("unknown mode");
 	}
 
 #if M_COMPILER == M_COMPILER_MSVC
-	if(fopen_s(&this->handle, this->path().c_str(), modeStr) != 0){
+	if(fopen_s(&this->handle, this->path().c_str(), mode_str) != 0){
 		this->handle = 0;
 	}
 #else
-	this->handle = fopen(this->path().c_str(), modeStr);
+	this->handle = fopen(this->path().c_str(), mode_str);
 #endif
 	if(!this->handle){
 		LOG([&](auto&o){o << "fs_file::open(): path() = " << this->path().c_str() << std::endl;})
@@ -63,26 +63,26 @@ void fs_file::close_internal()const noexcept{
 
 size_t fs_file::read_internal(utki::span<uint8_t> buf)const{
 	ASSERT(this->handle)
-	size_t numBytesRead = fread(buf.begin(), 1, buf.size(), this->handle);
-	if(numBytesRead != buf.size()){ // something happened
+	size_t num_bytes_read = fread(buf.begin(), 1, buf.size(), this->handle);
+	if(num_bytes_read != buf.size()){ // something happened
 		if(!feof(this->handle)){
 			throw std::runtime_error("fread() error"); // if it is not an EndOfFile then it is error
 		}
 	}
-	return numBytesRead;
+	return num_bytes_read;
 }
 
 size_t fs_file::write_internal(utki::span<const uint8_t> buf){
 	ASSERT(this->handle)
-	size_t bytesWritten = fwrite(buf.begin(), 1, buf.size(), this->handle);
-	if(bytesWritten != buf.size()){ // something bad has happened
+	size_t bytes_written = fwrite(buf.begin(), 1, buf.size(), this->handle);
+	if(bytes_written != buf.size()){ // something bad has happened
 		throw std::runtime_error("fwrite error");
 	}
 
-	return bytesWritten;
+	return bytes_written;
 }
 
-size_t fs_file::seek_backward_internal(size_t numBytesToSeek)const{
+size_t fs_file::seek_backward_internal(size_t num_bytes_to_seek)const{
 	ASSERT(this->handle)
 
 	// NOTE: fseek() accepts 'long int' as offset argument which is signed and can be
@@ -96,16 +96,16 @@ size_t fs_file::seek_backward_internal(size_t numBytesToSeek)const{
 	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
 	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
 
-	numBytesToSeek = std::min(numBytesToSeek, this->cur_pos()); // clamp top
+	num_bytes_to_seek = std::min(num_bytes_to_seek, this->cur_pos()); // clamp top
 
-	for(size_t numBytesLeft = numBytesToSeek; numBytesLeft != 0;){
-		ASSERT(numBytesLeft <= numBytesToSeek)
+	for(size_t num_bytes_left = num_bytes_to_seek; num_bytes_left != 0;){
+		ASSERT(num_bytes_left <= num_bytes_to_seek)
 
 		T_FSeekOffset offset;
-		if(numBytesLeft > DMax){
+		if(num_bytes_left > DMax){
 			offset = T_FSeekOffset(DMax);
 		}else{
-			offset = T_FSeekOffset(numBytesLeft);
+			offset = T_FSeekOffset(num_bytes_left);
 		}
 
 		ASSERT(offset > 0)
@@ -115,12 +115,12 @@ size_t fs_file::seek_backward_internal(size_t numBytesToSeek)const{
 		}
 
 		ASSERT(size_t(offset) < size_t(-1))
-		ASSERT(numBytesLeft >= size_t(offset))
+		ASSERT(num_bytes_left >= size_t(offset))
 
-		numBytesLeft -= size_t(offset);
+		num_bytes_left -= size_t(offset);
 	}
 
-	return numBytesToSeek;
+	return num_bytes_to_seek;
 }
 
 void fs_file::rewind_internal()const{
@@ -199,7 +199,7 @@ void fs_file::make_dir(){
 #endif
 }
 
-std::string fs_file::get_home_dir() {
+std::string fs_file::get_home_dir(){
 	std::string ret;
 
 #if M_OS == M_OS_WINDOWS && M_COMPILER == M_COMPILER_MSVC
@@ -402,7 +402,7 @@ uint64_t fs_file::size()const{
 	}
 	utki::scope_exit hfile_scope_exit([&hfile](){
 		if(CloseHandle(hfile) == 0){
-			LOG([](auto&o){o << "ERROR: CloseHandle() failed" << std::endl;})
+			LOG([](auto&o){o << "error: CloseHandle() failed" << std::endl;})
 		}
 	});
 	LARGE_INTEGER size;
