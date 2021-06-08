@@ -121,6 +121,24 @@ public:
 	}
 
 	/**
+ 	 * @brief Get file name without suffix.
+	 * Returns a string containing the file path without suffix, everything that
+	 * goes after the last dot character ('.') is trimmed, including the dot character.
+	 * I.e. if the file path is '/home/user/some.file.txt' then the return value
+	 * will be '/home/user/some.file'.
+	 * Note, that on *nix systems if the file name starts with a dot then this file is treated as hidden,
+	 * in that case it is thought that the file has no suffix. I.e., for example
+	 * , if the file path is '/home/user/.myfile' then the file has no suffix and this function
+	 * will return same string, i.e. '/home/user/.myfile'. Although, if the file path is '/home/user/.myfile.txt' then the file
+	 * does have a suffix and the function will return '/home/user/.myfile'.
+	 * @param path_name - path string to trim the suffix from.
+	 * @return String representing file name without suffix.
+	 */
+	std::string not_suffix(){
+		return papki::not_suffix(this->path());
+	}
+
+	/**
 	 * @brief Get directory part of the path.
 	 * Example: if path is '/home/user/some.file.txt' then the return value
 	 * will be '/home/user/'.

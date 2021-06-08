@@ -34,7 +34,7 @@ std::string papki::dir(const std::string& path_name){
 	return std::string(path_name, 0, slashPos + 1);
 }
 
-std::string papki::suffix(const std::string& path_name){
+std::string papki::suffix(std::string_view path_name){
     size_t dot_pos = path_name.rfind('.');
 	if(dot_pos == std::string::npos || dot_pos == 0){ // NOTE: dot_pos is 0 for hidden files in *nix systems
 		return std::string();
@@ -48,7 +48,26 @@ std::string papki::suffix(const std::string& path_name){
 			return std::string();
 		}
 		
-		return std::string(path_name, dot_pos + 1, path_name.size() - (dot_pos + 1));
+		return std::string(path_name.substr(dot_pos + 1));
+	}
+	ASSERT(false)
+}
+
+std::string papki::not_suffix(std::string_view path_name){
+    size_t dot_pos = path_name.rfind('.');
+	if(dot_pos == std::string::npos || dot_pos == 0){ // NOTE: dot_pos is 0 for hidden files in *nix systems
+		return std::string(path_name);
+	}else{
+		ASSERT(dot_pos > 0)
+		ASSERT(path_name.size() > 0)
+		ASSERT(path_name.size() >= dot_pos + 1)
+		
+		// check for hidden file on *nix systems
+		if(path_name[dot_pos - 1] == '/'){
+			return std::string(path_name);
+		}
+		
+		return std::string(path_name.substr(0, dot_pos));
 	}
 	ASSERT(false)
 }
