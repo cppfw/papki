@@ -41,7 +41,7 @@ protected:
 	 * @brief Constructor.
 	 * @param path_name - initial path to set to the newly created file instance.
 	 */
-	file(const std::string& path_name = std::string()) :
+	file(std::string_view path_name = std::string_view()) :
 			cur_path(path_name)
 	{}
 

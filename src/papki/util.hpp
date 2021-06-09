@@ -10,7 +10,7 @@ namespace papki{
  * @return true if path name ends with forward slash character '/'.
  * @return false otherwise.
  */
-bool is_dir(const std::string& path_name);
+bool is_dir(std::string_view path_name);
 
 /**
  * @brief Omit directories from path string.
@@ -19,7 +19,7 @@ bool is_dir(const std::string& path_name);
  * @param path_name - path string to omit directories from.
  * @return filename.
  */
-std::string not_dir(const std::string& path_name);
+std::string not_dir(std::string_view path_name);
 
 /**
  * @brief Get directory part of the path.
@@ -28,7 +28,7 @@ std::string not_dir(const std::string& path_name);
  * @param path_name - path string to get directory part from.
  * @return String representation of directory part of the path.
  */
-std::string dir(const std::string& path_name);
+std::string dir(std::string_view path_name);
 
 /**
  * @brief Get file suffix.

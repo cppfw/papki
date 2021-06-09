@@ -14,7 +14,7 @@ class zip_file : public papki::file{
 	
 	void* handle = nullptr;
 public:
-	zip_file(std::unique_ptr<papki::file> underlying_zip_file, const std::string& path = std::string());
+	zip_file(std::unique_ptr<papki::file> underlying_zip_file, std::string_view path = std::string_view());
 
 	~zip_file()noexcept;
 

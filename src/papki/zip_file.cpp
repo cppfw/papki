@@ -70,7 +70,7 @@ long ZCALLBACK UnzipTell(voidpf opaque, voidpf stream){
 
 }
 
-zip_file::zip_file(std::unique_ptr<papki::file> underlying_zip_file, const std::string& path) :
+zip_file::zip_file(std::unique_ptr<papki::file> underlying_zip_file, std::string_view path) :
 		papki::file(path),
 		underlying_zip_file(std::move(underlying_zip_file))
 {

@@ -4,34 +4,34 @@
 
 using namespace papki;
 
-bool papki::is_dir(const std::string& path_name){
+bool papki::is_dir(std::string_view path_name){
     return path_name.length() != 0 && path_name.back() == '/';
 }
 
-std::string papki::not_dir(const std::string& path_name){
-    size_t slashPos = path_name.rfind('/');
-	if(slashPos == std::string::npos){ // no slash found
-		return path_name;
+std::string papki::not_dir(std::string_view path_name){
+    size_t slash_pos = path_name.rfind('/');
+	if(slash_pos == std::string::npos){ // no slash found
+		return std::string(path_name);
 	}
 
-	ASSERT(slashPos > 0)
+	ASSERT(slash_pos > 0)
 	ASSERT(path_name.size() > 0)
-	ASSERT(path_name.size() >= slashPos + 1)
+	ASSERT(path_name.size() >= slash_pos + 1)
 
-	return std::string(path_name, slashPos + 1);
+	return std::string(path_name.substr(0, slash_pos + 1));
 }
 
-std::string papki::dir(const std::string& path_name){
-    size_t slashPos = path_name.rfind('/');
-	if(slashPos == std::string::npos){ // no slash found
+std::string papki::dir(std::string_view path_name){
+    size_t slash_pos = path_name.rfind('/');
+	if(slash_pos == std::string::npos){ // no slash found
 		return std::string();
 	}
 
-	ASSERT(slashPos > 0)
+	ASSERT(slash_pos > 0)
 	ASSERT(path_name.size() > 0)
-	ASSERT(path_name.size() >= slashPos + 1)
+	ASSERT(path_name.size() >= slash_pos + 1)
 
-	return std::string(path_name, 0, slashPos + 1);
+	return std::string(path_name, 0, slash_pos + 1);
 }
 
 std::string papki::suffix(std::string_view path_name){

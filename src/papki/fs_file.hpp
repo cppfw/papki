@@ -43,7 +43,7 @@ public:
 	 * the root directory and the path returned by path() method. 
      * @param path_name - initial path to set passed to file constructor.
      */
-	fs_file(const std::string& path_name = std::string()) :
+	fs_file(std::string_view path_name = std::string_view()) :
 			file(path_name)
 	{}
 	

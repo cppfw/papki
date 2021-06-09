@@ -16,7 +16,7 @@ public:
 	 * @param base_file - a file to wrap.
 	 * @param root_directory - path to the root directory to set. It should have trailing '/' character.
 	 */
-	root_dir(std::unique_ptr<file> base_file, const std::string& root_directory) :
+	root_dir(std::unique_ptr<file> base_file, std::string_view root_directory) :
 			base_file(std::move(base_file)),
 			root_directory(root_directory)
 	{
