@@ -1,3 +1,9 @@
+libpapki (1.0.101) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 09 Jun 2021 11:29:36 +0300
+
 libpapki (1.0.100) unstable; urgency=medium
 
   * add not_suffix()
