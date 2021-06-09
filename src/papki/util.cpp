@@ -18,7 +18,7 @@ std::string papki::not_dir(std::string_view path_name){
 	ASSERT(path_name.size() > 0)
 	ASSERT(path_name.size() >= slash_pos + 1)
 
-	return std::string(path_name.substr(0, slash_pos + 1));
+	return std::string(path_name.substr(slash_pos + 1));
 }
 
 std::string papki::dir(std::string_view path_name){
@@ -31,7 +31,7 @@ std::string papki::dir(std::string_view path_name){
 	ASSERT(path_name.size() > 0)
 	ASSERT(path_name.size() >= slash_pos + 1)
 
-	return std::string(path_name, 0, slash_pos + 1);
+	return std::string(path_name.substr(0, slash_pos + 1));
 }
 
 std::string papki::suffix(std::string_view path_name){
