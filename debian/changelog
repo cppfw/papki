@@ -1,3 +1,9 @@
+libpapki (1.0.103) unstable; urgency=medium
+
+  * fix not_dir() bug
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 09 Jun 2021 23:58:56 +0300
+
 libpapki (1.0.102) unstable; urgency=medium
 
   * use string_view
