@@ -1,3 +1,9 @@
+libpapki (1.0.104) unstable; urgency=medium
+
+  * fix bug: initialize vector_file index to 0
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 11 Jun 2021 19:05:07 +0300
+
 libpapki (1.0.103) unstable; urgency=medium
 
   * fix not_dir() bug
