@@ -35,7 +35,9 @@ size_t vector_file::write_internal(utki::span<const uint8_t> buf){
 	}
 	
 	size_t num_bytes_written = std::min(buf.size_bytes(), this->data.size() - this->idx);
-	memcpy(&this->data[this->idx], buf.begin(), num_bytes_written);
+
+	std::copy(buf.begin(), buf.end(), std::next(this->data.begin(), this->idx));
+
 	this->idx += num_bytes_written;
 	ASSERT(this->idx <= this->data.size())
 	return num_bytes_written;
