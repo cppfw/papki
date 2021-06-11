@@ -139,7 +139,6 @@ public:
 	 * , if the file path is '/home/user/.myfile' then the file has no suffix and this function
 	 * will return same string, i.e. '/home/user/.myfile'. Although, if the file path is '/home/user/.myfile.txt' then the file
 	 * does have a suffix and the function will return '/home/user/.myfile'.
-	 * @param path_name - path string to trim the suffix from.
 	 * @return String representing file name without suffix.
 	 */
 	std::string not_suffix(){

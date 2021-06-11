@@ -21,7 +21,7 @@ class vector_file : public file{
 	
 private:
 	std::vector<uint8_t> data;
-	mutable size_t idx;
+	mutable size_t idx; // current file position
 	
 public:
 	/**
