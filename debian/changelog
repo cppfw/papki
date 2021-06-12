@@ -1,3 +1,9 @@
+libpapki (1.0.105) unstable; urgency=medium
+
+  * do not use deprecated stuff
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 12 Jun 2021 16:40:03 +0300
+
 libpapki (1.0.104) unstable; urgency=medium
 
   * fix bug: initialize vector_file index to 0
