@@ -28,7 +28,7 @@ public:
 	}
 	
 	static std::unique_ptr<const root_dir> make(std::unique_ptr<const file> base_file, const std::string& root_directory){
-		return utki::make_unique<const root_dir>(std::unique_ptr<file>(const_cast<file*>(base_file.release())), root_directory);
+		return std::make_unique<const root_dir>(std::unique_ptr<file>(const_cast<file*>(base_file.release())), root_directory);
 	}
 	
 	root_dir(const root_dir&) = delete;
@@ -81,7 +81,7 @@ private:
 	}
 	
 	std::unique_ptr<file> spawn()override{
-		return utki::make_unique<root_dir>(this->base_file->spawn(), this->root_directory);
+		return std::make_unique<root_dir>(this->base_file->spawn(), this->root_directory);
 	}
 };
 

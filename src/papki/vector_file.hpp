@@ -41,7 +41,7 @@ public:
 	}
 	
 	virtual std::unique_ptr<file> spawn()override{
-		return utki::make_unique<vector_file>();
+		return std::make_unique<vector_file>();
 	}
 	
 	/**

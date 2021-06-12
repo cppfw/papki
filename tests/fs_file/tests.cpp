@@ -100,7 +100,7 @@ void Run(){
 
 namespace TestLoadWholeFileToMemory{
 void Run(){
-	papki::root_dir f(utki::make_unique<papki::fs_file>(), "");
+	papki::root_dir f(std::make_unique<papki::fs_file>(), "");
 	f.set_path("test.file.txt");
 	utki::assert(!f.is_dir(), SL);
 	utki::assert(!f.is_open(), SL);
