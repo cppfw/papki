@@ -7,7 +7,9 @@ env:
   MYCI_JFROG_PASSWORD: ${{ secrets.MYCI_JFROG_PASSWORD }}
   MYCI_GIT_USERNAME: igagis
   MYCI_GIT_PASSWORD: ${{ secrets.MYCI_GIT_ACCESS_TOKEN }}
-  CONAN_REMOTE: https://cppfw.jfrog.io/artifactory/api/conan/conan
+  MYCI_CONAN_REMOTE: http://gagis.hopto.org/conan
+  MYCI_CONAN_USER: cppfw
+  MYCI_CONAN_PASSWORD: ${{ secrets.MYCI_CONAN_PASSWORD }}
   CONAN_V2_MODE: 1
   CONAN_REVISIONS_ENABLED: 1
 jobs:
@@ -243,11 +245,11 @@ jobs:
         run: myci-apply-version.sh -v $PACKAGE_VERSION conan/conanfile.py.in
       - name: build
         run: |
-          conan remote add cppfw $CONAN_REMOTE
+          conan remote add cppfw $MYCI_CONAN_REMOTE
           conan create conan
       - name: deploy conan package
         run: |
-          conan user --remote cppfw --password $MYCI_JFROG_PASSWORD $MYCI_JFROG_USERNAME
+          conan user --remote cppfw --password $MYCI_CONAN_PASSWORD $MYCI_CONAN_USERNAME
           conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@
         if: startsWith(github.ref, 'refs/tags/')
 ##### conan - macosx #####
@@ -271,10 +273,10 @@ jobs:
         run: myci-apply-version.sh -v $PACKAGE_VERSION conan/conanfile.py.in
       - name: build
         run: |
-          conan remote add cppfw $CONAN_REMOTE
+          conan remote add cppfw $MYCI_CONAN_REMOTE
           conan create conan
       - name: deploy conan package
         run: |
-          conan user --remote cppfw --password $MYCI_JFROG_PASSWORD $MYCI_JFROG_USERNAME
+          conan user --remote cppfw --password $MYCI_CONAN_PASSWORD $MYCI_CONAN_USERNAME
           conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@
         if: startsWith(github.ref, 'refs/tags/')
