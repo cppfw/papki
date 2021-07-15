@@ -1,10 +1,12 @@
 name: ci
-on: [push, pull_request]
+on:
+  push: {branches-ignore: [latest], tags: ['*']}
+  pull_request:
 env:
   PACKAGE_NAME: ${{ github.event.repository.name }}
   PACKAGE_VERSION: ${{ github.sha }}
-  MYCI_JFROG_USERNAME: ivan.gagis@gmail.com
-  MYCI_JFROG_PASSWORD: ${{ secrets.MYCI_JFROG_PASSWORD }}
+  MYCI_NEXUS_USERNAME: cppfw
+  MYCI_NEXUS_PASSWORD: ${{ secrets.MYCI_NEXUS_PASSWORD }}
   MYCI_GIT_USERNAME: igagis
   MYCI_GIT_PASSWORD: ${{ secrets.MYCI_GIT_ACCESS_TOKEN }}
   MYCI_CONAN_REMOTE: http://gagis.hopto.org/conan
@@ -12,6 +14,7 @@ env:
   MYCI_CONAN_PASSWORD: ${{ secrets.MYCI_CONAN_PASSWORD }}
   CONAN_V2_MODE: 1
   CONAN_REVISIONS_ENABLED: 1
+  CONAN_SCM_TO_CONANDATA: 1
 jobs:
 ##### linux #####
   linux:
@@ -28,21 +31,23 @@ jobs:
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: linux - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     steps:
-      - name: git clone
-        uses: actions/checkout@v1
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
-          repo: deb https://cppfw.jfrog.io/artifactory/${{ matrix.os }} ${{ matrix.codename }} main
+          repo: deb http://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
-          key-server: https://cppfw.jfrog.io/artifactory/api/gpg/key/public
-          keys: 4A949240F79AD8027C6CA2F4953AE777616ADEDF
+          key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+          update: true
       - name: install ci tools
         run: |
           # configure timezone to avoid 'tzdata' package to require user interaction during installation (needed for ubuntu:focal)
           TZ=Europe/Helsinki ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-          apt install --assume-yes devscripts equivs myci
+          apt --quiet install --assume-yes devscripts equivs myci git
+      - name: git clone
+        uses: myci-actions/checkout@master
+        with:
+          submodules: true
       - name: set PACKAGE_VERSION
         uses: myci-actions/export-env-var@master
         with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
@@ -53,14 +58,16 @@ jobs:
       - name: build
         run: dpkg-buildpackage --unsigned-source --unsigned-changes
       - name: deploy deb packages
-        run: myci-deploy-debian-jfrog.sh --domain cppfw --repo ${{ matrix.os }} --distro ${{ matrix.codename }} --component main ../lib${PACKAGE_NAME}*_${PACKAGE_VERSION}_*.deb
+        run: |
+          echo "${{ secrets.MYCI_REPO_SSH_KEY }}" > repo_key_rsa && chmod 600 repo_key_rsa
+          myci-deploy-debian-ssh-freight.sh --key repo_key_rsa --server gagis.hopto.org --owner cppfw --repo ${{ matrix.os }} --distro ${{ matrix.codename }} --component main ../lib${PACKAGE_NAME}*_${PACKAGE_VERSION}_*.deb
         if: matrix.package_type == 'deb' && startsWith(github.ref, 'refs/tags/')
 ##### macosx #####
   macosx:
     runs-on: macos-latest
     steps:
     - name: git clone
-      uses: actions/checkout@v2
+      uses: myci-actions/checkout@master
     - name: add cppfw tap
       run: |
         brew tap cppfw/tap
@@ -87,7 +94,7 @@ jobs:
     - name: install ci tools
       run: brew install myci
     - name: git clone
-      uses: actions/checkout@v2
+      uses: myci-actions/checkout@master
     - name: set PACKAGE_VERSION
       uses: myci-actions/export-env-var@master
       with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
@@ -106,7 +113,9 @@ jobs:
     - name: create package
       run: myci-create-zip-package.sh --headers-dir src --file xcode/build/lib$PACKAGE_NAME.a///lib/ios --file LICENSE $PACKAGE_NAME-$PACKAGE_VERSION.zip
     - name: deploy
-      run: myci-deploy-cocoapods-jfrog.sh --repo cppfw --version $PACKAGE_VERSION --domain cppfw --jfrog-repo cocoapods --package-file $PACKAGE_NAME-$PACKAGE_VERSION.zip cocoapods/$PACKAGE_NAME.podspec.in
+      run: |
+        echo "${{ secrets.MYCI_REPO_SSH_KEY }}" > repo_key_rsa && chmod 600 repo_key_rsa
+        myci-deploy-cocoapods-ssh.sh --repo cppfw --version $PACKAGE_VERSION --server gagis.hopto.org --key repo_key_rsa --owner cppfw --generic-repo cocoapods --package $PACKAGE_NAME-$PACKAGE_VERSION.zip cocoapods/$PACKAGE_NAME.podspec.in
       if: startsWith(github.ref, 'refs/tags/')
 ##### android #####
   android:
@@ -114,16 +123,15 @@ jobs:
     container: mingc/android-build-box:latest
     steps:
     - name: git clone
-      uses: actions/checkout@v2
+      uses: myci-actions/checkout@master
     - name: add cppfw deb repo
       uses: myci-actions/add-deb-repo@master
       with:
-        repo: deb https://cppfw.jfrog.io/artifactory/$(lsb_release --id --short | tr '[:upper:]' '[:lower:]') $(lsb_release --codename --short) main
+        repo: deb http://gagis.hopto.org/repo/cppfw/$(lsb_release --id --short | tr '[:upper:]' '[:lower:]') $(lsb_release --codename --short) main
         repo-name: cppfw
-        key-server: https://cppfw.jfrog.io/artifactory/api/gpg/key/public
-        keys: 4A949240F79AD8027C6CA2F4953AE777616ADEDF
+        key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
     - name: install ci tools
-      run: apt install --assume-yes myci
+      run: apt --quiet install --assume-yes myci
     - name: set PACKAGE_VERSION
       uses: myci-actions/export-env-var@master
       with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
@@ -134,7 +142,7 @@ jobs:
         myci-apply-version.sh -v $PACKAGE_VERSION *.pom.in
         myci-apply-version.sh -v $PACKAGE_VERSION *.aar.in --filename-only
     - name: deploy
-      run: myci-deploy-maven-jfrog.sh --domain cppfw --repo android --path io/github/cppfw/$PACKAGE_NAME/$PACKAGE_VERSION android/$PACKAGE_NAME-$PACKAGE_VERSION.aar
+      run: myci-deploy-maven-nexus.sh --base-url http://gagis.hopto.org/nexus --repo android android/$PACKAGE_NAME-$PACKAGE_VERSION.aar
       if: startsWith(github.ref, 'refs/tags/')
 ##### msys2 #####
   msys2:
@@ -158,16 +166,24 @@ jobs:
         install: >-
           msys2-devel
           mingw-w64-${{ matrix.arch }}-toolchain
-    - name: git clone
-      uses: actions/checkout@v2
     - name: add cppfw pacman msys repo
       uses: myci-actions/add-pacman-repo@master
-      with: {name: cppfw_msys, url: 'https://cppfw.jfrog.io/artifactory/msys2/msys', shell: 'msys2 {0}'}
-    - name: add cppfw pacman ${{ matrix.repo }} repo
+      with:
+        name: cppfw_msys
+        url: http://gagis.hopto.org/repo/cppfw/msys2/msys
+        shell: 'msys2 {0}'
+        key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+    - name: add cppfw pacman msys/mingw repo
       uses: myci-actions/add-pacman-repo@master
-      with: {name: 'cppfw_${{ matrix.repo }}', url: 'https://cppfw.jfrog.io/artifactory/msys2/${{ matrix.repo }}', shell: 'msys2 {0}'}
+      with:
+        name: cppfw_${{ matrix.repo }}
+        url: http://gagis.hopto.org/repo/cppfw/msys2/${{ matrix.repo }}
+        shell: 'msys2 {0}'
+        key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
     - name: install ci tools
       run: pacman -Sy --noconfirm myci
+    - name: git clone
+      uses: myci-actions/checkout@master
     - name: prepare pacman package
       run: myci-apply-version.sh -v $(myci-deb-version.sh debian/changelog) msys2/PKGBUILD.in
     - name: build
@@ -178,8 +194,9 @@ jobs:
         PKGEXT='.pkg.tar.xz' autojobs=true makepkg-mingw --syncdeps --noconfirm --skipinteg
     - name: deploy
       run: |
+        echo "${{ secrets.MYCI_REPO_SSH_KEY }}" > repo_key_rsa && chmod 600 repo_key_rsa
         for f in $(find msys2 -name "mingw-w64-${{ matrix.arch }}-$PACKAGE_NAME-*-any.pkg.*"); do
-          myci-deploy-pacman-jfrog.sh --domain cppfw --repo msys2 --path ${{ matrix.repo }} --database cppfw_${{ matrix.repo }} $f
+          myci-deploy-pacman-ssh.sh --server gagis.hopto.org --key repo_key_rsa --owner cppfw --repo msys2/${{ matrix.repo }} --database cppfw_${{ matrix.repo }} $f
         done
       if: startsWith(github.ref, 'refs/tags/')
 ##### msvs #####
@@ -220,23 +237,25 @@ jobs:
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: conan - linux - ${{ matrix.arch }}
     steps:
-      - name: git clone
-        uses: actions/checkout@v1
+      - name: clean
+        uses: myci-actions/clean@master
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
-          repo: deb https://cppfw.jfrog.io/artifactory/${{ matrix.os }} ${{ matrix.codename }} main
+          repo: deb http://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
-          key-server: https://cppfw.jfrog.io/artifactory/api/gpg/key/public
-          keys: 4A949240F79AD8027C6CA2F4953AE777616ADEDF
+          key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+          update: true
       - name: install ci tools
         run: |
-          apt install --assume-yes devscripts equivs myci prorab prorab-extra python3-pip cmake
+          apt --quiet install --assume-yes devscripts equivs myci prorab prorab-extra python3-pip cmake git
       - name: install conan
         run: |
-          pip3 install conan
+          pip3 --quiet install conan
           conan profile new --detect default
           conan profile update settings.compiler.libcxx=libstdc++11 default
+      - name: git clone
+        uses: myci-actions/checkout@master
       - name: set PACKAGE_VERSION
         uses: myci-actions/export-env-var@master
         with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
@@ -246,19 +265,21 @@ jobs:
       - name: build
         run: |
           conan remote add cppfw $MYCI_CONAN_REMOTE
-          conan create conan
+          conan create conan $MYCI_CONAN_USER/main --ignore-dirty
       - name: deploy conan package
         run: |
-          conan user --remote cppfw --password $MYCI_CONAN_PASSWORD $MYCI_CONAN_USERNAME
-          conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@
+          conan user --remote cppfw --password $MYCI_CONAN_PASSWORD $MYCI_CONAN_USER
+          conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@$MYCI_CONAN_USER/main
         if: startsWith(github.ref, 'refs/tags/')
 ##### conan - macosx #####
   conan-macosx:
     name: conan - macosx
     runs-on: macos-latest
     steps:
+      - name: clean
+        uses: myci-actions/clean@master
       - name: git clone
-        uses: actions/checkout@v2
+        uses: myci-actions/checkout@master
       - name: add cppfw tap
         run: |
           brew tap cppfw/tap
@@ -274,9 +295,11 @@ jobs:
       - name: build
         run: |
           conan remote add cppfw $MYCI_CONAN_REMOTE
+          # for some reason 'conan create conan $MYCI_CONAN_USER/main --ignore-dirty' does not work on macosx, so do it in 2 steps
           conan create conan
+          conan export conan $MYCI_CONAN_USER/main --ignore-dirty
       - name: deploy conan package
         run: |
-          conan user --remote cppfw --password $MYCI_CONAN_PASSWORD $MYCI_CONAN_USERNAME
-          conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@
+          conan user --remote cppfw --password $MYCI_CONAN_PASSWORD $MYCI_CONAN_USER
+          conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@$MYCI_CONAN_USER/main
         if: startsWith(github.ref, 'refs/tags/')
