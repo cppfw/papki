@@ -1,3 +1,9 @@
+libpapki (1.0.108) unstable; urgency=medium
+
+  * use latest make from homebrew formulae
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 10 Aug 2021 15:47:16 +0300
+
 libpapki (1.0.107) unstable; urgency=medium
 
   * build for arm debian
