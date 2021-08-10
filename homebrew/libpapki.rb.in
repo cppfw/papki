@@ -8,12 +8,13 @@ class Libpapki < Formula
   depends_on "libutki"
   depends_on "zlib"
   
+  # use gmake here because otherwise homebrew uses default Mac's make which is of too old version 3.81
   def install
     ENV['PATH'] += ':/usr/local/bin'
-    system "make", "--directory", "src", "install", "PREFIX=#{prefix}"
+    system "/usr/local/opt/make/libexec/gnubin/make", "--directory", "src", "install", "PREFIX=#{prefix}"
   end
 
   test do
-    system "make", "test"
+    system "/usr/local/opt/make/libexec/gnubin/make", "test"
   end
 end
