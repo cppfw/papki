@@ -1,3 +1,9 @@
+libpapki (1.0.111) unstable; urgency=medium
+
+  * ios framework
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 29 Oct 2021 18:33:08 +0300
+
 libpapki (1.0.110) unstable; urgency=medium
 
   * build for debian bullseye
