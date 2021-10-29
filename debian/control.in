@@ -15,16 +15,16 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: cross-platform C++ file system library.
  File system abstraction library.
 
-Package: libpapki$(soname)-dbg
+Package: libpapki$(soname)-dbgsrc
 Section: debug
 Architecture: any
-Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libpapki$(soname) package.
+Depends: libpapki$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
+Description: debugging sources for libpapki$(soname) package.
 
 Package: libpapki-dev
 Section: libdevel
 Architecture: any
-Depends: libpapki$(soname) (= ${binary:Version}), libpapki$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends},
 		libutki-dev
 Suggests: libpapki-doc
 Description: cross-platform C++ file system library.
