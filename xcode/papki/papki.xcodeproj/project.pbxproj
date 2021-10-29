@@ -3,98 +3,68 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 55;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		248D7A0C4D225C353F1F950D /* libPods-papki.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DBB9CD323DFB6DD6610D616 /* libPods-papki.a */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		2C1D1EB3234F4CC5004E0ABC /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		2C1D1EB5234F4CC5004E0ABC /* libpapki.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpapki.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		489D1D067C0953A5BE6E21C0 /* Pods-papki.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-papki.debug.xcconfig"; path = "Target Support Files/Pods-papki/Pods-papki.debug.xcconfig"; sourceTree = "<group>"; };
-		5DBB9CD323DFB6DD6610D616 /* libPods-papki.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-papki.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D2D3649B998FAED539F8A624 /* Pods-papki.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-papki.release.xcconfig"; path = "Target Support Files/Pods-papki/Pods-papki.release.xcconfig"; sourceTree = "<group>"; };
+		2C9F0F8B272C375D00F6AB1B /* papki.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = papki.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2C1D1EB2234F4CC5004E0ABC /* Frameworks */ = {
+		2C9F0F88272C375D00F6AB1B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				248D7A0C4D225C353F1F950D /* libPods-papki.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2C1D1EAC234F4CC5004E0ABC = {
+		2C9F0F81272C375D00F6AB1B = {
 			isa = PBXGroup;
 			children = (
-				2C1D1EB7234F4CC5004E0ABC /* papki */,
-				2C1D1EB6234F4CC5004E0ABC /* Products */,
-				B4105152AACA4F3285895A12 /* Pods */,
-				EFEFEC1F585EB6FEF590919F /* Frameworks */,
+				2C9F0F8D272C375D00F6AB1B /* papki */,
+				2C9F0F8C272C375D00F6AB1B /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		2C1D1EB6234F4CC5004E0ABC /* Products */ = {
+		2C9F0F8C272C375D00F6AB1B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2C1D1EB5234F4CC5004E0ABC /* libpapki.a */,
+				2C9F0F8B272C375D00F6AB1B /* papki.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2C1D1EB7234F4CC5004E0ABC /* papki */ = {
+		2C9F0F8D272C375D00F6AB1B /* papki */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = papki;
 			sourceTree = "<group>";
 		};
-		B4105152AACA4F3285895A12 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				489D1D067C0953A5BE6E21C0 /* Pods-papki.debug.xcconfig */,
-				D2D3649B998FAED539F8A624 /* Pods-papki.release.xcconfig */,
-			);
-			name = Pods;
-			path = ../Pods;
-			sourceTree = "<group>";
-		};
-		EFEFEC1F585EB6FEF590919F /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				5DBB9CD323DFB6DD6610D616 /* libPods-papki.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		2C9F0F86272C375D00F6AB1B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		2C1D1EB4234F4CC5004E0ABC /* papki */ = {
+		2C9F0F8A272C375D00F6AB1B /* papki */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C1D1EBE234F4CC5004E0ABC /* Build configuration list for PBXNativeTarget "papki" */;
+			buildConfigurationList = 2C9F0F92272C375D00F6AB1B /* Build configuration list for PBXNativeTarget "papki" */;
 			buildPhases = (
-				E91A1A3F2C09E9547E6091A5 /* [CP] Check Pods Manifest.lock */,
-				2C1D1EB1234F4CC5004E0ABC /* Sources */,
-				2C1D1EB2234F4CC5004E0ABC /* Frameworks */,
-				2C1D1EB3234F4CC5004E0ABC /* CopyFiles */,
+				2C9F0F86272C375D00F6AB1B /* Headers */,
+				2C9F0F87272C375D00F6AB1B /* Sources */,
+				2C9F0F88272C375D00F6AB1B /* Frameworks */,
+				2C9F0F89272C375D00F6AB1B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -102,68 +72,53 @@
 			);
 			name = papki;
 			productName = papki;
-			productReference = 2C1D1EB5234F4CC5004E0ABC /* libpapki.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 2C9F0F8B272C375D00F6AB1B /* papki.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		2C1D1EAD234F4CC5004E0ABC /* Project object */ = {
+		2C9F0F82272C375D00F6AB1B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1110;
-				ORGANIZATIONNAME = cppfw;
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1310;
 				TargetAttributes = {
-					2C1D1EB4234F4CC5004E0ABC = {
-						CreatedOnToolsVersion = 11.1;
+					2C9F0F8A272C375D00F6AB1B = {
+						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
-			buildConfigurationList = 2C1D1EB0234F4CC5004E0ABC /* Build configuration list for PBXProject "papki" */;
-			compatibilityVersion = "Xcode 9.3";
+			buildConfigurationList = 2C9F0F85272C375D00F6AB1B /* Build configuration list for PBXProject "papki" */;
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 2C1D1EAC234F4CC5004E0ABC;
-			productRefGroup = 2C1D1EB6234F4CC5004E0ABC /* Products */;
+			mainGroup = 2C9F0F81272C375D00F6AB1B;
+			productRefGroup = 2C9F0F8C272C375D00F6AB1B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2C1D1EB4234F4CC5004E0ABC /* papki */,
+				2C9F0F8A272C375D00F6AB1B /* papki */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		E91A1A3F2C09E9547E6091A5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
+/* Begin PBXResourcesBuildPhase section */
+		2C9F0F89272C375D00F6AB1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-papki-checkManifestLockResult.txt",
-			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
 		};
-/* End PBXShellScriptBuildPhase section */
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2C1D1EB1234F4CC5004E0ABC /* Sources */ = {
+		2C9F0F87272C375D00F6AB1B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -173,13 +128,13 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2C1D1EBC234F4CC5004E0ABC /* Debug */ = {
+		2C9F0F90272C375D00F6AB1B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -199,6 +154,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -206,6 +162,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -223,21 +180,23 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		2C1D1EBD234F4CC5004E0ABC /* Release */ = {
+		2C9F0F91272C375D00F6AB1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -257,6 +216,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -264,6 +224,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -275,38 +236,68 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		2C1D1EBF234F4CC5004E0ABC /* Debug */ = {
+		2C9F0F93272C375D00F6AB1B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 489D1D067C0953A5BE6E21C0 /* Pods-papki.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.igagis.papki;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		2C1D1EC0234F4CC5004E0ABC /* Release */ = {
+		2C9F0F94272C375D00F6AB1B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D2D3649B998FAED539F8A624 /* Pods-papki.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.igagis.papki;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -314,25 +305,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C1D1EB0234F4CC5004E0ABC /* Build configuration list for PBXProject "papki" */ = {
+		2C9F0F85272C375D00F6AB1B /* Build configuration list for PBXProject "papki" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2C1D1EBC234F4CC5004E0ABC /* Debug */,
-				2C1D1EBD234F4CC5004E0ABC /* Release */,
+				2C9F0F90272C375D00F6AB1B /* Debug */,
+				2C9F0F91272C375D00F6AB1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C1D1EBE234F4CC5004E0ABC /* Build configuration list for PBXNativeTarget "papki" */ = {
+		2C9F0F92272C375D00F6AB1B /* Build configuration list for PBXNativeTarget "papki" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2C1D1EBF234F4CC5004E0ABC /* Debug */,
-				2C1D1EC0234F4CC5004E0ABC /* Release */,
+				2C9F0F93272C375D00F6AB1B /* Debug */,
+				2C9F0F94272C375D00F6AB1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 2C1D1EAD234F4CC5004E0ABC /* Project object */;
+	rootObject = 2C9F0F82272C375D00F6AB1B /* Project object */;
 }
