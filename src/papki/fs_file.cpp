@@ -409,11 +409,8 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 			throw std::system_error(errno, std::system_category(), ss.str());
 		}
 	}
-
 #	else
-
 #		error "fs_file::list_dir(): is not implemented yet for this os"
-
 #	endif
 #endif
 
