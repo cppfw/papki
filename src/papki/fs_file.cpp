@@ -40,7 +40,12 @@ SOFTWARE.
 #include <vector>
 #include <cstdlib>
 #include <sstream>
-#include <filesystem>
+
+// on iOS we use 'dirent' instead of std::filesystem,
+// see comment in fs_file::list_dir() function implementation for more details
+#if M_OS_NAME != M_OS_NAME_IOS
+#	include <filesystem>
+#endif
 
 #include "fs_file.hpp"
 
@@ -277,6 +282,10 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 
 	std::vector<std::string> files;
 
+// For all systems except iOS we use new implementation via std::filesystem.
+// On iOS the std::filesystem is available only starting from iOS 13.0 while it is still
+// desired to support iOS 11.0 at least, so for iOS we fall back to old implementation via 'dirent.h'.
+#if M_OS_NAME != M_OS_NAME_IOS
 	std::filesystem::directory_iterator iter(this->path());
 
 	for(const auto& p : iter){
@@ -291,9 +300,11 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 			break;
 		}
 	}
-
-#if 0 // TODO: remove commented code when std::filesystem-based implementation is stable enough
-#if M_OS == M_OS_WINDOWS
+#else
+	// Old implementation, used before std::filesystem became available. The code is still kept here
+	// because std::filesystem support is not very common yet and on some systems it might be needed
+	// to revert back to this old implementation.
+#	if M_OS == M_OS_WINDOWS
 	{
 		std::string pattern = this->path();
 		pattern += '*';
@@ -338,7 +349,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 			}
 		}
 	}
-#elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#	elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 	{
 		DIR *pdir = opendir(this->path().c_str());
 
@@ -399,11 +410,11 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 		}
 	}
 
-#else
+#	else
 
-#	error "fs_file::list_dir(): is not implemented yet for this os"
+#		error "fs_file::list_dir(): is not implemented yet for this os"
 
-#endif
+#	endif
 #endif
 
 	return files;
