@@ -337,7 +337,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 				}
 				files.push_back(s);
 
-				if (files.size() == maxEntries) {
+				if (files.size() == max_size) {
 					break;
 				}
 			} while (FindNextFile(h, &wfd) != 0);
@@ -397,7 +397,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size)const{
 
 			files.push_back(s);
 
-			if(files.size() == maxEntries){
+			if(files.size() == max_size){
 				break;
 			}
 		}
