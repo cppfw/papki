@@ -1,3 +1,9 @@
+libpapki (1.0.113) unstable; urgency=medium
+
+  * build for ios 9.0
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 31 Oct 2021 14:36:52 +0200
+
 libpapki (1.0.112) unstable; urgency=medium
 
   * revert list_dir() implemetation to dirent for ios
