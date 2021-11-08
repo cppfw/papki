@@ -1,3 +1,9 @@
+libpapki (1.0.114) unstable; urgency=medium
+
+  * build for raspbian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 08 Nov 2021 14:55:16 +0200
+
 libpapki (1.0.113) unstable; urgency=medium
 
   * build for ios 9.0
