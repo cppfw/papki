@@ -106,7 +106,7 @@ voidpf ZCALLBACK fopen_file_func (voidpf opaque, const char* filename, int mode)
         mode_fopen = "wb";
 
     if ((filename != NULL) && (mode_fopen != NULL)) {
-#if CFG_COMPILER == CFG_COMPILER_MSVC
+#if M_COMPILER == M_COMPILER_MSVC
         fopen_s(&file, filename, mode_fopen);
 #else
         file = fopen(filename, mode_fopen);
