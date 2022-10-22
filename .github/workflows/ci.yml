@@ -200,7 +200,7 @@ jobs:
     name: msys2 - ${{ matrix.repo }}
     steps:
     - name: make msys2 to provide the default shell
-      uses: msys2/setup-msys2@v3
+      uses: msys2/setup-msys2@v2
       with:
         update: true
         msystem: MSYS
