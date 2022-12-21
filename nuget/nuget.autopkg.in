@@ -2,7 +2,7 @@ configurations {
 	UserPlatformToolset {
 		// Needed because autopackage lacks VS2015+ support
 		key = "PlatformToolset";
-		choices: "v140,v141,v142";
+		choices: "v140,v141,v142,v143";
 	};
 
 	RuntimeLibrary {
@@ -31,8 +31,8 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.1.138;
-			zlib_static/1.2.11.7;
+			libutki/1.1.180;
+			zlib_static/1.2.11.11;
 		};
 	}
 	files {
@@ -97,6 +97,33 @@ nuget{
 		}
 		[x64,v142,debug,MultiThreadedDebugDLL] {
 			lib: ..\msvs_solution\x64\v142_Debug_MD\libpapki.lib;
+		}
+
+		//==== v143 tools ====
+
+		[x86,v143,release,MultiThreaded] {
+			lib: ..\msvs_solution\v143_Release_MT\libpapki.lib;
+		}
+		[x86,v143,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\v143_Debug_MT\libpapki.lib;
+		}
+		[x64,v143,release,MultiThreaded] {
+			lib: ..\msvs_solution\x64\v143_Release_MT\libpapki.lib;
+		}
+		[x64,v143,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\x64\v143_Debug_MT\libpapki.lib;
+		}
+		[x86,v143,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\v143_Release_MD\libpapki.lib;
+		}
+		[x86,v143,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\v143_Debug_MD\libpapki.lib;
+		}
+		[x64,v143,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\x64\v143_Release_MD\libpapki.lib;
+		}
+		[x64,v143,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\x64\v143_Debug_MD\libpapki.lib;
 		}
 	}
 }
