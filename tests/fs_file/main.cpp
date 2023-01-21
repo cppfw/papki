@@ -2,6 +2,10 @@
 
 #include "../../src/papki/fs_file.hpp"
 
+#ifdef assert
+#	undef assert
+#endif
+
 int main(int argc, char *argv[]){
 	TestTingFSFile();
 

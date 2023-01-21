@@ -7,6 +7,9 @@
 
 #include "tests.hpp"
 
+#ifdef assert
+#	undef assert
+#endif
 
 namespace TestSeekForward{
 void Run(){
