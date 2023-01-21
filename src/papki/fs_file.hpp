@@ -35,6 +35,10 @@ SOFTWARE.
 
 #include "file.hpp"
 
+#ifdef assert
+#	undef assert
+#endif
+
 namespace papki{
 
 /**

@@ -2,7 +2,6 @@
 
 #include "../../src/papki/fs_file.hpp"
 
-
 int main(int argc, char *argv[]){
 	{
 		std::vector<uint8_t> bytes = papki::fs_file("test_data.bin").load();
