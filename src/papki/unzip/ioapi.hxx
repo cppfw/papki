@@ -56,6 +56,8 @@ SOFTWARE.
 #	endif
 #endif
 
+#include "zconf.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

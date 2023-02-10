@@ -11,8 +11,8 @@
 #	undef assert
 #endif
 
-namespace TestSeekForward{
-void Run(){
+namespace test_seek_forward{
+void run(){
 	papki::fs_file f("test.file.txt");
 	utki::assert(!f.is_dir(), SL);
 	utki::assert(!f.is_open(), SL);
@@ -62,10 +62,10 @@ void Run(){
 
 
 
-namespace TestListDirContents{
-void Run(){
-	papki::fs_file curDir("./");
-	papki::file& f = curDir;
+namespace test_list_dir_contents{
+void run(){
+	papki::fs_file cur_dir("./");
+	papki::file& f = cur_dir;
 	
 	std::vector<std::string> r = f.list_dir();
 #ifdef DEBUG
@@ -88,8 +88,8 @@ void Run(){
 
 
 
-namespace TestHomeDir{
-void Run(){
+namespace test_home_dir{
+void run(){
 	std::string hd = papki::fs_file::get_home_dir();
 	
 	utki::assert(hd.size() != 0, SL); // There is always a trailing '/' character, so make sure there is something else besides that.
@@ -101,8 +101,8 @@ void Run(){
 
 
 
-namespace TestLoadWholeFileToMemory{
-void Run(){
+namespace test_load_whole_file_to_memory{
+void run(){
 	papki::root_dir f(std::make_unique<papki::fs_file>(), "");
 	f.set_path("test.file.txt");
 	utki::assert(!f.is_dir(), SL);

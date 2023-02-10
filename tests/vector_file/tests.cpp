@@ -7,7 +7,7 @@
 
 
 namespace TestBasicMemoryFile{
-void Run(){
+void run(){
 	papki::vector_file f;
 	utki::assert(!f.is_dir(), SL);
 	utki::assert(!f.is_open(), SL);

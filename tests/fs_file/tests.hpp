@@ -1,18 +1,18 @@
 #pragma once
 
 
-namespace TestSeekForward{
-void Run();
+namespace test_seek_forward{
+void run();
 }
 
-namespace TestListDirContents{
-void Run();
+namespace test_list_dir_contents{
+void run();
 }
 
-namespace TestHomeDir{
-void Run();
+namespace test_home_dir{
+void run();
 }
 
-namespace TestLoadWholeFileToMemory{
-void Run();
+namespace test_load_whole_file_to_memory{
+void run();
 }

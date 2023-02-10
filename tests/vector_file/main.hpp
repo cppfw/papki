@@ -6,5 +6,5 @@
 
 
 inline void TestTingMemoryFile(){
-	TestBasicMemoryFile::Run();
+	TestBasicMemoryFile::run();
 }

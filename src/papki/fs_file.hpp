@@ -104,9 +104,9 @@ public:
 	 */
 	static std::string get_home_dir();
 
-	virtual std::vector<std::string> list_dir(size_t max_entries = 0) const override;
+	std::vector<std::string> list_dir(size_t max_entries = 0) const override;
 
-	virtual std::unique_ptr<file> spawn() override;
+	std::unique_ptr<file> spawn() override;
 };
 
 } // namespace papki

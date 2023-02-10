@@ -2,5 +2,5 @@
 
 
 namespace TestBasicMemoryFile{
-void Run();
+void run();
 }
