@@ -69,7 +69,9 @@ original crypt.c. Code woven in by Terry Thorsen 1/2003.
 #include <cstdlib>
 #include <cstring>
 
+// NOLINTBEGIN
 #include "zlib.h"
+// NOLINTEND
 
 #ifdef STDC
 #	include <cstddef>

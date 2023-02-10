@@ -76,9 +76,11 @@ SOFTWARE.
 extern "C" {
 #endif
 
+// NOLINTBEGIN
 #ifndef _ZLIB_H
 #	include "zlib.h"
 #endif
+// NOLINTEND
 
 #ifndef _ZLIBIOAPI_H
 #	include "ioapi.hxx"

@@ -41,7 +41,9 @@ SOFTWARE.
 
 #include <utki/config.hpp>
 
+// NOLINTBEGIN
 #include "zlib.h"
+// NOLINTEND
 
 /* I've found an old Unix (a SunOS 4.1.3_U1) without all SEEK_* defined.... */
 
