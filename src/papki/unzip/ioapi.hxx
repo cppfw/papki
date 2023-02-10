@@ -59,7 +59,9 @@ enum class zlib_file_mode {
 #	endif
 #endif
 
+// NOLINTBEGIN
 #include "zconf.h"
+// NOLINTEND
 
 #ifdef __cplusplus
 extern "C" {
