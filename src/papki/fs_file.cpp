@@ -95,7 +95,7 @@ void fs_file::close_internal() const noexcept
 	ASSERT(this->handle)
 
 	fclose(this->handle);
-	this->handle = 0;
+	this->handle = nullptr;
 }
 
 size_t fs_file::read_internal(utki::span<uint8_t> buf) const
@@ -131,21 +131,22 @@ size_t fs_file::seek_backward_internal(size_t num_bytes_to_seek) const
 	//       Therefore, do several seek operations with smaller offset if
 	//       necessary.
 
-	typedef long int T_FSeekOffset;
-	const std::size_t DMax = std::size_t(((unsigned long int)(-1)) >> 1);
-	ASSERT((size_t(1) << ((sizeof(T_FSeekOffset) * 8) - 1)) - 1 == DMax)
-	static_assert(size_t(-(-T_FSeekOffset(DMax))) == DMax, "error");
+	typedef long int fseek_offset_type;
+	const auto max_offset = size_t(((unsigned long int)(-1)) >> 1);
+	ASSERT((size_t(1) << ((sizeof(fseek_offset_type) * 8) - 1)) - 1 == max_offset)
+	static_assert(size_t(-(-fseek_offset_type(max_offset))) == max_offset, "error");
 
-	num_bytes_to_seek = std::min(num_bytes_to_seek, this->cur_pos()); // clamp top
+	using std::min;
+	num_bytes_to_seek = min(num_bytes_to_seek, this->cur_pos()); // clamp top
 
 	for (size_t num_bytes_left = num_bytes_to_seek; num_bytes_left != 0;) {
 		ASSERT(num_bytes_left <= num_bytes_to_seek)
 
-		T_FSeekOffset offset;
-		if (num_bytes_left > DMax) {
-			offset = T_FSeekOffset(DMax);
+		fseek_offset_type offset;
+		if (num_bytes_left > max_offset) {
+			offset = fseek_offset_type(max_offset);
 		} else {
-			offset = T_FSeekOffset(num_bytes_left);
+			offset = fseek_offset_type(num_bytes_left);
 		}
 
 		ASSERT(offset > 0)

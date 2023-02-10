@@ -42,6 +42,7 @@ namespace papki {
  */
 class vector_file : public file
 {
+public:
 	vector_file(const vector_file&) = delete;
 	vector_file(vector_file&&) = delete;
 	vector_file& operator=(const vector_file&) = delete;
@@ -56,9 +57,9 @@ public:
 	 * @brief Constructor.
 	 * Creates empty memory file.
 	 */
-	vector_file() {}
+	vector_file() = default;
 
-	virtual ~vector_file() noexcept {}
+	~vector_file() noexcept override = default;
 
 	/**
 	 * @brief Current file size.
@@ -69,7 +70,7 @@ public:
 		return this->data.size();
 	}
 
-	virtual std::unique_ptr<file> spawn() override
+	std::unique_ptr<file> spawn() override
 	{
 		return std::make_unique<vector_file>();
 	}
@@ -99,9 +100,9 @@ protected:
 
 	size_t write_internal(utki::span<const uint8_t> buf) override;
 
-	size_t seek_forward_internal(size_t numBytesToSeek) const override;
+	size_t seek_forward_internal(size_t num_bytes_to_seek) const override;
 
-	size_t seek_backward_internal(size_t numBytesToSeek) const override;
+	size_t seek_backward_internal(size_t num_bytes_to_seek) const override;
 
 	void rewind_internal() const override;
 };

@@ -42,7 +42,7 @@ namespace papki {
  */
 class span_file : public file
 {
-private:
+public:
 	span_file(const span_file&) = delete;
 	span_file(span_file&&) = delete;
 	span_file& operator=(const span_file&) = delete;

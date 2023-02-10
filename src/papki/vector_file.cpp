@@ -62,7 +62,20 @@ size_t vector_file::write_internal(utki::span<const uint8_t> buf)
 
 	size_t num_bytes_written = std::min(buf.size_bytes(), this->data.size() - this->idx);
 
-	std::copy(buf.begin(), buf.end(), std::next(this->data.begin(), this->idx));
+	auto start_iter = this->data.begin();
+
+	for (decltype(this->idx) num_to_seek = this->idx;;) {
+		const auto max_seek = std::numeric_limits<ptrdiff_t>::max();
+		if (num_to_seek > max_seek) {
+			num_to_seek -= max_seek;
+			std::next(start_iter, max_seek);
+		} else {
+			std::next(start_iter, num_to_seek);
+			break;
+		}
+	}
+
+	std::copy(buf.begin(), buf.end(), start_iter);
 
 	this->idx += num_bytes_written;
 	ASSERT(this->idx <= this->data.size())

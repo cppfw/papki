@@ -77,26 +77,26 @@ size_t file::write(utki::span<const uint8_t> buf)
 	return ret;
 }
 
-size_t file::seek_forward_internal(size_t numBytesToSeek) const
+size_t file::seek_forward_internal(size_t num_bytes_to_seek) const
 {
 	std::array<uint8_t, 0x1000> buf; // 4kb buffer
 
-	size_t bytesRead = 0;
-	for (; bytesRead != numBytesToSeek;) {
-		size_t curNumToRead = numBytesToSeek - bytesRead;
-		curNumToRead = std::min(curNumToRead, buf.size()); // clamp top
-		size_t res = this->read(utki::make_span(&*buf.begin(), curNumToRead));
-		ASSERT(bytesRead < numBytesToSeek)
-		ASSERT(numBytesToSeek >= res)
-		ASSERT(bytesRead <= numBytesToSeek - res)
-		bytesRead += res;
+	size_t num_bytes_read = 0;
+	for (; num_bytes_read != num_bytes_to_seek;) {
+		size_t cur_num_to_read = num_bytes_to_seek - num_bytes_read;
+		cur_num_to_read = std::min(cur_num_to_read, buf.size()); // clamp top
+		size_t res = this->read(utki::make_span(&*buf.begin(), cur_num_to_read));
+		ASSERT(num_bytes_read < num_bytes_to_seek)
+		ASSERT(num_bytes_to_seek >= res)
+		ASSERT(num_bytes_read <= num_bytes_to_seek - res)
+		num_bytes_read += res;
 
-		if (res != curNumToRead) { // if end of file reached
+		if (res != cur_num_to_read) { // if end of file reached
 			break;
 		}
 	}
-	this->current_pos -= bytesRead; // make correction to curPos, since we were using read()
-	return bytesRead;
+	this->current_pos -= num_bytes_read; // make correction to curPos, since we were using read()
+	return num_bytes_read;
 }
 
 void file::make_dir()
@@ -149,7 +149,7 @@ bool file::exists() const
 	// try opening and closing the file to find out if it exists or not
 	ASSERT(!this->is_open())
 	try {
-		file::guard fileGuard(const_cast<file&>(*this), file::mode::read);
+		file::guard file_guard(const_cast<file&>(*this), file::mode::read);
 	} catch (std::runtime_error&) {
 		return false; // file opening failed, assume the file does not exist
 	}
