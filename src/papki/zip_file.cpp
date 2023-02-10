@@ -123,7 +123,7 @@ zip_file::zip_file(std::unique_ptr<papki::file> underlying_zip_file, std::string
 	ff.zerror_file = &unzip_error;
 	ff.ztell_file = &unzip_tell;
 
-	this->handle = unzOpen2(this->underlying_zip_file->path().c_str(), &ff);
+	this->handle = unz_open_2(this->underlying_zip_file->path().c_str(), &ff);
 
 	if (!this->handle) {
 		throw std::runtime_error("zip_file: opening zip file failed");
@@ -134,7 +134,7 @@ zip_file::~zip_file() noexcept
 {
 	this->close(); // make sure there is no file opened inside zip file
 
-	if (unzClose(this->handle) != UNZ_OK) {
+	if (unz_close(this->handle) != UNZ_OK) {
 		ASSERT(false)
 	}
 }
@@ -145,7 +145,7 @@ void zip_file::open_internal(mode mode)
 		throw std::invalid_argument("illegal mode requested, only READ supported inside ZIP file");
 	}
 
-	if (unzLocateFile(this->handle, this->path().c_str(), 0) != UNZ_OK) {
+	if (unz_locate_file(this->handle, this->path().c_str(), 0) != UNZ_OK) {
 		std::stringstream ss;
 		ss << "zip_file::OpenInternal(): file not found: " << this->path();
 		throw std::runtime_error(ss.str());
@@ -154,19 +154,19 @@ void zip_file::open_internal(mode mode)
 	{
 		unz_file_info zip_file_info;
 
-		if (unzGetCurrentFileInfo(this->handle, &zip_file_info, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
+		if (unz_get_current_file_info(this->handle, &zip_file_info, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
 			throw std::runtime_error("failed obtaining file info");
 		}
 	}
 
-	if (unzOpenCurrentFile(this->handle) != UNZ_OK) {
+	if (unz_open_current_file(this->handle) != UNZ_OK) {
 		throw std::runtime_error("file opening failed");
 	}
 }
 
 void zip_file::close_internal() const noexcept
 {
-	if (unzCloseCurrentFile(this->handle) == UNZ_CRCERROR) {
+	if (unz_close_current_file(this->handle) == UNZ_CRCERROR) {
 		ASSERT(false, [](auto& o) {
 			o << "zip_file::close(): CRC is not good" << std::endl;
 		})
@@ -176,7 +176,7 @@ void zip_file::close_internal() const noexcept
 size_t zip_file::read_internal(utki::span<uint8_t> buf) const
 {
 	ASSERT(buf.size() <= unsigned(-1))
-	int num_bytes_read = unzReadCurrentFile(this->handle, buf.begin(), unsigned(buf.size()));
+	int num_bytes_read = unz_read_current_file(this->handle, buf.begin(), unsigned(buf.size()));
 	if (num_bytes_read < 0) {
 		throw std::runtime_error("zip_file::Read(): file reading failed");
 	}
@@ -199,7 +199,7 @@ bool zip_file::exists() const
 		return true;
 	}
 
-	return unzLocateFile(this->handle, this->path().c_str(), 0) == UNZ_OK;
+	return unz_locate_file(this->handle, this->path().c_str(), 0) == UNZ_OK;
 }
 
 std::vector<std::string> zip_file::list_dir(size_t max_entries) const
@@ -220,16 +220,16 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 	// for every file, check if it is in the current directory
 	{
 		// move to first file
-		int ret = unzGoToFirstFile(this->handle);
+		int ret = unz_go_to_first_file(this->handle);
 
 		if (ret != UNZ_OK) {
-			throw std::runtime_error("zip_file::list_dir(): unzGoToFirstFile() failed.");
+			throw std::runtime_error("zip_file::list_dir(): unz_go_to_first_file() failed.");
 		}
 
 		do {
 			std::array<char, 255> file_name_buf;
 
-			if (unzGetCurrentFileInfo(
+			if (unz_get_current_file_info(
 					this->handle,
 					nullptr,
 					file_name_buf.data(),
@@ -241,7 +241,7 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 				)
 				!= UNZ_OK)
 			{
-				throw std::runtime_error("zip_file::list_dir(): unzGetCurrentFileInfo() failed.");
+				throw std::runtime_error("zip_file::list_dir(): unz_get_current_file_info() failed.");
 			}
 
 			file_name_buf[file_name_buf.size() - 1] = 0; // null-terminate, just to be on a safe side
@@ -278,10 +278,10 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 			if (files.size() == max_entries) {
 				break;
 			}
-		} while ((ret = unzGoToNextFile(this->handle)) == UNZ_OK);
+		} while ((ret = unz_go_to_next_file(this->handle)) == UNZ_OK);
 
 		if (ret != UNZ_END_OF_LIST_OF_FILE && ret != UNZ_OK) {
-			throw std::runtime_error("zip_file::list_dir(): unzGoToNextFile() failed.");
+			throw std::runtime_error("zip_file::list_dir(): unz_go_to_next_file() failed.");
 		}
 	}
 
