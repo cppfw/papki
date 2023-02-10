@@ -4,6 +4,7 @@ Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: g++ (>=4:4.8), debhelper (>= 9),
 		clang-tidy,
+		clang-format,
 		prorab,
 		prorab-extra,
 		myci,
