@@ -131,7 +131,7 @@ size_t fs_file::seek_backward_internal(size_t num_bytes_to_seek) const
 	//       Therefore, do several seek operations with smaller offset if
 	//       necessary.
 
-	typedef long int fseek_offset_type;
+	using fseek_offset_type = long int;
 	const auto max_offset = size_t(((unsigned long int)(-1)) >> 1);
 	ASSERT((size_t(1) << ((sizeof(fseek_offset_type) * 8) - 1)) - 1 == max_offset)
 	static_assert(size_t(-(-fseek_offset_type(max_offset))) == max_offset, "error");
