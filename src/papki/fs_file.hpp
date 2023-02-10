@@ -30,8 +30,8 @@ SOFTWARE.
 #include <cstdio>
 #include <memory>
 
-#include <utki/debug.hpp>
 #include <utki/config.hpp>
+#include <utki/debug.hpp>
 
 #include "file.hpp"
 
@@ -39,70 +39,74 @@ SOFTWARE.
 #	undef assert
 #endif
 
-namespace papki{
+namespace papki {
 
 /**
  * @brief Native OS file system implementation of file interface.
  * Implementation of a papki::file interface for native file system of the OS.
  */
-class fs_file : public file{
+class fs_file : public file
+{
 	mutable FILE* handle = nullptr;
 
 protected:
-	void open_internal(mode io_mode)override;
+	void open_internal(mode io_mode) override;
 
-	void close_internal()const noexcept override;
+	void close_internal() const noexcept override;
 
-	size_t read_internal(utki::span<uint8_t> buf)const override;
+	size_t read_internal(utki::span<uint8_t> buf) const override;
 
-	size_t write_internal(utki::span<const uint8_t> buf)override;
+	size_t write_internal(utki::span<const uint8_t> buf) override;
 
-	// NOTE: use default implementation of seek_forward() because of the problems with
+	// NOTE: use default implementation of seek_forward() because of the problems
+	// with
 	//       fseek(), as it can set file pointer beyond the end of file.
-	
-	size_t seek_backward_internal(size_t num_bytes_to_seek)const override;
-	
-	void rewind_internal()const override;
-	
+
+	size_t seek_backward_internal(size_t num_bytes_to_seek) const override;
+
+	void rewind_internal() const override;
+
 public:
 	/**
 	 * @brief Constructor.
-	 * A root directory can be set which holds the file system subtree. The file path
-	 * set by set_path() method will refer to a file path relative to the root directory.
-	 * That means that all file operations like opening the file and other will be 
-	 * performed on the actual file/directory referred by the final path which is a concatenation of
-	 * the root directory and the path returned by path() method. 
-     * @param path_name - initial path to set passed to file constructor.
-     */
+	 * A root directory can be set which holds the file system subtree. The file
+	 * path set by set_path() method will refer to a file path relative to the
+	 * root directory. That means that all file operations like opening the file
+	 * and other will be performed on the actual file/directory referred by the
+	 * final path which is a concatenation of the root directory and the path
+	 * returned by path() method.
+	 * @param path_name - initial path to set passed to file constructor.
+	 */
 	fs_file(std::string_view path_name = std::string_view()) :
-			file(path_name)
+		file(path_name)
 	{}
-	
+
 	/**
 	 * @brief Destructor.
 	 * This destructor calls the close() method.
 	 */
-	virtual ~fs_file()noexcept{
+	virtual ~fs_file() noexcept
+	{
 		this->close();
-	}	
-	
-	bool exists()const override;
-	
-	uint64_t size()const override;
+	}
 
-	void make_dir()override;
+	bool exists() const override;
+
+	uint64_t size() const override;
+
+	void make_dir() override;
 
 	/**
 	 * @brief Get user home directory.
 	 * Returns an absolute path to the current user's home directory.
 	 * On *nix systems it will be something like "/home/user/".
-     * @return Absolute path to the user's home directory.
-     */
+	 * @return Absolute path to the user's home directory.
+	 */
 	static std::string get_home_dir();
 
-	virtual std::vector<std::string> list_dir(size_t max_entries = 0)const override;
-	
-	virtual std::unique_ptr<file> spawn()override;
+	virtual std::vector<std::string> list_dir(size_t max_entries = 0) const override;
+
+	virtual std::unique_ptr<file> spawn() override;
 };
 
-}
+} // namespace papki

@@ -13,7 +13,7 @@
 			"group":"build"
 		},
 		{
-			"label": "build_dbg",
+			"label": "build-dbg",
 			"type": "shell",
 			"command": "make config=dbg",
 			"problemMatcher": [
@@ -29,7 +29,7 @@
 			"group":"build"
 		},
 		{
-			"label": "clean_dbg",
+			"label": "clean-dbg",
 			"type": "shell",
 			"command": "make clean config=dbg",
 			"problemMatcher": [],
@@ -44,11 +44,18 @@
 			"group": "build"
 		},
 		{
-			"label": "test_dbg",
+			"label": "test-dbg",
 			"type": "shell",
 			"command": "make test config=dbg",
 			"problemMatcher": [],
-			"dependsOn": "build_dbg",
+			"dependsOn": "build-dbg",
+			"group": "build"
+		},
+		{
+			"label": "format",
+			"type": "shell",
+			"command": "make apply-format",
+			"problemMatcher": [],
 			"group": "build"
 		}
 	]

@@ -25,59 +25,64 @@ SOFTWARE.
 
 /* ================ LICENSE END ================ */
 
-#include <list>
-#include <cstring>
-
 #include "file.hpp"
+
+#include <cstring>
+#include <list>
 
 using namespace papki;
 
-bool file::is_dir()const noexcept{
-	if(this->path().size() == 0){
+bool file::is_dir() const noexcept
+{
+	if (this->path().size() == 0) {
 		return false;
 	}
 
 	ASSERT(this->path().size() > 0)
-	if(this->path().back() == '/'){
+	if (this->path().back() == '/') {
 		return true;
 	}
 
 	return false;
 }
 
-std::vector<std::string> file::list_dir(size_t max_entries)const{
+std::vector<std::string> file::list_dir(size_t max_entries) const
+{
 	throw std::runtime_error("file::list_dir(): not supported for this file instance");
 }
 
-size_t file::read(utki::span<uint8_t> buf)const{
-	if(!this->is_open()){
+size_t file::read(utki::span<uint8_t> buf) const
+{
+	if (!this->is_open()) {
 		throw std::logic_error("Cannot read, file is not opened");
 	}
-	
+
 	size_t ret = this->read_internal(buf);
 	this->current_pos += ret;
 	return ret;
 }
 
-size_t file::write(utki::span<const uint8_t> buf){
-	if(!this->is_open()){
+size_t file::write(utki::span<const uint8_t> buf)
+{
+	if (!this->is_open()) {
 		throw std::logic_error("Cannot write, file is not opened");
 	}
 
-	if(this->io_mode != mode::write){
+	if (this->io_mode != mode::write) {
 		throw std::logic_error("file is opened, but not in write mode");
 	}
-	
+
 	size_t ret = this->write_internal(buf);
 	this->current_pos += ret;
 	return ret;
 }
 
-size_t file::seek_forward_internal(size_t numBytesToSeek)const{
+size_t file::seek_forward_internal(size_t numBytesToSeek) const
+{
 	std::array<uint8_t, 0x1000> buf; // 4kb buffer
-	
+
 	size_t bytesRead = 0;
-	for(; bytesRead != numBytesToSeek;){
+	for (; bytesRead != numBytesToSeek;) {
 		size_t curNumToRead = numBytesToSeek - bytesRead;
 		curNumToRead = std::min(curNumToRead, buf.size()); // clamp top
 		size_t res = this->read(utki::make_span(&*buf.begin(), curNumToRead));
@@ -85,8 +90,8 @@ size_t file::seek_forward_internal(size_t numBytesToSeek)const{
 		ASSERT(numBytesToSeek >= res)
 		ASSERT(bytesRead <= numBytesToSeek - res)
 		bytesRead += res;
-		
-		if(res != curNumToRead){ // if end of file reached
+
+		if (res != curNumToRead) { // if end of file reached
 			break;
 		}
 	}
@@ -94,27 +99,29 @@ size_t file::seek_forward_internal(size_t numBytesToSeek)const{
 	return bytesRead;
 }
 
-void file::make_dir(){
+void file::make_dir()
+{
 	throw std::runtime_error("Make directory is not supported");
 }
 
-std::vector<uint8_t> file::load(size_t max_bytes_to_load)const{
-	if(this->is_open()){
+std::vector<uint8_t> file::load(size_t max_bytes_to_load) const
+{
+	if (this->is_open()) {
 		throw std::logic_error("file::load(): file should not be opened");
 	}
 
 	std::vector<uint8_t> ret;
 
 	file::guard file_guard(*this); // make sure we close the file upon exit from the function
-	
+
 	const size_t read_chunk_size = 0x1000; // 4kb
 
-	for(size_t num_bytes_read = 0; max_bytes_to_load != 0; num_bytes_read += read_chunk_size){
+	for (size_t num_bytes_read = 0; max_bytes_to_load != 0; num_bytes_read += read_chunk_size) {
 		auto num_bytes_to_read = std::min(max_bytes_to_load, read_chunk_size);
 		ret.resize(ret.size() + num_bytes_to_read);
 		auto n = this->read(utki::make_span(&ret[num_bytes_read], num_bytes_to_read));
 		ASSERT(n <= num_bytes_to_read)
-		if(n != num_bytes_to_read){
+		if (n != num_bytes_to_read) {
 			ret.resize(num_bytes_read + n);
 			return ret;
 		}
@@ -125,28 +132,33 @@ std::vector<uint8_t> file::load(size_t max_bytes_to_load)const{
 	return ret;
 }
 
-bool file::exists()const{
-	if(this->is_dir()){
+bool file::exists() const
+{
+	if (this->is_dir()) {
 		// TODO: implement checking for directory existance
-		throw std::logic_error("file::exists(): path is a directory, checking for directory existence is not yet supported");
+		throw std::logic_error(
+			"file::exists(): path is a directory, checking for "
+			"directory existence is not yet supported"
+		);
 	}
 
-	if(this->is_open()){
+	if (this->is_open()) {
 		return true;
 	}
 
 	// try opening and closing the file to find out if it exists or not
 	ASSERT(!this->is_open())
-	try{
+	try {
 		file::guard fileGuard(const_cast<file&>(*this), file::mode::read);
-	}catch(std::runtime_error&){
+	} catch (std::runtime_error&) {
 		return false; // file opening failed, assume the file does not exist
 	}
 	return true; // file open succeeded => file exists
 }
 
-uint64_t file::size()const{
-	if(this->is_open()){
+uint64_t file::size() const
+{
+	if (this->is_open()) {
 		throw std::logic_error("file must not be open when calling file::size() method");
 	}
 
@@ -156,9 +168,9 @@ uint64_t file::size()const{
 }
 
 file::guard::guard(const file& f, mode io_mode) :
-		f(f)
+	f(f)
 {
-	if(this->f.is_open()){
+	if (this->f.is_open()) {
 		throw std::logic_error("file::guard::guard(): file is already opened");
 	}
 
@@ -166,15 +178,16 @@ file::guard::guard(const file& f, mode io_mode) :
 }
 
 file::guard::guard(const file& f) :
-		f(f)
+	f(f)
 {
-	if(this->f.is_open()){
+	if (this->f.is_open()) {
 		throw std::logic_error("file::guard::guard(): file is already opened");
 	}
 
 	this->f.open();
 }
 
-file::guard::~guard(){
+file::guard::~guard()
+{
 	this->f.close();
 }
