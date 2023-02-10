@@ -6,6 +6,7 @@
 #	undef assert
 #endif
 
+// NOLINTNEXTLINE(bugprone-exception-escape, "we want uncaught exceptions to fail the tests")
 int main(int argc, char *argv[]){
 	test_papki_fs_file();
 
