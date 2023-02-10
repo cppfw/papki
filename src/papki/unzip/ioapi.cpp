@@ -33,13 +33,12 @@ SOFTWARE.
    Copyright (C) 1998-2009 Gilles Vollant
 */
 
-// NOLINTBEGIN
-
 #include "ioapi.hxx"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 #include <utki/config.hpp>
 
 #include "zlib.h"
@@ -66,7 +65,7 @@ uLong ZCALLBACK fwrite_file_func OF((voidpf opaque, voidpf stream, const void* b
 
 long ZCALLBACK ftell_file_func OF((voidpf opaque, voidpf stream));
 
-long ZCALLBACK fseek_file_func OF((voidpf opaque, voidpf stream, uLong offset, int origin));
+long ZCALLBACK fseek_file_func OF((voidpf opaque, voidpf stream, long offset, int origin));
 
 int ZCALLBACK fclose_file_func OF((voidpf opaque, voidpf stream));
 
@@ -74,8 +73,8 @@ int ZCALLBACK ferror_file_func OF((voidpf opaque, voidpf stream));
 
 voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 {
-	FILE* file = NULL;
-	const char* mode_fopen = NULL;
+	FILE* file = nullptr;
+	const char* mode_fopen = nullptr;
 	if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
 		mode_fopen = "rb";
 	else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
@@ -83,7 +82,7 @@ voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 	else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
 		mode_fopen = "wb";
 
-	if ((filename != NULL) && (mode_fopen != NULL)) {
+	if ((filename != nullptr) && (mode_fopen != nullptr)) {
 #if M_COMPILER == M_COMPILER_MSVC
 		fopen_s(&file, filename, mode_fopen);
 #else
@@ -114,7 +113,7 @@ long ZCALLBACK ftell_file_func(voidpf opaque, voidpf stream)
 	return ret;
 }
 
-long ZCALLBACK fseek_file_func(voidpf opaque, voidpf stream, uLong offset, int origin)
+long ZCALLBACK fseek_file_func(voidpf opaque, voidpf stream, long offset, int origin)
 {
 	int fseek_origin = 0;
 	long ret;
@@ -160,7 +159,5 @@ void fill_fopen_filefunc(zlib_filefunc_def* pzlib_filefunc_def)
 	pzlib_filefunc_def->zseek_file = fseek_file_func;
 	pzlib_filefunc_def->zclose_file = fclose_file_func;
 	pzlib_filefunc_def->zerror_file = ferror_file_func;
-	pzlib_filefunc_def->opaque = NULL;
+	pzlib_filefunc_def->opaque = nullptr;
 }
-
-// NOLINTEND

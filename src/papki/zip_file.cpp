@@ -79,7 +79,7 @@ int ZCALLBACK unzip_error(voidpf opaque, voidpf stream)
 	return 0; // no error
 }
 
-long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, uLong offset, int origin)
+long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, int origin)
 {
 	auto f = reinterpret_cast<papki::file*>(stream);
 
