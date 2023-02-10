@@ -54,7 +54,7 @@ std::string papki::dir(std::string_view path_name)
 {
 	size_t slash_pos = path_name.rfind('/');
 	if (slash_pos == std::string::npos) { // no slash found
-		return std::string();
+		return {};
 	}
 
 	ASSERT(slash_pos > 0)
@@ -68,7 +68,7 @@ std::string papki::suffix(std::string_view path_name)
 {
 	size_t dot_pos = path_name.rfind('.');
 	if (dot_pos == std::string::npos || dot_pos == 0) { // NOTE: dot_pos is 0 for hidden files in *nix systems
-		return std::string();
+		return {};
 	} else {
 		ASSERT(dot_pos > 0)
 		ASSERT(path_name.size() > 0)
@@ -76,7 +76,7 @@ std::string papki::suffix(std::string_view path_name)
 
 		// check for hidden file on *nix systems
 		if (path_name[dot_pos - 1] == '/') {
-			return std::string();
+			return {};
 		}
 
 		return std::string(path_name.substr(dot_pos + 1));

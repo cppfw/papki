@@ -43,21 +43,21 @@ void span_file::open_internal(mode io_mode)
 size_t span_file::read_internal(utki::span<uint8_t> buf) const
 {
 	ASSERT(this->ptr <= this->data.end())
-	size_t numBytesRead = std::min(buf.size_bytes(), size_t(this->data.end() - this->ptr));
-	memcpy(&*buf.begin(), &*this->ptr, numBytesRead);
-	this->ptr += numBytesRead;
+	size_t num_bytes_read = std::min(buf.size_bytes(), size_t(this->data.end() - this->ptr));
+	memcpy(&*buf.begin(), &*this->ptr, num_bytes_read);
+	this->ptr += num_bytes_read;
 	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
-	return numBytesRead;
+	return num_bytes_read;
 }
 
 size_t span_file::write_internal(utki::span<const uint8_t> buf)
 {
 	ASSERT(this->ptr <= this->data.end())
-	size_t numBytesWritten = std::min(buf.size_bytes(), size_t(this->data.end() - this->ptr));
-	memcpy(&*this->ptr, &*buf.begin(), numBytesWritten);
-	this->ptr += numBytesWritten;
+	size_t num_bytes_written = std::min(buf.size_bytes(), size_t(this->data.end() - this->ptr));
+	memcpy(&*this->ptr, &*buf.begin(), num_bytes_written);
+	this->ptr += num_bytes_written;
 	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
-	return numBytesWritten;
+	return num_bytes_written;
 }
 
 size_t span_file::seek_forward_internal(size_t num_bytes_to_seek) const

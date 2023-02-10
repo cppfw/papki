@@ -1,6 +1,6 @@
 #pragma once
 
 
-namespace TestBasicMemoryFile{
+namespace test_basic_memory_file{
 void run();
 }

@@ -4,7 +4,6 @@
 
 #include "tests.hpp"
 
-
-inline void TestTingMemoryFile(){
-	TestBasicMemoryFile::run();
+inline void test_papki_memory_file(){
+	test_basic_memory_file::run();
 }

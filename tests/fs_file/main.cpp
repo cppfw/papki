@@ -7,7 +7,7 @@
 #endif
 
 int main(int argc, char *argv[]){
-	TestTingFSFile();
+	test_papki_fs_file();
 
 	// test file size
 	{

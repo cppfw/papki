@@ -2,7 +2,7 @@
 
 
 int main(int argc, char *argv[]){
-	TestTingMemoryFile();
+	test_papki_memory_file();
 
 	return 0;
 }

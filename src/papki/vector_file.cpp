@@ -32,6 +32,21 @@ SOFTWARE.
 
 using namespace papki;
 
+// TODO: move this to utki
+template <typename iterator_type>
+iterator_type the_next(iterator_type iter, size_t num)
+{
+	const auto max_advance = std::numeric_limits<typename std::iterator_traits<iterator_type>::difference_type>::max();
+	for (size_t num_left = num;;) {
+		if (num_left > size_t(max_advance)) {
+			num_left -= max_advance;
+			iter = std::next(iter, max_advance);
+		} else {
+			return std::next(iter, num_left);
+		}
+	}
+}
+
 void vector_file::open_internal(mode mode)
 {
 	this->idx = 0;
@@ -42,8 +57,8 @@ size_t vector_file::read_internal(utki::span<uint8_t> buf) const
 	ASSERT(this->idx <= this->data.size())
 	size_t num_bytes_read = std::min(buf.size_bytes(), this->data.size() - this->idx);
 
-	auto i = std::next(this->data.begin(), this->idx);
-	std::copy(i, std::next(i, num_bytes_read), buf.begin());
+	auto i = the_next(this->data.begin(), this->idx);
+	std::copy(i, the_next(i, num_bytes_read), buf.begin());
 
 	this->idx += num_bytes_read;
 	ASSERT(this->idx <= this->data.size())
@@ -62,20 +77,7 @@ size_t vector_file::write_internal(utki::span<const uint8_t> buf)
 
 	size_t num_bytes_written = std::min(buf.size_bytes(), this->data.size() - this->idx);
 
-	auto start_iter = this->data.begin();
-
-	for (decltype(this->idx) num_to_seek = this->idx;;) {
-		const auto max_seek = std::numeric_limits<ptrdiff_t>::max();
-		if (num_to_seek > max_seek) {
-			num_to_seek -= max_seek;
-			std::next(start_iter, max_seek);
-		} else {
-			std::next(start_iter, num_to_seek);
-			break;
-		}
-	}
-
-	std::copy(buf.begin(), buf.end(), start_iter);
+	std::copy(buf.begin(), buf.end(), the_next(this->data.begin(), this->idx));
 
 	this->idx += num_bytes_written;
 	ASSERT(this->idx <= this->data.size())
