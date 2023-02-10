@@ -39,8 +39,8 @@ voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 {
 	auto f = reinterpret_cast<papki::file*>(opaque);
 
-	switch (mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) {
-		case ZLIB_FILEFUNC_MODE_READ:
+	switch (mode & int(zlib_file_mode::zlib_filefunc_mode_readwritefilter)) {
+		case int(zlib_file_mode::zlib_filefunc_mode_read):
 			f->open(papki::file::mode::read);
 			break;
 		default:
@@ -79,20 +79,20 @@ int ZCALLBACK unzip_error(voidpf opaque, voidpf stream)
 	return 0; // no error
 }
 
-long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, int origin)
+long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, zlib_seek_relative origin)
 {
 	auto f = reinterpret_cast<papki::file*>(stream);
 
 	// assume that offset can only be positive, since its type is unsigned
 
 	switch (origin) {
-		case ZLIB_FILEFUNC_SEEK_CUR:
+		case zlib_seek_relative::zlib_filefunc_seek_cur:
 			f->seek_forward(offset);
 			return 0;
-		case ZLIB_FILEFUNC_SEEK_END:
+		case zlib_seek_relative::zlib_filefunc_seek_end:
 			f->seek_forward(std::numeric_limits<size_t>::max());
 			return 0;
-		case ZLIB_FILEFUNC_SEEK_SET:
+		case zlib_seek_relative::zlib_filefunc_seek_set:
 			f->rewind();
 			f->seek_forward(offset);
 			return 0;

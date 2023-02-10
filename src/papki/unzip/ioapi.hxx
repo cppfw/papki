@@ -33,47 +33,47 @@ SOFTWARE.
    Copyright (C) 1998-2009 Gilles Vollant
 */
 
-// NOLINTBEGIN
+#ifndef ZLIBIOAPI_H
+#define ZLIBIOAPI_H
 
-#ifndef _ZLIBIOAPI_H
-#	define _ZLIBIOAPI_H
+enum class zlib_seek_relative {
+	zlib_filefunc_seek_set,
+	zlib_filefunc_seek_cur,
+	zlib_filefunc_seek_end,
+};
 
-#	define ZLIB_FILEFUNC_SEEK_CUR (1)
-#	define ZLIB_FILEFUNC_SEEK_END (2)
-#	define ZLIB_FILEFUNC_SEEK_SET (0)
+enum class zlib_file_mode {
+	zlib_filefunc_mode_read = 1,
+	zlib_filefunc_mode_write = 2,
+	zlib_filefunc_mode_readwritefilter = 3,
+	zlib_filefunc_mode_existing = 4,
+	zlib_filefunc_mode_create = 8,
+};
 
-#	define ZLIB_FILEFUNC_MODE_READ (1)
-#	define ZLIB_FILEFUNC_MODE_WRITE (2)
-#	define ZLIB_FILEFUNC_MODE_READWRITEFILTER (3)
+#ifndef ZCALLBACK
 
-#	define ZLIB_FILEFUNC_MODE_EXISTING (4)
-#	define ZLIB_FILEFUNC_MODE_CREATE (8)
-
-#	ifndef ZCALLBACK
-
-#		if (defined(WIN32) || defined(WINDOWS) || defined(_WINDOWS)) && defined(CALLBACK) \
-			&& defined(USEWINDOWS_CALLBACK)
-#			define ZCALLBACK CALLBACK
-#		else
-#			define ZCALLBACK
-#		endif
+#	if (defined(WIN32) || defined(WINDOWS) || defined(_WINDOWS)) && defined(CALLBACK) && defined(USEWINDOWS_CALLBACK)
+#		define ZCALLBACK CALLBACK
+#	else
+#		define ZCALLBACK
 #	endif
+#endif
 
-#	include "zconf.h"
+#include "zconf.h"
 
-#	ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-#	endif
+#endif
 
-typedef voidpf(ZCALLBACK* open_file_func) OF((voidpf opaque, const char* filename, int mode));
-typedef uLong(ZCALLBACK* read_file_func) OF((voidpf opaque, voidpf stream, void* buf, uLong size));
-typedef uLong(ZCALLBACK* write_file_func) OF((voidpf opaque, voidpf stream, const void* buf, uLong size));
-typedef long(ZCALLBACK* tell_file_func) OF((voidpf opaque, voidpf stream));
-typedef long(ZCALLBACK* seek_file_func) OF((voidpf opaque, voidpf stream, long offset, int origin));
-typedef int(ZCALLBACK* close_file_func) OF((voidpf opaque, voidpf stream));
-typedef int(ZCALLBACK* testerror_file_func) OF((voidpf opaque, voidpf stream));
+using open_file_func = voidpf(ZCALLBACK*) OF((voidpf opaque, const char* filename, int mode));
+using read_file_func = uLong(ZCALLBACK*) OF((voidpf opaque, voidpf stream, void* buf, uLong size));
+using write_file_func = uLong(ZCALLBACK*) OF((voidpf opaque, voidpf stream, const void* buf, uLong size));
+using tell_file_func = long(ZCALLBACK*) OF((voidpf opaque, voidpf stream));
+using seek_file_func = long(ZCALLBACK*) OF((voidpf opaque, voidpf stream, long offset, zlib_seek_relative origin));
+using close_file_func = int(ZCALLBACK*) OF((voidpf opaque, voidpf stream));
+using testerror_file_func = int(ZCALLBACK*) OF((voidpf opaque, voidpf stream));
 
-typedef struct zlib_filefunc_def_s {
+using zlib_filefunc_def = struct zlib_filefunc_def_s {
 	open_file_func zopen_file;
 	read_file_func zread_file;
 	write_file_func zwrite_file;
@@ -82,24 +82,19 @@ typedef struct zlib_filefunc_def_s {
 	close_file_func zclose_file;
 	testerror_file_func zerror_file;
 	voidpf opaque;
-} zlib_filefunc_def;
+};
 
 void fill_fopen_filefunc OF((zlib_filefunc_def * pzlib_filefunc_def));
 
-#	define ZREAD(filefunc, filestream, buf, size) \
-		((*((filefunc).zread_file))((filefunc).opaque, filestream, buf, size))
-#	define ZWRITE(filefunc, filestream, buf, size) \
-		((*((filefunc).zwrite_file))((filefunc).opaque, filestream, buf, size))
-#	define ZTELL(filefunc, filestream) ((*((filefunc).ztell_file))((filefunc).opaque, filestream))
-#	define ZSEEK(filefunc, filestream, pos, mode) \
-		((*((filefunc).zseek_file))((filefunc).opaque, filestream, pos, mode))
-#	define ZCLOSE(filefunc, filestream) ((*((filefunc).zclose_file))((filefunc).opaque, filestream))
-#	define ZERROR(filefunc, filestream) ((*((filefunc).zerror_file))((filefunc).opaque, filestream))
+#define ZREAD(filefunc, filestream, buf, size) ((*((filefunc).zread_file))((filefunc).opaque, filestream, buf, size))
+#define ZWRITE(filefunc, filestream, buf, size) ((*((filefunc).zwrite_file))((filefunc).opaque, filestream, buf, size))
+#define ZTELL(filefunc, filestream) ((*((filefunc).ztell_file))((filefunc).opaque, filestream))
+#define ZSEEK(filefunc, filestream, pos, mode) ((*((filefunc).zseek_file))((filefunc).opaque, filestream, pos, mode))
+#define ZCLOSE(filefunc, filestream) ((*((filefunc).zclose_file))((filefunc).opaque, filestream))
+#define ZERROR(filefunc, filestream) ((*((filefunc).zerror_file))((filefunc).opaque, filestream))
 
-#	ifdef __cplusplus
+#ifdef __cplusplus
 }
-#	endif
-
 #endif
 
-// NOLINTEND
+#endif

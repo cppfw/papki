@@ -75,11 +75,12 @@ voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 {
 	FILE* file = nullptr;
 	const char* mode_fopen = nullptr;
-	if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
+	if ((mode & int(zlib_file_mode::zlib_filefunc_mode_readwritefilter))
+		== int(zlib_file_mode::zlib_filefunc_mode_read))
 		mode_fopen = "rb";
-	else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
+	else if (mode & int(zlib_file_mode::zlib_filefunc_mode_existing))
 		mode_fopen = "r+b";
-	else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
+	else if (mode & int(zlib_file_mode::zlib_filefunc_mode_create))
 		mode_fopen = "wb";
 
 	if ((filename != nullptr) && (mode_fopen != nullptr)) {
@@ -113,18 +114,18 @@ long ZCALLBACK ftell_file_func(voidpf opaque, voidpf stream)
 	return ret;
 }
 
-long ZCALLBACK fseek_file_func(voidpf opaque, voidpf stream, long offset, int origin)
+long ZCALLBACK fseek_file_func(voidpf opaque, voidpf stream, long offset, zlib_seek_relative origin)
 {
 	int fseek_origin = 0;
 	long ret;
 	switch (origin) {
-		case ZLIB_FILEFUNC_SEEK_CUR:
+		case zlib_seek_relative::zlib_filefunc_seek_cur:
 			fseek_origin = SEEK_CUR;
 			break;
-		case ZLIB_FILEFUNC_SEEK_END:
+		case zlib_seek_relative::zlib_filefunc_seek_end:
 			fseek_origin = SEEK_END;
 			break;
-		case ZLIB_FILEFUNC_SEEK_SET:
+		case zlib_seek_relative::zlib_filefunc_seek_set:
 			fseek_origin = SEEK_SET;
 			break;
 		default:

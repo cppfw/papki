@@ -331,7 +331,7 @@ local uLong unzlocal_SearchCentralDir(const zlib_filefunc_def* pzlib_filefunc_de
 	uLong uMaxBack = 0xffff; /* maximum size of global comment */
 	uLong uPosFound = 0;
 
-	if (ZSEEK(*pzlib_filefunc_def, filestream, 0, ZLIB_FILEFUNC_SEEK_END) != 0)
+	if (ZSEEK(*pzlib_filefunc_def, filestream, 0, zlib_seek_relative::zlib_filefunc_seek_end) != 0)
 		return 0;
 
 	uSizeFile = ZTELL(*pzlib_filefunc_def, filestream);
@@ -354,7 +354,7 @@ local uLong unzlocal_SearchCentralDir(const zlib_filefunc_def* pzlib_filefunc_de
 		uReadPos = uSizeFile - uBackRead;
 
 		uReadSize = ((BUFREADCOMMENT + 4) < (uSizeFile - uReadPos)) ? (BUFREADCOMMENT + 4) : (uSizeFile - uReadPos);
-		if (ZSEEK(*pzlib_filefunc_def, filestream, uReadPos, ZLIB_FILEFUNC_SEEK_SET) != 0)
+		if (ZSEEK(*pzlib_filefunc_def, filestream, uReadPos, zlib_seek_relative::zlib_filefunc_seek_set) != 0)
 			break;
 
 		if (ZREAD(*pzlib_filefunc_def, filestream, buf, uReadSize) != uReadSize)
@@ -411,7 +411,7 @@ extern unzFile ZEXPORT unzOpen2(const char* path, zlib_filefunc_def* pzlib_filef
 	us.filestream = (*(us.z_filefunc.zopen_file))(
 		us.z_filefunc.opaque,
 		path,
-		ZLIB_FILEFUNC_MODE_READ | ZLIB_FILEFUNC_MODE_EXISTING
+		int(zlib_file_mode::zlib_filefunc_mode_read) | int(zlib_file_mode::zlib_filefunc_mode_existing)
 	);
 	if (us.filestream == NULL)
 		return NULL;
@@ -420,7 +420,7 @@ extern unzFile ZEXPORT unzOpen2(const char* path, zlib_filefunc_def* pzlib_filef
 	if (central_pos == 0)
 		err = UNZ_ERRNO;
 
-	if (ZSEEK(us.z_filefunc, us.filestream, central_pos, ZLIB_FILEFUNC_SEEK_SET) != 0)
+	if (ZSEEK(us.z_filefunc, us.filestream, central_pos, zlib_seek_relative::zlib_filefunc_seek_set) != 0)
 		err = UNZ_ERRNO;
 
 	/* the signature, already checked */
@@ -571,7 +571,12 @@ local int unzlocal_GetCurrentFileInfoInternal(
 	if (file == NULL)
 		return UNZ_PARAMERROR;
 	s = (unz_s*)file;
-	if (ZSEEK(s->z_filefunc, s->filestream, s->pos_in_central_dir + s->byte_before_the_zipfile, ZLIB_FILEFUNC_SEEK_SET)
+	if (ZSEEK(
+			s->z_filefunc,
+			s->filestream,
+			s->pos_in_central_dir + s->byte_before_the_zipfile,
+			zlib_seek_relative::zlib_filefunc_seek_set
+		)
 		!= 0)
 		err = UNZ_ERRNO;
 
@@ -653,7 +658,7 @@ local int unzlocal_GetCurrentFileInfoInternal(
 			uSizeRead = extraFieldBufferSize;
 
 		if (lSeek != 0) {
-			if (ZSEEK(s->z_filefunc, s->filestream, lSeek, ZLIB_FILEFUNC_SEEK_CUR) == 0)
+			if (ZSEEK(s->z_filefunc, s->filestream, lSeek, zlib_seek_relative::zlib_filefunc_seek_cur) == 0)
 				lSeek = 0;
 			else
 				err = UNZ_ERRNO;
@@ -675,7 +680,7 @@ local int unzlocal_GetCurrentFileInfoInternal(
 			uSizeRead = commentBufferSize;
 
 		if (lSeek != 0) {
-			if (ZSEEK(s->z_filefunc, s->filestream, lSeek, ZLIB_FILEFUNC_SEEK_CUR) == 0) {
+			if (ZSEEK(s->z_filefunc, s->filestream, lSeek, zlib_seek_relative::zlib_filefunc_seek_cur) == 0) {
 				// lSeek=0;
 			} else {
 				err = UNZ_ERRNO;
@@ -948,7 +953,7 @@ local int unzlocal_CheckCurrentFileCoherencyHeader(
 			s->z_filefunc,
 			s->filestream,
 			s->cur_file_info_internal.offset_curfile + s->byte_before_the_zipfile,
-			ZLIB_FILEFUNC_SEEK_SET
+			zlib_seek_relative::zlib_filefunc_seek_set
 		)
 		!= 0)
 		return UNZ_ERRNO;
@@ -1254,7 +1259,7 @@ extern int ZEXPORT unzReadCurrentFile(unzFile file, voidp buf, unsigned len)
 					pfile_in_zip_read_info->z_filefunc,
 					pfile_in_zip_read_info->filestream,
 					pfile_in_zip_read_info->pos_in_zipfile + pfile_in_zip_read_info->byte_before_the_zipfile,
-					ZLIB_FILEFUNC_SEEK_SET
+					zlib_seek_relative::zlib_filefunc_seek_set
 				)
 				!= 0)
 				return UNZ_ERRNO;
@@ -1472,7 +1477,7 @@ extern int ZEXPORT unzGetLocalExtrafield(unzFile file, voidp buf, unsigned len)
 			pfile_in_zip_read_info->z_filefunc,
 			pfile_in_zip_read_info->filestream,
 			pfile_in_zip_read_info->offset_local_extrafield + pfile_in_zip_read_info->pos_local_extrafield,
-			ZLIB_FILEFUNC_SEEK_SET
+			zlib_seek_relative::zlib_filefunc_seek_set
 		)
 		!= 0)
 		return UNZ_ERRNO;
@@ -1540,7 +1545,7 @@ extern int ZEXPORT unzGetGlobalComment(unzFile file, char* szComment, uLong uSiz
 	if (uReadThis > s->gi.size_comment)
 		uReadThis = s->gi.size_comment;
 
-	if (ZSEEK(s->z_filefunc, s->filestream, s->central_pos + 22, ZLIB_FILEFUNC_SEEK_SET) != 0)
+	if (ZSEEK(s->z_filefunc, s->filestream, s->central_pos + 22, zlib_seek_relative::zlib_filefunc_seek_set) != 0)
 		return UNZ_ERRNO;
 
 	if (uReadThis > 0) {
