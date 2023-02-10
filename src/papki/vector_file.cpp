@@ -30,22 +30,9 @@ SOFTWARE.
 #include <algorithm>
 #include <cstring>
 
-using namespace papki;
+#include <utki/util.hpp>
 
-// TODO: move this to utki
-template <typename iterator_type>
-iterator_type the_next(iterator_type iter, size_t num)
-{
-	const auto max_advance = std::numeric_limits<typename std::iterator_traits<iterator_type>::difference_type>::max();
-	for (size_t num_left = num;;) {
-		if (num_left > size_t(max_advance)) {
-			num_left -= max_advance;
-			iter = std::next(iter, max_advance);
-		} else {
-			return std::next(iter, num_left);
-		}
-	}
-}
+using namespace papki;
 
 void vector_file::open_internal(mode mode)
 {
@@ -57,8 +44,8 @@ size_t vector_file::read_internal(utki::span<uint8_t> buf) const
 	ASSERT(this->idx <= this->data.size())
 	size_t num_bytes_read = std::min(buf.size_bytes(), this->data.size() - this->idx);
 
-	auto i = the_next(this->data.begin(), this->idx);
-	std::copy(i, the_next(i, num_bytes_read), buf.begin());
+	auto i = utki::next(this->data.begin(), this->idx);
+	std::copy(i, utki::next(i, num_bytes_read), buf.begin());
 
 	this->idx += num_bytes_read;
 	ASSERT(this->idx <= this->data.size())
@@ -77,7 +64,7 @@ size_t vector_file::write_internal(utki::span<const uint8_t> buf)
 
 	size_t num_bytes_written = std::min(buf.size_bytes(), this->data.size() - this->idx);
 
-	std::copy(buf.begin(), buf.end(), the_next(this->data.begin(), this->idx));
+	std::copy(buf.begin(), buf.end(), utki::next(this->data.begin(), this->idx));
 
 	this->idx += num_bytes_written;
 	ASSERT(this->idx <= this->data.size())
