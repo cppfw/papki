@@ -17,44 +17,44 @@ void run(){
 	utki::assert(!f.is_dir(), SL);
 	utki::assert(!f.is_open(), SL);
 	
-	for(unsigned numToSeek = 0; numToSeek < 0x1000; numToSeek += (0x1000 / 4)){
-		std::array<uint8_t, 1> testByte;
+	for(unsigned num_to_seek = 0; num_to_seek < 0x1000; num_to_seek += (0x1000 / 4)){
+		std::array<uint8_t, 1> test_byte;
 		{
-			std::vector<uint8_t> buf(numToSeek);
+			std::vector<uint8_t> buf(num_to_seek);
 			
-			papki::file::guard fileGuard(f, papki::file::mode::read);
+			papki::file::guard file_guard(f, papki::file::mode::read);
 			
 			auto res = f.read(utki::make_span(buf));
 			utki::assert(res == buf.size(), SL);
 			
-			res = f.read(utki::make_span(testByte));
-			utki::assert(res == testByte.size(), SL);
+			res = f.read(utki::make_span(test_byte));
+			utki::assert(res == test_byte.size(), SL);
 		}
 		
 		{
-			papki::file::guard fileGuard(f, papki::file::mode::read);
+			papki::file::guard file_guard(f, papki::file::mode::read);
 
-			f.file::seek_forward(numToSeek);
+			f.file::seek_forward(num_to_seek);
 
 			std::array<uint8_t, 1> buf;
 
 			auto res = f.read(utki::make_span(buf));
 			utki::assert(res == 1, SL);
 
-			utki::assert(buf[0] == testByte[0], SL);
+			utki::assert(buf[0] == test_byte[0], SL);
 		}
 
 		{
-			papki::file::guard fileGuard(f, papki::file::mode::read);
+			papki::file::guard file_guard(f, papki::file::mode::read);
 
-			f.seek_forward(numToSeek);
+			f.seek_forward(num_to_seek);
 
 			std::array<uint8_t, 1> buf;
 
 			auto res = f.read(utki::make_span(buf));
 			utki::assert(res == 1, SL);
 
-			utki::assert(buf[0] == testByte[0], SL);
+			utki::assert(buf[0] == test_byte[0], SL);
 		}
 	}
 }

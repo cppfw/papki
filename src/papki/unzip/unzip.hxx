@@ -69,28 +69,30 @@ SOFTWARE.
 	  ftp://ftp.pkware.com/probdesc.zip
 */
 
+// NOLINTBEGIN
+
 #ifndef _unz_H
-#define _unz_H
+#	define _unz_H
 
-#ifdef __cplusplus
+#	ifdef __cplusplus
 extern "C" {
-#endif
+#	endif
 
-#ifndef _ZLIB_H
-#	include "zlib.h"
-#endif
+#	ifndef _ZLIB_H
+#		include "zlib.h"
+#	endif
 
-#ifndef _ZLIBIOAPI_H
-#	include "ioapi.hxx"
-#endif
+#	ifndef _ZLIBIOAPI_H
+#		include "ioapi.hxx"
+#	endif
 
-#ifdef HAVE_BZIP2
-#	include "bzlib.h"
-#endif
+#	ifdef HAVE_BZIP2
+#		include "bzlib.h"
+#	endif
 
-#define Z_BZIP2ED 12
+#	define Z_BZIP2ED 12
 
-#if defined(STRICTUNZIP) || defined(STRICTZIPUNZIP)
+#	if defined(STRICTUNZIP) || defined(STRICTZIPUNZIP)
 /* like the STRICT of WIN32, we define a pointer that cannot be converted
 	from (void*) without cast */
 typedef struct TagunzFile__ {
@@ -98,18 +100,18 @@ typedef struct TagunzFile__ {
 } unzFile__;
 
 typedef unzFile__* unzFile;
-#else
+#	else
 typedef voidp unzFile;
-#endif
+#	endif
 
-#define UNZ_OK (0)
-#define UNZ_END_OF_LIST_OF_FILE (-100)
-#define UNZ_ERRNO (Z_ERRNO)
-#define UNZ_EOF (0)
-#define UNZ_PARAMERROR (-102)
-#define UNZ_BADZIPFILE (-103)
-#define UNZ_INTERNALERROR (-104)
-#define UNZ_CRCERROR (-105)
+#	define UNZ_OK (0)
+#	define UNZ_END_OF_LIST_OF_FILE (-100)
+#	define UNZ_ERRNO (Z_ERRNO)
+#	define UNZ_EOF (0)
+#	define UNZ_PARAMERROR (-102)
+#	define UNZ_BADZIPFILE (-103)
+#	define UNZ_INTERNALERROR (-104)
+#	define UNZ_CRCERROR (-105)
 
 /* tm_unz contain date/time info */
 typedef struct tm_unz_s {
@@ -348,8 +350,10 @@ extern uLong ZEXPORT unzGetOffset(unzFile file);
 /* Set the current file offset */
 extern int ZEXPORT unzSetOffset(unzFile file, uLong pos);
 
-#ifdef __cplusplus
+#	ifdef __cplusplus
 }
-#endif
+#	endif
 
 #endif /* _unz_H */
+
+// NOLINTEND

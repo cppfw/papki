@@ -85,7 +85,7 @@ public:
 	 * @brief Destructor.
 	 * This destructor calls the close() method.
 	 */
-	virtual ~fs_file() noexcept
+	~fs_file() noexcept override
 	{
 		this->close();
 	}

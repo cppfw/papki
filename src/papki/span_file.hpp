@@ -75,9 +75,9 @@ public:
 		span_file(utki::make_span(reinterpret_cast<const uint8_t*>(data.data()), data.size()))
 	{}
 
-	~span_file() noexcept override {}
+	~span_file() noexcept override = default;
 
-	virtual std::unique_ptr<file> spawn() override
+	std::unique_ptr<file> spawn() override
 	{
 		throw std::runtime_error("span_file::spawn(): spawning is not supported.");
 	}

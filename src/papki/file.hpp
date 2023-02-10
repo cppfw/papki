@@ -88,6 +88,7 @@ public:
 	 * checks if the file is closed. The file shall be closed upon the object
 	 * destruction, all the implementations should assure that.
 	 */
+	// NOLINTNEXTLINE(modernize-use-equals-default, "the destructor is not trivial in DEBUG build config")
 	virtual ~file() noexcept
 	{
 		ASSERT(!this->is_open())
@@ -207,12 +208,6 @@ public:
 	std::string not_dir() const
 	{
 		return papki::not_dir(this->path());
-	}
-
-	// TODO: deprecated, remove
-	std::string notDir() const
-	{
-		return this->not_dir();
 	}
 
 	/**

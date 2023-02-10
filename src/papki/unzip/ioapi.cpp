@@ -33,6 +33,8 @@ SOFTWARE.
    Copyright (C) 1998-2009 Gilles Vollant
 */
 
+// NOLINTBEGIN
+
 #include "ioapi.hxx"
 
 #include <stdio.h>
@@ -160,3 +162,5 @@ void fill_fopen_filefunc(zlib_filefunc_def* pzlib_filefunc_def)
 	pzlib_filefunc_def->zerror_file = ferror_file_func;
 	pzlib_filefunc_def->opaque = NULL;
 }
+
+// NOLINTEND

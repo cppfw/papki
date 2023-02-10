@@ -71,9 +71,9 @@ public:
 	root_dir& operator=(const root_dir&) = delete;
 
 private:
-	void set_path_internal(std::string&& pathName) const override
+	void set_path_internal(std::string&& path_name) const override
 	{
-		this->file::set_path_internal(std::move(pathName));
+		this->file::set_path_internal(std::move(path_name));
 		this->base_file->set_path(this->root_directory + this->path());
 	}
 
@@ -87,9 +87,9 @@ private:
 		this->base_file->close();
 	}
 
-	std::vector<std::string> list_dir(size_t maxEntries = 0) const override
+	std::vector<std::string> list_dir(size_t max_entries = 0) const override
 	{
-		return this->base_file->list_dir(maxEntries);
+		return this->base_file->list_dir(max_entries);
 	}
 
 	size_t read_internal(utki::span<uint8_t> buf) const override
@@ -102,14 +102,14 @@ private:
 		return this->base_file->write(buf);
 	}
 
-	size_t seek_forward_internal(size_t numBytesToSeek) const override
+	size_t seek_forward_internal(size_t num_bytes_to_seek) const override
 	{
-		return this->base_file->seek_forward(numBytesToSeek);
+		return this->base_file->seek_forward(num_bytes_to_seek);
 	}
 
-	size_t seek_backward_internal(size_t numBytesToSeek) const override
+	size_t seek_backward_internal(size_t num_bytes_to_seek) const override
 	{
-		return this->base_file->seek_backward(numBytesToSeek);
+		return this->base_file->seek_backward(num_bytes_to_seek);
 	}
 
 	void rewind_internal() const override

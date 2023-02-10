@@ -35,9 +35,9 @@ using namespace papki;
 
 namespace {
 
-voidpf ZCALLBACK UnzipOpen(voidpf opaque, const char* filename, int mode)
+voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 {
-	papki::file* f = reinterpret_cast<papki::file*>(opaque);
+	auto f = reinterpret_cast<papki::file*>(opaque);
 
 	switch (mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) {
 		case ZLIB_FILEFUNC_MODE_READ:
@@ -45,7 +45,7 @@ voidpf ZCALLBACK UnzipOpen(voidpf opaque, const char* filename, int mode)
 			break;
 		default:
 			throw std::invalid_argument(
-				"UnzipOpen(): tried opening zip file something "
+				"unzip_open(): tried opening zip file something "
 				"else than READ. Only READ is supported."
 			);
 	}
@@ -53,20 +53,20 @@ voidpf ZCALLBACK UnzipOpen(voidpf opaque, const char* filename, int mode)
 	return f;
 }
 
-int ZCALLBACK UnzipClose(voidpf opaque, voidpf stream)
+int ZCALLBACK unzip_close(voidpf opaque, voidpf stream)
 {
-	papki::file* f = reinterpret_cast<papki::file*>(stream);
+	auto f = reinterpret_cast<papki::file*>(stream);
 	f->close();
 	return 0;
 }
 
-uLong ZCALLBACK UnzipRead(voidpf opaque, voidpf stream, void* buf, uLong size)
+uLong ZCALLBACK unzip_read(voidpf opaque, voidpf stream, void* buf, uLong size)
 {
-	papki::file* f = reinterpret_cast<papki::file*>(stream);
+	auto f = reinterpret_cast<papki::file*>(stream);
 	return uLong(f->read(utki::span<uint8_t>(reinterpret_cast<uint8_t*>(buf), size)));
 }
 
-uLong ZCALLBACK UnzipWrite(voidpf opaque, voidpf stream, const void* buf, uLong size)
+uLong ZCALLBACK unzip_write(voidpf opaque, voidpf stream, const void* buf, uLong size)
 {
 	ASSERT(false, [](auto& o) {
 		o << "Writing ZIP files is not supported";
@@ -74,14 +74,14 @@ uLong ZCALLBACK UnzipWrite(voidpf opaque, voidpf stream, const void* buf, uLong 
 	return 0;
 }
 
-int ZCALLBACK UnzipError(voidpf opaque, voidpf stream)
+int ZCALLBACK unzip_error(voidpf opaque, voidpf stream)
 {
 	return 0; // no error
 }
 
-long ZCALLBACK UnzipSeek(voidpf opaque, voidpf stream, uLong offset, int origin)
+long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, uLong offset, int origin)
 {
-	papki::file* f = reinterpret_cast<papki::file*>(stream);
+	auto f = reinterpret_cast<papki::file*>(stream);
 
 	// assume that offset can only be positive, since its type is unsigned
 
@@ -101,9 +101,9 @@ long ZCALLBACK UnzipSeek(voidpf opaque, voidpf stream, uLong offset, int origin)
 	}
 }
 
-long ZCALLBACK UnzipTell(voidpf opaque, voidpf stream)
+long ZCALLBACK unzip_tell(voidpf opaque, voidpf stream)
 {
-	papki::file* f = reinterpret_cast<papki::file*>(stream);
+	auto f = reinterpret_cast<papki::file*>(stream);
 	return long(f->cur_pos());
 }
 
@@ -115,13 +115,13 @@ zip_file::zip_file(std::unique_ptr<papki::file> underlying_zip_file, std::string
 {
 	zlib_filefunc_def ff;
 	ff.opaque = this->underlying_zip_file.operator->();
-	ff.zopen_file = &UnzipOpen;
-	ff.zclose_file = &UnzipClose;
-	ff.zread_file = &UnzipRead;
-	ff.zwrite_file = &UnzipWrite;
-	ff.zseek_file = &UnzipSeek;
-	ff.zerror_file = &UnzipError;
-	ff.ztell_file = &UnzipTell;
+	ff.zopen_file = &unzip_open;
+	ff.zclose_file = &unzip_close;
+	ff.zread_file = &unzip_read;
+	ff.zwrite_file = &unzip_write;
+	ff.zseek_file = &unzip_seek;
+	ff.zerror_file = &unzip_error;
+	ff.ztell_file = &unzip_tell;
 
 	this->handle = unzOpen2(this->underlying_zip_file->path().c_str(), &ff);
 
@@ -154,7 +154,7 @@ void zip_file::open_internal(mode mode)
 	{
 		unz_file_info zip_file_info;
 
-		if (unzGetCurrentFileInfo(this->handle, &zip_file_info, 0, 0, 0, 0, 0, 0) != UNZ_OK) {
+		if (unzGetCurrentFileInfo(this->handle, &zip_file_info, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
 			throw std::runtime_error("failed obtaining file info");
 		}
 	}
@@ -231,12 +231,12 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 
 			if (unzGetCurrentFileInfo(
 					this->handle,
-					NULL,
-					&*file_name_buf.begin(),
+					nullptr,
+					file_name_buf.data(),
 					uLong(file_name_buf.size()),
-					NULL,
+					nullptr,
 					0,
-					NULL,
+					nullptr,
 					0
 				)
 				!= UNZ_OK)

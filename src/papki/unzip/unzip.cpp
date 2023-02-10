@@ -61,6 +61,8 @@ original crypt.c. Code woven in by Terry Thorsen 1/2003.
   version without encryption capabilities).
  */
 
+// NOLINTBEGIN
+
 #define NOUNCRYPT
 
 #include "unzip.hxx"
@@ -1593,3 +1595,5 @@ extern int ZEXPORT unzSetOffset(unzFile file, uLong pos)
 	s->current_file_ok = (err == UNZ_OK);
 	return err;
 }
+
+// NOLINTEND

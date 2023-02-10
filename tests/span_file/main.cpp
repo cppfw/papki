@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
 		auto i = span.begin();
 		auto j = res.begin();
 		for(; i != span.end(); ++i, ++j){
-			utki::assert(*i == *j, SL);
+			utki::assert(uint8_t(*i) == *j, SL);
 		}
 	}
 	return 0;
