@@ -233,10 +233,10 @@ void fs_file::make_dir()
 		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
 	}
 #elif M_OS == M_OS_WINDOWS
-	if (!CreateDirectory(this->path().c_str(), NULL)) {
+	if (!CreateDirectory(this->path().c_str(), nullptr)) {
 		auto error = GetLastError();
 		if (error != ERROR_ALREADY_EXISTS) {
-			throw std::system_error(error, std::generic_category(), "CreateDirectory() failed");
+			throw std::system_error(int(error), std::generic_category(), "CreateDirectory() failed");
 		}
 	}
 #else
@@ -450,13 +450,13 @@ uint64_t fs_file::size() const
 		this->path().c_str(),
 		GENERIC_READ,
 		FILE_SHARE_READ | FILE_SHARE_WRITE,
-		NULL,
+		nullptr,
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL,
-		NULL
+		nullptr
 	);
 	if (hfile == INVALID_HANDLE_VALUE) {
-		throw std::system_error(GetLastError(), std::generic_category(), "OpenFile() failed");
+		throw std::system_error(int(GetLastError()), std::generic_category(), "OpenFile() failed");
 	}
 	utki::scope_exit hfile_scope_exit([&hfile]() {
 		if (CloseHandle(hfile) == 0) {
@@ -467,7 +467,7 @@ uint64_t fs_file::size() const
 	});
 	LARGE_INTEGER size;
 	if (GetFileSizeEx(hfile, &size) == 0) {
-		throw std::system_error(GetLastError(), std::generic_category(), "GetFileSizeEx() failed");
+		throw std::system_error(int(GetLastError()), std::generic_category(), "GetFileSizeEx() failed");
 	}
 	return size.QuadPart;
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
