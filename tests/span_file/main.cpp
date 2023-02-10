@@ -1,5 +1,6 @@
 #include "../../src/papki/span_file.hpp"
 
+// NOLINTNEXTLINE(bugprone-exception-escape, "we want uncaught exceptions to fail the tests")
 int main(int argc, char *argv[]){
 	// test read only span_file
 	{
