@@ -31,7 +31,13 @@ groups=()
 
 depends=("${pkgPrefix}utki" "${pkgPrefix}zlib")
 
-makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen')
+makedepends=(
+	'myci'
+	'prorab'
+	'prorab-extra'
+	'doxygen'
+	"${pkgPrefix}clang-tools-extra" # for clang-tidy
+)
 checkdepends=('myci')
 optdepends=()
 provides=()

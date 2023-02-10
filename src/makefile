@@ -1,6 +1,7 @@
 include prorab.mk
 include prorab-license.mk
 include prorab-install-dbgsrc.mk
+include prorab-clang-format.mk
 
 $(eval $(call prorab-try-simple-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
@@ -23,6 +24,8 @@ ifneq ($(os),macosx)
 endif
 
 $(eval $(prorab-build-lib))
+
+$(eval $(prorab-clang-format))
 
 this_src_dir := $(this_name)
 this_license_file := ../LICENSE
