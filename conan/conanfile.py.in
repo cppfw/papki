@@ -33,7 +33,7 @@ class PapkiConan(ConanFile):
 # conan_basic_setup()''')
 
 	def build(self):
-		self.run("CONANBUILDINFO_DIR=$(pwd)/ make")
+		self.run("CONANBUILDINFO_DIR=$(pwd)/ make lint=off")
 		self.run("CONANBUILDINFO_DIR=$(pwd)/ make test")
 
 	def package(self):
