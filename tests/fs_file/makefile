@@ -22,7 +22,7 @@ this_test_deps := $(prorab_this_name)
 this_test_ld_path := ../../src/out/$(c)
 # for conan
 this_test_ld_path += $(patsubst -L%,%,$(filter -L%,$(LDFLAGS)))
-
+$(info this_test_ld_path = $(this_test_ld_path))
 $(eval $(prorab-test))
 
 # include makefile for building papki
