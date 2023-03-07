@@ -233,7 +233,7 @@ void fs_file::make_dir()
 		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
 	}
 #elif M_OS == M_OS_WINDOWS
-	if (!CreateDirectory(this->path().c_str(), nullptr)) {
+	if (!CreateDirectoryA(this->path().c_str(), nullptr)) {
 		auto error = GetLastError();
 		if (error != ERROR_ALREADY_EXISTS) {
 			throw std::system_error(int(error), std::generic_category(), "CreateDirectory() failed");
@@ -446,7 +446,7 @@ uint64_t fs_file::size() const
 	}
 
 #if M_OS == M_OS_WINDOWS
-	HANDLE hfile = CreateFile(
+	HANDLE hfile = CreateFileA(
 		this->path().c_str(),
 		GENERIC_READ,
 		FILE_SHARE_READ | FILE_SHARE_WRITE,
