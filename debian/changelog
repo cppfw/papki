@@ -1,3 +1,9 @@
+libpapki (1.0.125) unstable; urgency=medium
+
+  * update to conan 2
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 07 Mar 2023 17:21:03 +0200
+
 libpapki (1.0.124) unstable; urgency=medium
 
   * update to conan 2
