@@ -19,7 +19,7 @@ class PapkiConan(ConanFile):
 
 	def requirements(self):
 		self.requires("utki/[>=1.1.192]@cppfw/main", transitive_headers=True)
-		self.requires("zlib/[>=1.2.11]@cppfw/main")
+		self.requires("zlib/[>=1.2.13]")
 
 	def config_options(self):
 		if self.settings.os == "Windows":
