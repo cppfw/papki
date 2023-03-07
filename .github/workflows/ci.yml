@@ -342,7 +342,7 @@ jobs:
       matrix:
         os:
           - macos-11
-          # TODO: change to macos-12 when zlib package supports compiler.version=14
+          # TODO: enable macos-12 when zlib package supports compiler.version=14
           # - macos-12
     name: conan - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
