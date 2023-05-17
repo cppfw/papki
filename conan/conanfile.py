@@ -6,20 +6,23 @@ from conan.tools.layout import basic_layout
 
 class PapkiConan(ConanFile):
 	name = "papki"
-	version = "$(version)"
 	license = "MIT"
 	author = "Ivan Gagis <igagis@gmail.com>"
 	url = "http://github.com/cppfw/" + name
 	description = "File system abstraction C++ library"
 	topics = ("C++", "cross-platform")
 	settings = "os", "compiler", "build_type", "arch"
+	package_type = "library"
 	options = {"shared": [True, False], "fPIC": [True, False]}
 	default_options = {"shared": False, "fPIC": True}
 	generators = "AutotoolsDeps" # this will set CXXFLAGS etc. env vars
 
 	def requirements(self):
-		self.requires("utki/[>=1.1.192]@cppfw/main", transitive_headers=True)
+		self.requires("utki/[>=1.1.202]@cppfw/main", transitive_headers=True)
 		self.requires("zlib/[>=1.2.13]")
+
+	# def build_requirements(self):
+	# 	self.requires("tst/[>=0.3.29]@cppfw/main", visible=False)
 
 	def config_options(self):
 		if self.settings.os == "Windows":
@@ -27,9 +30,13 @@ class PapkiConan(ConanFile):
 
 	# save commit and remote URL to conandata.yml for packaging
 	def export(self):
-		git = Git(self, self.recipe_folder)
+		git = Git(self)
 		scm_url = git.get_remote_url()
-		scm_commit = git.get_commit()
+		# NOTE: Git.get_commit() doesn't work properly,
+		# it gets latest commit of the folder in which conanfile.py resides.
+		# So, we use "git rev-parse HEAD" instead as it gets the actual HEAD
+		# commit regardless of the current working directory within the repo.
+		scm_commit = git.run("rev-parse HEAD") # get current commit
 		update_conandata(self, {"sources": {"commit": scm_commit, "url": scm_url}})
 
 	def source(self):
@@ -50,19 +57,23 @@ class PapkiConan(ConanFile):
 		dst_include_dir = os.path.join(self.package_folder, "include")
 		dst_lib_dir = os.path.join(self.package_folder, "lib")
 		dst_bin_dir = os.path.join(self.package_folder, "bin")
+		
 		copy(conanfile=self, pattern="*.h",                    dst=dst_include_dir, src=src_dir,     keep_path=True)
 		copy(conanfile=self, pattern="*.hpp",                  dst=dst_include_dir, src=src_dir,     keep_path=True)
-		copy(conanfile=self, pattern="*" + self.name + ".lib", dst=dst_lib_dir,     src="",          keep_path=False)
-		copy(conanfile=self, pattern="*.dll",                  dst=dst_bin_dir,     src=src_rel_dir, keep_path=False)
-		copy(conanfile=self, pattern="*.so",                   dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
-		copy(conanfile=self, pattern="*.so.*",                 dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
-		copy(conanfile=self, pattern="*.dylib",                dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
-		copy(conanfile=self, pattern="*.a",                    dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
+
+		if self.options.shared:
+			copy(conanfile=self, pattern="*" + self.name + ".lib", dst=dst_lib_dir,     src="",          keep_path=False)
+			copy(conanfile=self, pattern="*.dll",                  dst=dst_bin_dir,     src=src_rel_dir, keep_path=False)
+			copy(conanfile=self, pattern="*.so",                   dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
+			copy(conanfile=self, pattern="*.so.*",                 dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
+			copy(conanfile=self, pattern="*.dylib",                dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
+		else:
+			copy(conanfile=self, pattern="*" + self.name + ".lib", dst=dst_lib_dir,     src="",          keep_path=False)
+			copy(conanfile=self, pattern="*.a",                    dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
 
 	def package_info(self):
 		self.cpp_info.libs = [self.name]
 
 	def package_id(self):
-
 		# change package id only when minor or major version changes, i.e. when ABI breaks
 		self.info.requires.minor_mode()
