@@ -291,7 +291,7 @@ jobs:
           # - {os: debian, codename: bullseye, image_owner: , arch: x86_64}
           - {os: ubuntu, codename: jammy, image_owner: , arch: x86_64}
           # - {os: debian, codename: bullseye, image_owner: i386/, arch: x86, labels: [i386,docker]}
-          # - {os: debian, codename: bullseye, image_owner: arm32v7/, arch: armhf, labels: [arm,docker]}
+          - {os: debian, codename: bullseye, image_owner: arm32v7/, arch: armhf, labels: [arm,docker]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: conan - linux - ${{ matrix.arch }}
@@ -341,7 +341,7 @@ jobs:
         os:
           - macos-11
           # TODO: enable macos-12 when zlib package supports compiler.version=14
-          # - macos-12
+          - macos-12
     name: conan - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
