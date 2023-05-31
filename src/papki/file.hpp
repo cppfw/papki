@@ -324,7 +324,7 @@ protected:
 	/**
 	 * @brief Read data from file.
 	 * Override this function to implement reading routine. This function is
-	 * called by Read() method after it has done some safety checks. It is assumed
+	 * called by read() method after it has done some safety checks. It is assumed
 	 * that the whole passed buffer needs to be filled with data.
 	 * @param buf - buffer to fill with read data.
 	 * @return number of bytes actually read.
@@ -390,7 +390,7 @@ public:
 	/**
 	 * @brief Seek forward.
 	 * Seek file pointer forward relatively to current position.
-	 * There is a default implementation of this function which uses Read() method
+	 * There is a default implementation of this function which uses read() method
 	 * to skip the specified number of bytes by reading the data and wasting it
 	 * away. It will not go beyond the end of file.
 	 * @param num_bytes_to_seek - number of bytes to skip.
