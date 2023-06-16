@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <utki/config.hpp>
 #include <utki/types.hpp>
+#include <utki/util.hpp>
 
 #if M_OS == M_OS_WINDOWS
 #	include <utki/windows.hpp>
