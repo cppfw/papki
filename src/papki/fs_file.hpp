@@ -81,6 +81,12 @@ public:
 		file(path_name)
 	{}
 
+	fs_file(const fs_file&) = delete;
+	fs_file& operator=(const fs_file&) = delete;
+
+	fs_file(fs_file&&) = delete;
+	fs_file& operator=(fs_file&&) = delete;
+
 	/**
 	 * @brief Destructor.
 	 * This destructor calls the close() method.

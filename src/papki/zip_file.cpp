@@ -37,6 +37,7 @@ namespace {
 
 voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(opaque);
 
 	switch (mode & int(zlib_file_mode::zlib_filefunc_mode_readwritefilter)) {
@@ -55,6 +56,7 @@ voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 
 int ZCALLBACK unzip_close(voidpf opaque, voidpf stream)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
 	f->close();
 	return 0;
@@ -62,7 +64,9 @@ int ZCALLBACK unzip_close(voidpf opaque, voidpf stream)
 
 uLong ZCALLBACK unzip_read(voidpf opaque, voidpf stream, void* buf, uLong size)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	return uLong(f->read(utki::span<uint8_t>(reinterpret_cast<uint8_t*>(buf), size)));
 }
 
@@ -81,6 +85,7 @@ int ZCALLBACK unzip_error(voidpf opaque, voidpf stream)
 
 long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, zlib_seek_relative origin)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
 
 	// assume that offset can only be positive, since its type is unsigned
@@ -103,6 +108,7 @@ long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, zlib_seek_r
 
 long ZCALLBACK unzip_tell(voidpf opaque, voidpf stream)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
 	return long(f->cur_pos());
 }
@@ -226,8 +232,9 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 			throw std::runtime_error("zip_file::list_dir(): unz_go_to_first_file() failed.");
 		}
 
+		// NOLINTNEXTLINE(cppcoreguidelines-avoid-do-while)
 		do {
-			std::array<char, 255> file_name_buf;
+			std::array<char, std::numeric_limits<char>::max()> file_name_buf{};
 
 			if (unz_get_current_file_info(
 					this->handle,

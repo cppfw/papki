@@ -59,6 +59,7 @@ void run(){
 
 		utki::assert(!contents.empty(), SL);
 
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 		std::string str(reinterpret_cast<char*>(contents.data()), contents.size());
 
 		utki::assert(str == "test file #2.\n", [&](auto&o){o << "str = " << str;}, SL);

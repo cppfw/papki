@@ -6,6 +6,7 @@ int main(int argc, char *argv[]){
 	{
 		const auto hw = "Hello world!";
 
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 		auto span = utki::make_span(reinterpret_cast<const uint8_t*>(hw), strlen(hw));
 
 		papki::span_file file(span);

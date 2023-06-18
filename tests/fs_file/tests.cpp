@@ -18,7 +18,7 @@ void run(){
 	utki::assert(!f.is_open(), SL);
 	
 	for(unsigned num_to_seek = 0; num_to_seek < 0x1000; num_to_seek += (0x1000 / 4)){
-		std::array<uint8_t, 1> test_byte;
+		std::array<uint8_t, 1> test_byte{};
 		{
 			std::vector<uint8_t> buf(num_to_seek);
 			
@@ -36,7 +36,7 @@ void run(){
 
 			f.file::seek_forward(num_to_seek);
 
-			std::array<uint8_t, 1> buf;
+			std::array<uint8_t, 1> buf{};
 
 			auto res = f.read(utki::make_span(buf));
 			utki::assert(res == 1, SL);
@@ -49,7 +49,7 @@ void run(){
 
 			f.seek_forward(num_to_seek);
 
-			std::array<uint8_t, 1> buf;
+			std::array<uint8_t, 1> buf{};
 
 			auto res = f.read(utki::make_span(buf));
 			utki::assert(res == 1, SL);

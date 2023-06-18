@@ -23,7 +23,7 @@ void run(){
 	}
 	
 	{
-		std::array<uint8_t, 4> b;
+		std::array<uint8_t, 4> b{};
 		
 		papki::file::guard file_guard(f, papki::file::mode::read);
 		

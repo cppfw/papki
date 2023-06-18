@@ -104,9 +104,10 @@ extern int errno;
 #endif
 
 #ifndef ALLOC
-#	define ALLOC(size) (malloc(size))
+#	define ALLOC(size) (malloc(size)) // NOLINT
 #endif
 #ifndef TRYFREE
+// NOLINTNEXTLINE
 #	define TRYFREE(p) \
 		{ \
 			if (p) \
@@ -1351,7 +1352,7 @@ extern int ZEXPORT unz_read_current_file(unzFile file, voidp buf, unsigned len) 
 				uDoCopy = pfile_in_zip_read_info->stream.avail_in; // NOLINT
 			// NOLINT
 			for (i = 0; i < uDoCopy; i++) // NOLINT
-				*(pfile_in_zip_read_info->stream.next_out + i) =
+				*(pfile_in_zip_read_info->stream.next_out + i) = // NOLINT
 					*(pfile_in_zip_read_info->stream.next_in + i); // NOLINT
 			// NOLINT
 			pfile_in_zip_read_info->crc32 = // NOLINT

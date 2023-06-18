@@ -63,15 +63,20 @@ public:
 	 * should remain alive during lifetime of this span_file object.
 	 */
 	span_file(utki::span<uint8_t> data) :
-		data(data)
+		data(std::move(data)),
+		ptr{this->data.begin()}
 	{}
 
 	span_file(utki::span<const uint8_t> data) :
 		is_ready_only(true),
-		data(const_cast<uint8_t*>(data.data()), data.size())
+		// TODO: why const_cast?
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
+		data(const_cast<uint8_t*>(data.data()), data.size()),
+		ptr{this->data.begin()}
 	{}
 
 	span_file(utki::span<const char> data) :
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 		span_file(utki::make_span(reinterpret_cast<const uint8_t*>(data.data()), data.size()))
 	{}
 

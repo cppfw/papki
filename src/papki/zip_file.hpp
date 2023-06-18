@@ -45,6 +45,12 @@ class zip_file : public papki::file
 public:
 	zip_file(std::unique_ptr<papki::file> underlying_zip_file, std::string_view path = std::string_view());
 
+	zip_file(const zip_file&) = delete;
+	zip_file& operator=(const zip_file&) = delete;
+
+	zip_file(zip_file&&) = delete;
+	zip_file& operator=(zip_file&&) = delete;
+
 	~zip_file() noexcept override;
 
 	void open_internal(papki::file::mode mode) override;

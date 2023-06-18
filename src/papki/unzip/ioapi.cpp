@@ -89,7 +89,7 @@ voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 #if M_COMPILER == M_COMPILER_MSVC
 		fopen_s(&file, filename, mode_fopen);
 #else
-		file = fopen(filename, mode_fopen);
+		file = fopen(filename, mode_fopen); // NOLINT
 #endif
 	}
 	return file;
@@ -97,29 +97,29 @@ voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 
 uLong ZCALLBACK fread_file_func(voidpf opaque, voidpf stream, void* buf, uLong size)
 {
-	uLong ret;
-	ret = (uLong)fread(buf, 1, (size_t)size, (FILE*)stream);
+	uLong ret; // NOLINT
+	ret = (uLong)fread(buf, 1, (size_t)size, (FILE*)stream); // NOLINT
 	return ret;
 }
 
 uLong ZCALLBACK fwrite_file_func(voidpf opaque, voidpf stream, const void* buf, uLong size)
 {
-	uLong ret;
-	ret = (uLong)fwrite(buf, 1, (size_t)size, (FILE*)stream);
+	uLong ret; // NOLINT
+	ret = (uLong)fwrite(buf, 1, (size_t)size, (FILE*)stream); // NOLINT
 	return ret;
 }
 
 long ZCALLBACK ftell_file_func(voidpf opaque, voidpf stream)
 {
-	long ret;
-	ret = ftell((FILE*)stream);
+	long ret; // NOLINT
+	ret = ftell((FILE*)stream); // NOLINT
 	return ret;
 }
 
 long ZCALLBACK fseek_file_func(voidpf opaque, voidpf stream, long offset, zlib_seek_relative origin)
 {
 	int fseek_origin = 0;
-	long ret;
+	long ret; // NOLINT
 	switch (origin) {
 		case zlib_seek_relative::zlib_filefunc_seek_cur:
 			fseek_origin = SEEK_CUR;
@@ -134,22 +134,22 @@ long ZCALLBACK fseek_file_func(voidpf opaque, voidpf stream, long offset, zlib_s
 			return -1;
 	}
 	ret = 0;
-	if (fseek((FILE*)stream, offset, fseek_origin) != 0)
+	if (fseek((FILE*)stream, offset, fseek_origin) != 0) // NOLINT
 		ret = -1;
 	return ret;
 }
 
 int ZCALLBACK fclose_file_func(voidpf opaque, voidpf stream)
 {
-	int ret;
-	ret = fclose((FILE*)stream);
+	int ret; // NOLINT
+	ret = fclose((FILE*)stream); // NOLINT
 	return ret;
 }
 
 int ZCALLBACK ferror_file_func(voidpf opaque, voidpf stream)
 {
-	int ret;
-	ret = ferror((FILE*)stream);
+	int ret; // NOLINT
+	ret = ferror((FILE*)stream); // NOLINT
 	return ret;
 }
 

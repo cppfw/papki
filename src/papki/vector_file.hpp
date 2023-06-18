@@ -50,7 +50,7 @@ public:
 
 private:
 	std::vector<uint8_t> data;
-	mutable size_t idx; // current file position
+	mutable size_t idx = 0; // current file position
 
 public:
 	/**

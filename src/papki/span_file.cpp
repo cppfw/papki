@@ -80,5 +80,6 @@ size_t span_file::seek_backward_internal(size_t num_bytes_to_seek) const
 
 void span_file::rewind_internal() const
 {
-	this->ptr = const_cast<decltype(this->data)::value_type*>(&*this->data.begin());
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
+	this->ptr = const_cast<decltype(this->data)::value_type*>(this->data.data());
 }

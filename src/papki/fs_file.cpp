@@ -59,26 +59,25 @@ void fs_file::open_internal(mode mode)
 		throw std::logic_error("path refers to a directory, directories can't be opened");
 	}
 
-	const char* mode_str;
-	switch (mode) {
-		case file::mode::write:
-			mode_str = "r+b";
-			break;
-		case file::mode::create:
-			mode_str = "w+b";
-			break;
-		case file::mode::read:
-			mode_str = "rb";
-			break;
-		default:
-			throw std::invalid_argument("unknown mode");
-	}
+	const char* mode_str = [&mode]() {
+		switch (mode) {
+			case file::mode::write:
+				return "r+b";
+			case file::mode::create:
+				return "w+b";
+			case file::mode::read:
+				return "rb";
+			default:
+				throw std::invalid_argument("unknown mode");
+		}
+	}();
 
 #if M_COMPILER == M_COMPILER_MSVC
 	if (fopen_s(&this->handle, this->path().c_str(), mode_str) != 0) {
 		this->handle = 0;
 	}
 #else
+	// NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
 	this->handle = fopen(this->path().c_str(), mode_str);
 #endif
 	if (!this->handle) {
@@ -95,6 +94,7 @@ void fs_file::close_internal() const noexcept
 {
 	ASSERT(this->handle)
 
+	// NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
 	fclose(this->handle);
 	this->handle = nullptr;
 }
@@ -143,7 +143,7 @@ size_t fs_file::seek_backward_internal(size_t num_bytes_to_seek) const
 	for (size_t num_bytes_left = num_bytes_to_seek; num_bytes_left != 0;) {
 		ASSERT(num_bytes_left <= num_bytes_to_seek)
 
-		fseek_offset_type offset;
+		fseek_offset_type offset = 0;
 		if (num_bytes_left > max_offset) {
 			offset = fseek_offset_type(max_offset);
 		} else {
@@ -230,7 +230,8 @@ void fs_file::make_dir()
 
 #if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
 	umask(0); // clear umask for proper permissions of newly created directory
-	if (mkdir(this->path().c_str(), 0755) != 0) {
+	constexpr auto default_permissions = 0755;
+	if (mkdir(this->path().c_str(), default_permissions) != 0) {
 		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
 	}
 #elif M_OS == M_OS_WINDOWS
@@ -472,7 +473,8 @@ uint64_t fs_file::size() const
 	}
 	return size.QuadPart;
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
-	struct stat file_stats;
+	struct stat file_stats {};
+
 	if (stat(this->path().c_str(), &file_stats) < 0) {
 		throw std::system_error(errno, std::system_category(), "stat() failed");
 	}

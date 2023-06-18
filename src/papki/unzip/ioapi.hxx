@@ -88,11 +88,17 @@ using zlib_filefunc_def = struct zlib_filefunc_def_s {
 
 void fill_fopen_filefunc OF((zlib_filefunc_def * pzlib_filefunc_def));
 
+// NOLINTNEXTLINE
 #define ZREAD(filefunc, filestream, buf, size) ((*((filefunc).zread_file))((filefunc).opaque, filestream, buf, size))
+// NOLINTNEXTLINE
 #define ZWRITE(filefunc, filestream, buf, size) ((*((filefunc).zwrite_file))((filefunc).opaque, filestream, buf, size))
+// NOLINTNEXTLINE
 #define ZTELL(filefunc, filestream) ((*((filefunc).ztell_file))((filefunc).opaque, filestream))
+// NOLINTNEXTLINE
 #define ZSEEK(filefunc, filestream, pos, mode) ((*((filefunc).zseek_file))((filefunc).opaque, filestream, pos, mode))
+// NOLINTNEXTLINE
 #define ZCLOSE(filefunc, filestream) ((*((filefunc).zclose_file))((filefunc).opaque, filestream))
+// NOLINTNEXTLINE
 #define ZERROR(filefunc, filestream) ((*((filefunc).zerror_file))((filefunc).opaque, filestream))
 
 #ifdef __cplusplus

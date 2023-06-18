@@ -62,6 +62,7 @@ public:
 	)
 	{
 		return std::make_unique<const root_dir>(
+			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 			std::unique_ptr<file>(const_cast<file*>(base_file.release())),
 			root_directory
 		);
@@ -69,6 +70,11 @@ public:
 
 	root_dir(const root_dir&) = delete;
 	root_dir& operator=(const root_dir&) = delete;
+
+	root_dir(root_dir&&) = delete;
+	root_dir& operator=(root_dir&&) = delete;
+
+	~root_dir() override = default;
 
 private:
 	void set_path_internal(std::string&& path_name) const override

@@ -67,7 +67,7 @@ public:
 	};
 
 protected:
-	mode io_mode; // mode only matters when file is opened
+	mode io_mode = mode::read; // mode only matters when file is opened
 
 	/**
 	 * @brief Constructor.
@@ -79,8 +79,10 @@ protected:
 
 public:
 	file(const file&) = delete;
-	file(file&&) = delete;
 	file& operator=(const file&) = delete;
+
+	file(file&&) = delete;
+	file& operator=(file&&) = delete;
 
 	/**
 	 * @brief Destructor.
@@ -245,6 +247,7 @@ public:
 	 */
 	void open() const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		const_cast<file*>(this)->open(mode::read);
 	}
 
@@ -356,7 +359,10 @@ public:
 	 */
 	size_t write(utki::span<const char> buf)
 	{
-		return this->write(utki::make_span(reinterpret_cast<const uint8_t*>(buf.data()), buf.size()));
+		return this->write(
+			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+			utki::make_span(reinterpret_cast<const uint8_t*>(buf.data()), buf.size())
+		);
 	}
 
 	/**
@@ -478,6 +484,7 @@ protected:
 	{
 		mode m = this->io_mode;
 		this->close();
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		const_cast<file*>(this)->open(m);
 	}
 
@@ -533,6 +540,7 @@ public:
 	//       overloads
 	std::unique_ptr<const file> spawn() const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<file*>(this)->spawn();
 	}
 
@@ -545,6 +553,7 @@ public:
 
 	std::unique_ptr<const file> spawn(std::string&& path) const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<file*>(this)->spawn(std::move(path));
 	}
 
@@ -555,6 +564,7 @@ public:
 
 	std::unique_ptr<const file> spawn(const std::string& path) const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<file*>(this)->spawn(std::string(path));
 	}
 
@@ -595,6 +605,12 @@ public:
 		guard(const file& file, mode mode);
 
 		guard(const file& file);
+
+		guard(const guard&) = delete;
+		guard& operator=(const guard&) = delete;
+
+		guard(guard&&) = delete;
+		guard& operator=(guard&&) = delete;
 
 		~guard();
 	};

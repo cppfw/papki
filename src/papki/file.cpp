@@ -79,7 +79,8 @@ size_t file::write(utki::span<const uint8_t> buf)
 
 size_t file::seek_forward_internal(size_t num_bytes_to_seek) const
 {
-	std::array<uint8_t, 0x1000> buf; // 4kb buffer
+	constexpr size_t num_bytes_in_kilobyte = 1024;
+	std::array<uint8_t, 4 * num_bytes_in_kilobyte> buf{}; // 4kb buffer
 
 	size_t num_bytes_read = 0;
 	for (; num_bytes_read != num_bytes_to_seek;) {
@@ -149,6 +150,7 @@ bool file::exists() const
 	// try opening and closing the file to find out if it exists or not
 	ASSERT(!this->is_open())
 	try {
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		file::guard file_guard(const_cast<file&>(*this), file::mode::read);
 	} catch (std::runtime_error&) {
 		return false; // file opening failed, assume the file does not exist
@@ -174,6 +176,7 @@ file::guard::guard(const file& f, mode io_mode) :
 		throw std::logic_error("file::guard::guard(): file is already opened");
 	}
 
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 	const_cast<file&>(this->f).open(io_mode);
 }
 
