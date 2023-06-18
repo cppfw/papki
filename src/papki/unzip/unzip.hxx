@@ -104,14 +104,14 @@ typedef unzFile__* unzFile;
 using unzFile = voidp;
 #endif
 
-#define UNZ_OK (0)
-#define UNZ_END_OF_LIST_OF_FILE (-100)
-#define UNZ_ERRNO (Z_ERRNO)
-#define UNZ_EOF (0)
-#define UNZ_PARAMERROR (-102)
-#define UNZ_BADZIPFILE (-103)
-#define UNZ_INTERNALERROR (-104)
-#define UNZ_CRCERROR (-105)
+#define UNZ_OK (0) // NOLINT
+#define UNZ_END_OF_LIST_OF_FILE (-100) // NOLINT
+#define UNZ_ERRNO (Z_ERRNO) // NOLINT
+#define UNZ_EOF (0) // NOLINT
+#define UNZ_PARAMERROR (-102) // NOLINT
+#define UNZ_BADZIPFILE (-103) // NOLINT
+#define UNZ_INTERNALERROR (-104) // NOLINT
+#define UNZ_CRCERROR (-105) // NOLINT
 
 /* tm_unz contain date/time info */
 using tm_unz = struct tm_unz_s {

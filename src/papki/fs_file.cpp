@@ -267,6 +267,7 @@ std::string fs_file::get_home_dir()
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
 
 #	if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
 	char* home = getenv("HOME");
 #	elif M_OS == M_OS_WINDOWS
 	char* home = getenv("USERPROFILE");

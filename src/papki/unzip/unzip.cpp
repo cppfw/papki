@@ -85,7 +85,7 @@ extern int errno;
 #endif
 
 #ifndef local
-#	define local static
+#	define local static // NOLINT
 #endif
 /* compile with -Dlocal if your debugger can't find static symbols */
 
@@ -96,11 +96,11 @@ extern int errno;
 #endif
 
 #ifndef UNZ_BUFSIZE
-#	define UNZ_BUFSIZE (16384)
+#	define UNZ_BUFSIZE (16384) // NOLINT
 #endif
 
 #ifndef UNZ_MAXFILENAMEINZIP
-#	define UNZ_MAXFILENAMEINZIP (256)
+#	define UNZ_MAXFILENAMEINZIP (256) // NOLINT
 #endif
 
 #ifndef ALLOC
