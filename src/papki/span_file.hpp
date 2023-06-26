@@ -52,7 +52,7 @@ private:
 	bool is_ready_only = false;
 
 	utki::span<uint8_t> data;
-	mutable decltype(data)::iterator ptr;
+	mutable decltype(data)::iterator iter;
 
 public:
 	/**
@@ -64,7 +64,7 @@ public:
 	 */
 	span_file(utki::span<uint8_t> data) :
 		data(std::move(data)),
-		ptr{this->data.begin()}
+		iter{this->data.begin()}
 	{}
 
 	span_file(utki::span<const uint8_t> data) :
@@ -72,7 +72,7 @@ public:
 		// TODO: why const_cast?
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		data(const_cast<uint8_t*>(data.data()), data.size()),
-		ptr{this->data.begin()}
+		iter{this->data.begin()}
 	{}
 
 	span_file(utki::span<const char> data) :

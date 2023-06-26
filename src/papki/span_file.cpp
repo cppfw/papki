@@ -30,6 +30,8 @@ SOFTWARE.
 #include <algorithm>
 #include <cstring>
 
+#include <utki/util.hpp>
+
 using namespace papki;
 
 void span_file::open_internal(mode io_mode)
@@ -37,49 +39,49 @@ void span_file::open_internal(mode io_mode)
 	if (this->is_ready_only && io_mode != mode::read) {
 		throw std::logic_error("could not open span_file for writing, the file is read only");
 	}
-	this->ptr = this->data.begin();
+	this->iter = this->data.begin();
 }
 
 size_t span_file::read_internal(utki::span<uint8_t> buf) const
 {
-	ASSERT(this->ptr <= this->data.end())
-	size_t num_bytes_read = std::min(buf.size_bytes(), size_t(this->data.end() - this->ptr));
-	memcpy(&*buf.begin(), &*this->ptr, num_bytes_read);
-	this->ptr += num_bytes_read;
-	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
+	ASSERT(this->iter <= this->data.end())
+	size_t num_bytes_read = std::min(buf.size(), size_t(this->data.end() - this->iter));
+	auto end = utki::next(this->iter, num_bytes_read);
+	std::copy(this->iter, end, buf.begin());
+	this->iter = end;
+	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
 	return num_bytes_read;
 }
 
 size_t span_file::write_internal(utki::span<const uint8_t> buf)
 {
-	ASSERT(this->ptr <= this->data.end())
-	size_t num_bytes_written = std::min(buf.size_bytes(), size_t(this->data.end() - this->ptr));
-	memcpy(&*this->ptr, &*buf.begin(), num_bytes_written);
-	this->ptr += num_bytes_written;
-	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
+	ASSERT(this->iter <= this->data.end())
+	size_t num_bytes_written = std::min(buf.size_bytes(), size_t(this->data.end() - this->iter));
+	std::copy(buf.begin(), utki::next(buf.begin(), num_bytes_written), this->iter);
+	utki::next(this->iter, num_bytes_written);
+	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
 	return num_bytes_written;
 }
 
 size_t span_file::seek_forward_internal(size_t num_bytes_to_seek) const
 {
-	ASSERT(this->ptr <= this->data.end())
-	num_bytes_to_seek = std::min(size_t(this->data.end() - this->ptr), num_bytes_to_seek);
-	this->ptr += num_bytes_to_seek;
-	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
+	ASSERT(this->iter <= this->data.end())
+	num_bytes_to_seek = std::min(size_t(this->data.end() - this->iter), num_bytes_to_seek);
+	this->iter += num_bytes_to_seek;
+	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
 	return num_bytes_to_seek;
 }
 
 size_t span_file::seek_backward_internal(size_t num_bytes_to_seek) const
 {
-	ASSERT(this->ptr >= this->data.begin())
-	num_bytes_to_seek = std::min(size_t(this->ptr - this->data.begin()), num_bytes_to_seek);
-	this->ptr -= num_bytes_to_seek;
-	ASSERT(this->data.overlaps(&*this->ptr) || this->ptr == this->data.end())
+	ASSERT(this->iter >= this->data.begin())
+	num_bytes_to_seek = std::min(size_t(this->iter - this->data.begin()), num_bytes_to_seek);
+	this->iter -= num_bytes_to_seek;
+	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
 	return num_bytes_to_seek;
 }
 
 void span_file::rewind_internal() const
 {
-	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
-	this->ptr = const_cast<decltype(this->data)::value_type*>(this->data.data());
+	this->iter = this->data.begin();
 }
