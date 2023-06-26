@@ -63,8 +63,8 @@ public:
 	 * should remain alive during lifetime of this span_file object.
 	 */
 	span_file(utki::span<uint8_t> data) :
-		data(std::move(data)),
-		iter{this->data.begin()}
+		data(data),
+		iter(this->data.begin())
 	{}
 
 	span_file(utki::span<const uint8_t> data) :
