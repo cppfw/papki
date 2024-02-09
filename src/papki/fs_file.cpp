@@ -29,9 +29,9 @@ SOFTWARE.
 #include <utki/types.hpp>
 #include <utki/util.hpp>
 
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 #	include <utki/windows.hpp>
-#elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
 #	include <cerrno>
 #	include <cstring>
 
@@ -45,7 +45,7 @@ SOFTWARE.
 
 // on iOS we use 'dirent' instead of std::filesystem,
 // see comment in fs_file::list_dir() function implementation for more details
-#if M_OS_NAME != M_OS_NAME_IOS
+#if CFG_OS_NAME != CFG_OS_NAME_IOS
 #	include <filesystem>
 #endif
 
@@ -72,7 +72,7 @@ void fs_file::open_internal(mode mode)
 		}
 	}();
 
-#if M_COMPILER == M_COMPILER_MSVC
+#if CFG_COMPILER == CFG_COMPILER_MSVC
 	if (fopen_s(&this->handle, this->path().c_str(), mode_str) != 0) {
 		this->handle = 0;
 	}
@@ -188,7 +188,7 @@ bool fs_file::exists() const
 	}
 
 	if (this->is_dir()) {
-#if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
 		DIR* pdir = opendir(this->path().c_str());
 		if (!pdir) {
 			return false;
@@ -196,7 +196,7 @@ bool fs_file::exists() const
 			closedir(pdir);
 			return true;
 		}
-#elif M_OS == M_OS_WINDOWS
+#elif CFG_OS == CFG_OS_WINDOWS
 		DWORD attrs = GetFileAttributesA(this->path().c_str());
 		if (attrs == INVALID_FILE_ATTRIBUTES) {
 			// Could not get file attributes, perhaps the file/directory does not
@@ -228,13 +228,13 @@ void fs_file::make_dir()
 		throw std::logic_error("invalid directory name, should end with '/'");
 	}
 
-#if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
 	umask(0); // clear umask for proper permissions of newly created directory
 	constexpr auto default_permissions = 0755;
 	if (mkdir(this->path().c_str(), default_permissions) != 0) {
 		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
 	}
-#elif M_OS == M_OS_WINDOWS
+#elif CFG_OS == CFG_OS_WINDOWS
 	if (!CreateDirectoryA(this->path().c_str(), nullptr)) {
 		auto error = GetLastError();
 		if (error != ERROR_ALREADY_EXISTS) {
@@ -250,7 +250,7 @@ std::string fs_file::get_home_dir()
 {
 	std::string ret;
 
-#if M_OS == M_OS_WINDOWS && M_COMPILER == M_COMPILER_MSVC
+#if CFG_OS == CFG_OS_WINDOWS && CFG_COMPILER == CFG_COMPILER_MSVC
 	{
 		char* buf = nullptr;
 		size_t size = 0;
@@ -264,12 +264,12 @@ std::string fs_file::get_home_dir()
 		}
 		ret = std::string(buf);
 	}
-#elif M_OS == M_OS_LINUX || M_OS == M_OS_WINDOWS || M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_WINDOWS || CFG_OS == CFG_OS_MACOSX
 
-#	if M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#	if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
 	char* home = getenv("HOME");
-#	elif M_OS == M_OS_WINDOWS
+#	elif CFG_OS == CFG_OS_WINDOWS
 	char* home = getenv("USERPROFILE");
 #	else
 #		error "unsupported OS"
@@ -304,7 +304,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size) const
 // On iOS the std::filesystem is available only starting from iOS 13.0 while it
 // is still desired to support iOS 11.0 at least, so for iOS we fall back to old
 // implementation via 'dirent.h'.
-#if M_OS_NAME != M_OS_NAME_IOS
+#if CFG_OS_NAME != CFG_OS_NAME_IOS
 	std::filesystem::directory_iterator iter(this->path());
 
 	for (const auto& p : iter) {
@@ -324,7 +324,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size) const
 	// is still kept here because std::filesystem support is not very common yet
 	// and on some systems it might be needed to revert back to this old
 	// implementation.
-#	if M_OS == M_OS_WINDOWS
+#	if CFG_OS == CFG_OS_WINDOWS
 	{
 		std::string pattern = this->path();
 		pattern += '*';
@@ -372,7 +372,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size) const
 			}
 		}
 	}
-#	elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#	elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
 	{
 		DIR* pdir = opendir(this->path().c_str());
 
@@ -448,7 +448,7 @@ uint64_t fs_file::size() const
 		throw std::logic_error("method size() is called on directory");
 	}
 
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	HANDLE hfile = CreateFileA(
 		this->path().c_str(),
 		GENERIC_READ,
@@ -473,7 +473,7 @@ uint64_t fs_file::size() const
 		throw std::system_error(int(GetLastError()), std::generic_category(), "GetFileSizeEx() failed");
 	}
 	return size.QuadPart;
-#elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
 	struct stat file_stats {};
 
 	if (stat(this->path().c_str(), &file_stats) < 0) {

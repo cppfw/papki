@@ -77,8 +77,8 @@ voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 {
 	FILE* file = nullptr;
 	const char* mode_fopen = nullptr;
-	if ((mode & int(zlib_file_mode::zlib_filefunc_mode_readwritefilter))
-		== int(zlib_file_mode::zlib_filefunc_mode_read))
+	if ((mode & int(zlib_file_mode::zlib_filefunc_mode_readwritefilter)) ==
+		int(zlib_file_mode::zlib_filefunc_mode_read))
 		mode_fopen = "rb";
 	else if (mode & int(zlib_file_mode::zlib_filefunc_mode_existing))
 		mode_fopen = "r+b";
@@ -86,7 +86,7 @@ voidpf ZCALLBACK fopen_file_func(voidpf opaque, const char* filename, int mode)
 		mode_fopen = "wb";
 
 	if ((filename != nullptr) && (mode_fopen != nullptr)) {
-#if M_COMPILER == M_COMPILER_MSVC
+#if CFG_COMPILER == CFG_COMPILER_MSVC
 		fopen_s(&file, filename, mode_fopen);
 #else
 		file = fopen(filename, mode_fopen); // NOLINT

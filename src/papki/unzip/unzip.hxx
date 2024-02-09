@@ -101,7 +101,7 @@ typedef struct TagunzFile__ {
 
 typedef unzFile__* unzFile;
 #else
-using unzFile = voidp;
+using unzFile = voidp; // NOLINT
 #endif
 
 #define UNZ_OK (0) // NOLINT

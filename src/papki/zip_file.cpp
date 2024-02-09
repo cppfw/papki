@@ -245,8 +245,7 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 					0,
 					nullptr,
 					0
-				)
-				!= UNZ_OK)
+				) != UNZ_OK)
 			{
 				throw std::runtime_error("zip_file::list_dir(): unz_get_current_file_info() failed.");
 			}

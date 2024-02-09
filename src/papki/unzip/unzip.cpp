@@ -803,8 +803,8 @@ extern int ZEXPORT unz_go_to_next_file(unzFile file) // NOLINT
 		if (s->num_file + 1 == s->gi.number_entry) // NOLINT
 			return UNZ_END_OF_LIST_OF_FILE; // NOLINT
 	// NOLINT
-	s->pos_in_central_dir += SIZECENTRALDIRITEM + s->cur_file_info.size_filename
-		+ s->cur_file_info.size_file_extra // NOLINT
+	s->pos_in_central_dir += SIZECENTRALDIRITEM + s->cur_file_info.size_filename +
+		s->cur_file_info.size_file_extra // NOLINT
 		+ s->cur_file_info.size_file_comment; // NOLINT
 	s->num_file++; // NOLINT
 	err = unzlocal_GetCurrentFileInfoInternal( // NOLINT
@@ -1342,8 +1342,8 @@ extern int ZEXPORT unz_read_current_file(unzFile file, voidp buf, unsigned len) 
 		if ((pfile_in_zip_read_info->compression_method == 0) || (pfile_in_zip_read_info->raw)) { // NOLINT
 			uInt uDoCopy, i; // NOLINT
 			// NOLINT
-			if ((pfile_in_zip_read_info->stream.avail_in == 0)
-				&& (pfile_in_zip_read_info->rest_read_compressed == 0)) // NOLINT
+			if ((pfile_in_zip_read_info->stream.avail_in == 0) &&
+				(pfile_in_zip_read_info->rest_read_compressed == 0)) // NOLINT
 				return (iRead == 0) ? UNZ_EOF : iRead; // NOLINT
 			// NOLINT
 			if (pfile_in_zip_read_info->stream.avail_out < pfile_in_zip_read_info->stream.avail_in) // NOLINT
@@ -1538,8 +1538,8 @@ extern int ZEXPORT unz_get_local_extra_field(unzFile file, voidp buf, unsigned l
 		!= 0) // NOLINT
 		return UNZ_ERRNO; // NOLINT
 	// NOLINT
-	if (ZREAD(pfile_in_zip_read_info->z_filefunc, pfile_in_zip_read_info->filestream, buf, read_now)
-		!= read_now) // NOLINT
+	if (ZREAD(pfile_in_zip_read_info->z_filefunc, pfile_in_zip_read_info->filestream, buf, read_now) !=
+		read_now) // NOLINT
 		return UNZ_ERRNO; // NOLINT
 	// NOLINT
 	return (int)read_now; // NOLINT
@@ -1604,8 +1604,8 @@ extern int ZEXPORT unz_get_global_comment(unzFile file, char* szComment, uLong u
 	if (uReadThis > s->gi.size_comment) // NOLINT
 		uReadThis = s->gi.size_comment; // NOLINT
 	// NOLINT
-	if (ZSEEK(s->z_filefunc, s->filestream, s->central_pos + 22, zlib_seek_relative::zlib_filefunc_seek_set)
-		!= 0) // NOLINT
+	if (ZSEEK(s->z_filefunc, s->filestream, s->central_pos + 22, zlib_seek_relative::zlib_filefunc_seek_set) !=
+		0) // NOLINT
 		return UNZ_ERRNO; // NOLINT
 	// NOLINT
 	if (uReadThis > 0) { // NOLINT
