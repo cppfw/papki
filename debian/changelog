@@ -1,3 +1,9 @@
+libpapki (1.0.136) unstable; urgency=medium
+
+  * add as_dir()
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 25 Feb 2024 17:36:20 +0200
+
 libpapki (1.0.135) unstable; urgency=medium
 
   * bookworm
