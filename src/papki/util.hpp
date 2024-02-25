@@ -91,4 +91,11 @@ std::string suffix(std::string_view path_name);
  */
 std::string not_suffix(std::string_view path_name);
 
+/**
+ * @brief Append trailing slash if needed.
+ * @param path - path to append trailing slash
+ * @return Path name with appended trailing slash.
+ */
+std::string as_dir(std::string_view path);
+
 } // namespace papki

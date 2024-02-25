@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include "util.hpp"
 
+#include <sstream>
+
 #include <utki/debug.hpp>
 
 using namespace papki;
@@ -102,4 +104,11 @@ std::string papki::not_suffix(std::string_view path_name)
 		return std::string(path_name.substr(0, dot_pos));
 	}
 	ASSERT(false)
+}
+
+std::string papki::as_dir(std::string_view path)
+{
+	std::stringstream ss;
+	ss << path << '/';
+	return ss.str();
 }
