@@ -28,6 +28,7 @@ SOFTWARE.
 #include "util.hpp"
 
 #include <sstream>
+#include <string_view>
 
 #include <utki/debug.hpp>
 
