@@ -98,4 +98,6 @@ std::string not_suffix(std::string_view path_name);
  */
 std::string as_dir(std::string_view path);
 
+std::string_view as_file(std::string_view path);
+
 } // namespace papki

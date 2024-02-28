@@ -31,6 +31,9 @@ SOFTWARE.
 #include <string_view>
 
 #include <utki/debug.hpp>
+#include <utki/string.hpp>
+
+using namespace std::string_literals;
 
 using namespace papki;
 
@@ -109,7 +112,24 @@ std::string papki::not_suffix(std::string_view path_name)
 
 std::string papki::as_dir(std::string_view path)
 {
-	std::stringstream ss;
-	ss << path << '/';
-	return ss.str();
+	if (path.empty()) {
+		return "./"s;
+	}
+
+	if (path.back() == '/') {
+		return std::string(path);
+	}
+
+	return utki::cat(path, '/');
+}
+
+std::string_view papki::as_file(std::string_view path)
+{
+	if (path.empty()) {
+		return path;
+	}
+	if (path.back() == '/') {
+		return path.substr(0, path.size() - 1);
+	}
+	return path;
 }
