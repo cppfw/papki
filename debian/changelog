@@ -1,3 +1,9 @@
+libpapki (1.0.138) unstable; urgency=medium
+
+  * rvalue ref param -> by value param
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 03 Mar 2024 14:37:15 +0200
+
 libpapki (1.0.137) unstable; urgency=medium
 
   * aptian
