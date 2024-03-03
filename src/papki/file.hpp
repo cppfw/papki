@@ -100,7 +100,7 @@ public:
 	 * @brief Set the path for this file instance.
 	 * @param path_name - the path to a file or directory.
 	 */
-	void set_path(std::string&& path_name) const
+	void set_path(std::string path_name) const
 	{
 		if (this->is_open()) {
 			throw std::logic_error("papki::file::set_path(): cannot set path when file is opened");
