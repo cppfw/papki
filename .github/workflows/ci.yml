@@ -186,10 +186,10 @@ jobs:
       with: {name: PATH, value: "$HOMEBREW_PREFIX/opt/make/libexec/gnubin:$PATH"}
     - name: set CXXFLAGS
       uses: myci-actions/export-env-var@master
-      with: {name: CXXFLAGS, value: "-I $HOMEBREW_PREFIX/inlcude"}
+      with: {name: CXXFLAGS, value: "-I $HOMEBREW_PREFIX/include $CXXFLAGS"}
     - name: set LDFLAGS
       uses: myci-actions/export-env-var@master
-      with: {name: LDFLAGS, value: "-L $HOMEBREW_PREFIX/lib"}
+      with: {name: LDFLAGS, value: "-L $HOMEBREW_PREFIX/lib $LDFLAGS"}
     - name: install deps
       run: myci-brew-install.sh `myci-list-deps-homebrew.sh`
     - name: build
