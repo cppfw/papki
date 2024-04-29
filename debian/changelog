@@ -1,3 +1,9 @@
+libpapki (1.0.139) unstable; urgency=medium
+
+  * update homebrew formulae
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 29 Apr 2024 22:34:04 +0300
+
 libpapki (1.0.138) unstable; urgency=medium
 
   * rvalue ref param -> by value param
