@@ -11,7 +11,7 @@ class PapkiConan(ConanFile):
 	url = "http://github.com/cppfw/" + name
 	description = "File system abstraction C++ library"
 	topics = ("C++", "cross-platform")
-	settings = "os", "build_type", "arch"
+	settings = "os", "compiler", "build_type", "arch"
 	package_type = "library"
 	options = {"shared": [True, False], "fPIC": [True, False]}
 	default_options = {"shared": False, "fPIC": True}
