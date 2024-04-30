@@ -28,6 +28,10 @@ class PapkiConan(ConanFile):
 		if self.settings.os == "Windows":
 			del self.options.fPIC
 
+	def compatibility(self):
+		if self.settings.compiler == "apple-clang":
+			return [{"settings": [("compiler.version", "13")]}]
+
 	# save commit and remote URL to conandata.yml for packaging
 	def export(self):
 		git = Git(self)
