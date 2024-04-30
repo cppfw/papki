@@ -445,7 +445,6 @@ jobs:
         run: |
           conan profile detect --name default
           sed -i -E "s/compiler.cppstd=.*$/compiler.cppstd=17/g" ~/.conan2/profiles/default
-          sed -i -E "s/compiler.version=.*$/compiler.version=any/g" ~/.conan2/profiles/default
       - name: set PATH to use latest make
         uses: myci-actions/export-env-var@master
         with: {name: PATH, value: "/usr/local/opt/make/libexec/gnubin:$PATH"}
