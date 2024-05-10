@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <sstream>
 
-#include "unzip/unzip.hxx"
+#include <unzip.h>
 
 using namespace papki;
 
@@ -40,8 +40,8 @@ voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(opaque);
 
-	switch (mode & int(zlib_file_mode::zlib_filefunc_mode_readwritefilter)) {
-		case int(zlib_file_mode::zlib_filefunc_mode_read):
+	switch (mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) {
+		case ZLIB_FILEFUNC_MODE_READ:
 			f->open(papki::file::mode::read);
 			break;
 		default:
@@ -83,7 +83,7 @@ int ZCALLBACK unzip_error(voidpf opaque, voidpf stream)
 	return 0; // no error
 }
 
-long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, zlib_seek_relative origin)
+long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, unsigned long offset, int origin)
 {
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
@@ -91,13 +91,13 @@ long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, long offset, zlib_seek_r
 	// assume that offset can only be positive, since its type is unsigned
 
 	switch (origin) {
-		case zlib_seek_relative::zlib_filefunc_seek_cur:
+		case ZLIB_FILEFUNC_SEEK_CUR:
 			f->seek_forward(offset);
 			return 0;
-		case zlib_seek_relative::zlib_filefunc_seek_end:
+		case ZLIB_FILEFUNC_SEEK_END:
 			f->seek_forward(std::numeric_limits<size_t>::max());
 			return 0;
-		case zlib_seek_relative::zlib_filefunc_seek_set:
+		case ZLIB_FILEFUNC_SEEK_SET:
 			f->rewind();
 			f->seek_forward(offset);
 			return 0;
@@ -129,7 +129,7 @@ zip_file::zip_file(std::unique_ptr<papki::file> underlying_zip_file, std::string
 	ff.zerror_file = &unzip_error;
 	ff.ztell_file = &unzip_tell;
 
-	this->handle = unz_open_2(this->underlying_zip_file->path().c_str(), &ff);
+	this->handle = unzOpen2(this->underlying_zip_file->path().c_str(), &ff);
 
 	if (!this->handle) {
 		throw std::runtime_error("zip_file: opening zip file failed");
@@ -140,7 +140,7 @@ zip_file::~zip_file() noexcept
 {
 	this->close(); // make sure there is no file opened inside zip file
 
-	if (unz_close(this->handle) != UNZ_OK) {
+	if (unzClose(this->handle) != UNZ_OK) {
 		ASSERT(false)
 	}
 }
@@ -151,7 +151,7 @@ void zip_file::open_internal(mode mode)
 		throw std::invalid_argument("illegal mode requested, only READ supported inside ZIP file");
 	}
 
-	if (unz_locate_file(this->handle, this->path().c_str(), 0) != UNZ_OK) {
+	if (unzLocateFile(this->handle, this->path().c_str(), 0) != UNZ_OK) {
 		std::stringstream ss;
 		ss << "zip_file::OpenInternal(): file not found: " << this->path();
 		throw std::runtime_error(ss.str());
@@ -160,19 +160,19 @@ void zip_file::open_internal(mode mode)
 	{
 		unz_file_info zip_file_info;
 
-		if (unz_get_current_file_info(this->handle, &zip_file_info, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
+		if (unzGetCurrentFileInfo(this->handle, &zip_file_info, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
 			throw std::runtime_error("failed obtaining file info");
 		}
 	}
 
-	if (unz_open_current_file(this->handle) != UNZ_OK) {
+	if (unzOpenCurrentFile(this->handle) != UNZ_OK) {
 		throw std::runtime_error("file opening failed");
 	}
 }
 
 void zip_file::close_internal() const noexcept
 {
-	if (unz_close_current_file(this->handle) == UNZ_CRCERROR) {
+	if (unzCloseCurrentFile(this->handle) == UNZ_CRCERROR) {
 		ASSERT(false, [](auto& o) {
 			o << "zip_file::close(): CRC is not good" << std::endl;
 		})
@@ -182,7 +182,7 @@ void zip_file::close_internal() const noexcept
 size_t zip_file::read_internal(utki::span<uint8_t> buf) const
 {
 	ASSERT(buf.size() <= unsigned(-1))
-	int num_bytes_read = unz_read_current_file(this->handle, buf.begin(), unsigned(buf.size()));
+	int num_bytes_read = unzReadCurrentFile(this->handle, buf.begin(), unsigned(buf.size()));
 	if (num_bytes_read < 0) {
 		throw std::runtime_error("zip_file::Read(): file reading failed");
 	}
@@ -205,7 +205,7 @@ bool zip_file::exists() const
 		return true;
 	}
 
-	return unz_locate_file(this->handle, this->path().c_str(), 0) == UNZ_OK;
+	return unzLocateFile(this->handle, this->path().c_str(), 0) == UNZ_OK;
 }
 
 std::vector<std::string> zip_file::list_dir(size_t max_entries) const
@@ -226,7 +226,7 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 	// for every file, check if it is in the current directory
 	{
 		// move to first file
-		int ret = unz_go_to_first_file(this->handle);
+		int ret = unzGoToFirstFile(this->handle);
 
 		if (ret != UNZ_OK) {
 			throw std::runtime_error("zip_file::list_dir(): unz_go_to_first_file() failed.");
@@ -236,7 +236,7 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 		do {
 			std::array<char, std::numeric_limits<char>::max()> file_name_buf{};
 
-			if (unz_get_current_file_info(
+			if (unzGetCurrentFileInfo(
 					this->handle,
 					nullptr,
 					file_name_buf.data(),
@@ -284,7 +284,7 @@ std::vector<std::string> zip_file::list_dir(size_t max_entries) const
 			if (files.size() == max_entries) {
 				break;
 			}
-		} while ((ret = unz_go_to_next_file(this->handle)) == UNZ_OK);
+		} while ((ret = unzGoToNextFile(this->handle)) == UNZ_OK);
 
 		if (ret != UNZ_END_OF_LIST_OF_FILE && ret != UNZ_OK) {
 			throw std::runtime_error("zip_file::list_dir(): unz_go_to_next_file() failed.");
