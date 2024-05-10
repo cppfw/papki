@@ -32,6 +32,37 @@ SOFTWARE.
 
 using namespace papki;
 
+void file::open(mode io_mode)
+{
+	if (this->is_open()) {
+		throw std::logic_error("papki::file::open(): file is already opened");
+	}
+	if (this->is_dir()) {
+		throw std::logic_error("file refers to directory, directory cannot be opened");
+	}
+	this->open_internal(io_mode);
+
+	// set open mode
+	if (io_mode == mode::create) {
+		this->io_mode = mode::write;
+	} else {
+		this->io_mode = io_mode;
+	}
+
+	this->is_file_open = true;
+
+	this->current_pos = 0;
+};
+
+void file::close() const noexcept
+{
+	if (!this->is_open()) {
+		return;
+	}
+	this->close_internal();
+	this->is_file_open = false;
+}
+
 bool file::is_dir() const noexcept
 {
 	if (this->path().size() == 0) {
@@ -77,6 +108,16 @@ size_t file::write(utki::span<const uint8_t> buf)
 	return ret;
 }
 
+size_t file::seek_forward(size_t num_bytes_to_seek) const
+{
+	if (!this->is_open()) {
+		throw std::logic_error("seek_forward(): file is not opened");
+	}
+	size_t ret = this->seek_forward_internal(num_bytes_to_seek);
+	this->current_pos += ret;
+	return ret;
+}
+
 size_t file::seek_forward_internal(size_t num_bytes_to_seek) const
 {
 	constexpr size_t num_bytes_in_kilobyte = 1024;
@@ -100,9 +141,49 @@ size_t file::seek_forward_internal(size_t num_bytes_to_seek) const
 	return num_bytes_read;
 }
 
+size_t file::seek_backward(size_t num_bytes_to_seek) const
+{
+	if (!this->is_open()) {
+		throw std::logic_error("seek_backward(): file is not opened");
+	}
+	size_t ret = this->seek_backward_internal(num_bytes_to_seek);
+	ASSERT(ret <= this->current_pos)
+	this->current_pos -= ret;
+	return ret;
+}
+
+size_t file::seek_backward_internal(size_t num_bytes_to_seek) const
+{
+	throw std::runtime_error("seek_backward() is unsupported");
+}
+
 void file::make_dir()
 {
 	throw std::runtime_error("Make directory is not supported");
+}
+
+void file::rewind() const
+{
+	if (!this->is_open()) {
+		throw std::logic_error("rewind(): file is not opened");
+	}
+	this->rewind_internal();
+	this->current_pos = 0;
+}
+
+void file::rewind_internal() const
+{
+	mode m = this->io_mode;
+	this->close();
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
+	const_cast<file*>(this)->open(m);
+}
+
+std::unique_ptr<file> file::spawn(std::string path)
+{
+	auto ret = this->spawn();
+	ret->set_path(std::move(path));
+	return ret;
 }
 
 std::vector<uint8_t> file::load(size_t max_bytes_to_load) const

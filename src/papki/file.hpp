@@ -51,7 +51,7 @@ class file
 {
 	mutable std::string cur_path;
 
-	mutable bool is_file_opened = false;
+	mutable bool is_file_open = false;
 
 	mutable size_t current_pos = 0; // holds current position from file beginning
 
@@ -99,32 +99,37 @@ public:
 	/**
 	 * @brief Set the path for this file instance.
 	 * @param path_name - the path to a file or directory.
+	 * @return Reference to this file object.
 	 */
-	void set_path(std::string path_name) const
+	const file& set_path(std::string path_name) const
 	{
 		if (this->is_open()) {
-			throw std::logic_error("papki::file::set_path(): cannot set path when file is opened");
+			throw std::logic_error("papki::file::set_path(): cannot set path when file is open");
 		}
 
 		this->set_path_internal(std::move(path_name));
+
+		return *this;
 	}
 
 	/**
 	 * @brief Set the path for this file instance.
 	 * @param path_name - the path to a file or directory.
+	 * @return Reference to this file object.
 	 */
-	void set_path(std::string_view path_name) const
+	const file& set_path(std::string_view path_name) const
 	{
-		this->set_path(std::string(path_name));
+		return this->set_path(std::string(path_name));
 	}
 
 	/**
 	 * @brief Set the path for this file instance.
 	 * @param path_name - the path to a file or directory.
+	 * @return Reference to this file object.
 	 */
-	void set_path(const char* path_name) const
+	const file& set_path(const char* path_name) const
 	{
-		this->set_path(std::string(path_name));
+		return this->set_path(std::string(path_name));
 	}
 
 protected:
@@ -218,27 +223,7 @@ public:
 	 * @param io_mode - file opening mode (reading/writing/create).
 	 * @throw std::logic_error - if file is already opened.
 	 */
-	void open(mode io_mode)
-	{
-		if (this->is_open()) {
-			throw std::logic_error("papki::file::open(): file is already opened");
-		}
-		if (this->is_dir()) {
-			throw std::logic_error("file refers to directory, directory cannot be opened");
-		}
-		this->open_internal(io_mode);
-
-		// set open mode
-		if (io_mode == mode::create) {
-			this->io_mode = mode::write;
-		} else {
-			this->io_mode = io_mode;
-		}
-
-		this->is_file_opened = true;
-
-		this->current_pos = 0;
-	};
+	void open(mode io_mode);
 
 	/**
 	 * @brief Open file for reading.
@@ -263,14 +248,7 @@ public:
 	/**
 	 * @brief Close file.
 	 */
-	void close() const noexcept
-	{
-		if (!this->is_open()) {
-			return;
-		}
-		this->close_internal();
-		this->is_file_opened = false;
-	}
+	void close() const noexcept;
 
 protected:
 	/**
@@ -287,7 +265,7 @@ public:
 	 */
 	bool is_open() const noexcept
 	{
-		return this->is_file_opened;
+		return this->is_file_open;
 	}
 
 	/**
@@ -403,15 +381,7 @@ public:
 	 * @return number of bytes actually skipped.
 	 * @throw std::logic_error - if file is not opened.
 	 */
-	size_t seek_forward(size_t num_bytes_to_seek) const
-	{
-		if (!this->is_open()) {
-			throw std::logic_error("seek_forward(): file is not opened");
-		}
-		size_t ret = this->seek_forward_internal(num_bytes_to_seek);
-		this->current_pos += ret;
-		return ret;
-	}
+	size_t seek_forward(size_t num_bytes_to_seek) const;
 
 protected:
 	/**
@@ -433,16 +403,7 @@ public:
 	 * @param num_bytes_to_seek - number of bytes to skip.
 	 * @return number of bytes actually skipped.
 	 */
-	size_t seek_backward(size_t num_bytes_to_seek) const
-	{
-		if (!this->is_open()) {
-			throw std::logic_error("seek_backward(): file is not opened");
-		}
-		size_t ret = this->seek_backward_internal(num_bytes_to_seek);
-		ASSERT(ret <= this->current_pos)
-		this->current_pos -= ret;
-		return ret;
-	}
+	size_t seek_backward(size_t num_bytes_to_seek) const;
 
 protected:
 	/**
@@ -453,10 +414,7 @@ protected:
 	 * @param num_bytes_to_seek - number of bytes to seek.
 	 * @return number of bytes actually skipped.
 	 */
-	virtual size_t seek_backward_internal(size_t num_bytes_to_seek) const
-	{
-		throw std::runtime_error("seek_backward() is unsupported");
-	}
+	virtual size_t seek_backward_internal(size_t num_bytes_to_seek) const;
 
 public:
 	/**
@@ -465,14 +423,7 @@ public:
 	 * opening the file again.
 	 * @throw std::logic_error - if file is not opened.
 	 */
-	void rewind() const
-	{
-		if (!this->is_open()) {
-			throw std::logic_error("rewind(): file is not opened");
-		}
-		this->rewind_internal();
-		this->current_pos = 0;
-	}
+	void rewind() const;
 
 protected:
 	/**
@@ -480,13 +431,7 @@ protected:
 	 * This function is called by rewind() after it has done some safety checks.
 	 * Derived class may override this function with its own implementation.
 	 */
-	virtual void rewind_internal() const
-	{
-		mode m = this->io_mode;
-		this->close();
-		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
-		const_cast<file*>(this)->open(m);
-	}
+	virtual void rewind_internal() const;
 
 public:
 	/**
@@ -544,22 +489,12 @@ public:
 		return const_cast<file*>(this)->spawn();
 	}
 
-	std::unique_ptr<file> spawn(std::string&& path)
-	{
-		auto ret = this->spawn();
-		ret->set_path(std::move(path));
-		return ret;
-	}
+	std::unique_ptr<file> spawn(std::string path);
 
-	std::unique_ptr<const file> spawn(std::string&& path) const
+	std::unique_ptr<const file> spawn(std::string path) const
 	{
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<file*>(this)->spawn(std::move(path));
-	}
-
-	std::unique_ptr<file> spawn(const std::string& path)
-	{
-		return this->spawn(std::string(path));
 	}
 
 	std::unique_ptr<const file> spawn(const std::string& path) const
