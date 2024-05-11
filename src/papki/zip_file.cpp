@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <sstream>
 
-#include <unzip.h>
+#include <minizip/unzip.h>
 
 using namespace papki;
 
