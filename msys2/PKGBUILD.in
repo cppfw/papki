@@ -60,7 +60,7 @@ prepare() {
 
 build() {
 	cd "$rootDir"
-	make
+	make lint=off
 }
 
 check() {
