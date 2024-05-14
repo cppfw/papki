@@ -474,7 +474,7 @@ uint64_t fs_file::size() const
 	}
 	return size.QuadPart;
 #elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
-	struct stat file_stats {};
+	struct stat file_stats{};
 
 	if (stat(this->path().c_str(), &file_stats) < 0) {
 		throw std::system_error(errno, std::system_category(), "stat() failed");
