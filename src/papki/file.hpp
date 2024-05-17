@@ -497,7 +497,7 @@ public:
 		return const_cast<file*>(this)->spawn(std::move(path));
 	}
 
-	std::unique_ptr<const file> spawn(const std::string& path) const
+	std::unique_ptr<const file> spawn(std::string_view path) const
 	{
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<file*>(this)->spawn(std::string(path));
