@@ -1,3 +1,9 @@
+libpapki (1.0.140) unstable; urgency=medium
+
+  * make file::set_path() return reference to itself
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 17 May 2024 15:55:49 +0300
+
 libpapki (1.0.139) unstable; urgency=medium
 
   * update homebrew formulae
