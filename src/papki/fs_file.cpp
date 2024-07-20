@@ -25,13 +25,15 @@ SOFTWARE.
 
 /* ================ LICENSE END ================ */
 
+#include <stdexcept>
+
 #include <utki/config.hpp>
 #include <utki/types.hpp>
 #include <utki/util.hpp>
 
 #if CFG_OS == CFG_OS_WINDOWS
 #	include <utki/windows.hpp>
-#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
+#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX || CFG_OS == CFG_OS_UNIX
 #	include <cerrno>
 #	include <cstring>
 
@@ -188,7 +190,7 @@ bool fs_file::exists() const
 	}
 
 	if (this->is_dir()) {
-#if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
+#if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX || CFG_OS == CFG_OS_UNIX
 		DIR* pdir = opendir(this->path().c_str());
 		if (!pdir) {
 			return false;
@@ -211,7 +213,7 @@ bool fs_file::exists() const
 
 		return false;
 #else
-		throw std::runtime_exception("Checking for directory existence is not supported");
+		throw std::runtime_error("Checking for directory existence is not supported");
 #endif
 	} else {
 		return this->file::exists();
@@ -264,9 +266,9 @@ std::string fs_file::get_home_dir()
 		}
 		ret = std::string(buf);
 	}
-#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_WINDOWS || CFG_OS == CFG_OS_MACOSX
+#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_WINDOWS || CFG_OS == CFG_OS_UNIX || CFG_OS == CFG_OS_MACOSX
 
-#	if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
+#	if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX || CFG_OS == CFG_OS_UNIX
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
 	char* home = getenv("HOME");
 #	elif CFG_OS == CFG_OS_WINDOWS
