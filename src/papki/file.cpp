@@ -159,13 +159,13 @@ size_t file::seek_backward_internal(size_t num_bytes_to_seek) const
 
 void file::make_dir()
 {
-	throw std::runtime_error("Make directory is not supported");
+	throw std::runtime_error("make_dir() is not supported");
 }
 
 void file::rewind() const
 {
 	if (!this->is_open()) {
-		throw std::logic_error("rewind(): file is not opened");
+		throw std::logic_error("rewind(): file is not open");
 	}
 	this->rewind_internal();
 	this->current_pos = 0;
@@ -189,7 +189,7 @@ std::unique_ptr<file> file::spawn(std::string path)
 std::vector<uint8_t> file::load(size_t max_bytes_to_load) const
 {
 	if (this->is_open()) {
-		throw std::logic_error("file::load(): file should not be opened");
+		throw std::logic_error("file::load(): file should not be open");
 	}
 
 	std::vector<uint8_t> ret;

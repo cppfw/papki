@@ -45,9 +45,9 @@ SOFTWARE.
 #include <sstream>
 #include <vector>
 
-// on iOS we use 'dirent' instead of std::filesystem,
-// see comment in fs_file::list_dir() function implementation for more details
-#if CFG_OS_NAME != CFG_OS_NAME_IOS
+// On iOS < 13.0 we use 'dirent' instead of std::filesystem, since std::filesystem
+// becomes available only from iOS 13.0.
+#if CFG_OS_NAME != CFG_OS_NAME_IOS || CFG_OS_IOS_DEPLOYMENT_TARGET >= 130000
 #	include <filesystem>
 #endif
 
@@ -223,26 +223,18 @@ bool fs_file::exists() const
 void fs_file::make_dir()
 {
 	if (this->is_open()) {
-		throw std::logic_error("cannot make directory when file is opened");
+		throw std::invalid_argument("cannot make directory when file is opened");
 	}
 
-	if (this->path().size() == 0 || this->path()[this->path().size() - 1] != '/') {
-		throw std::logic_error("invalid directory name, should end with '/'");
+	if (!papki::is_dir(this->path())) {
+		throw std::invalid_argument("invalid directory name, should end with '/'");
 	}
 
-#if CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX
-	umask(0); // clear umask for proper permissions of newly created directory
-	constexpr auto default_permissions = 0755;
-	if (mkdir(this->path().c_str(), default_permissions) != 0) {
-		throw std::system_error(errno, std::generic_category(), "mkdir() failed");
-	}
-#elif CFG_OS == CFG_OS_WINDOWS
-	if (!CreateDirectoryA(this->path().c_str(), nullptr)) {
-		auto error = GetLastError();
-		if (error != ERROR_ALREADY_EXISTS) {
-			throw std::system_error(int(error), std::generic_category(), "CreateDirectory() failed");
-		}
-	}
+// On iOS the std::filesystem is available only starting from iOS 13.0, so for iOS < 13.0 we do not support directory
+// creation.
+#if (CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_MACOSX || CFG_OS == CFG_OS_WINDOWS) && \
+	(CFG_OS_NAME != CFG_OS_NAME_IOS || CFG_OS_IOS_DEPLOYMENT_TARGET >= 130000)
+	std::filesystem::create_directories(this->path());
 #else
 	throw std::runtime_error("creating directory is not supported");
 #endif
@@ -302,11 +294,11 @@ std::vector<std::string> fs_file::list_dir(size_t max_size) const
 
 	std::vector<std::string> files;
 
-// For all systems except iOS we use new implementation via std::filesystem.
+// For all systems except iOS < 13.0 we use new implementation via std::filesystem.
 // On iOS the std::filesystem is available only starting from iOS 13.0 while it
-// is still desired to support iOS 11.0 at least, so for iOS we fall back to old
+// is still desired to support iOS 11.0 at least, so for iOS < 13.0 we fall back to old
 // implementation via 'dirent.h'.
-#if CFG_OS_NAME != CFG_OS_NAME_IOS
+#if CFG_OS_NAME != CFG_OS_NAME_IOS || CFG_OS_IOS_DEPLOYMENT_TARGET >= 130000
 	std::filesystem::directory_iterator iter(this->path());
 
 	for (const auto& p : iter) {

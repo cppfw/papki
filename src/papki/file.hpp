@@ -436,9 +436,11 @@ protected:
 public:
 	/**
 	 * @brief Create directory.
-	 * If this file instance is a directory then try to create that directory on
+	 * If this file instance is a directory then try to create that directory on the
 	 * file system. Not all file systems are writable, so not all of them support
 	 * directory creation.
+	 * The function will create all intermediate directories of the path if needed.
+	 * If the directory already exists then nothing is done.
 	 * @throw std::logic_error - if file is opened.
 	 */
 	virtual void make_dir();
