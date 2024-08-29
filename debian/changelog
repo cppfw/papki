@@ -1,3 +1,9 @@
+libpapki (1.0.143) unstable; urgency=medium
+
+  * fs_file::make_dir(): create intermediate directories
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 30 Aug 2024 00:51:11 +0300
+
 libpapki (1.0.142) unstable; urgency=medium
 
   * ubuntu noble build
