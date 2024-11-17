@@ -49,7 +49,7 @@ size_t span_file::read_internal(utki::span<uint8_t> buf) const
 	auto end = utki::next(this->iter, num_bytes_read);
 	std::copy(this->iter, end, buf.begin());
 	this->iter = end;
-	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
+	ASSERT(utki::overlaps(this->data, &*this->iter) || this->iter == this->data.end())
 	return num_bytes_read;
 }
 
@@ -59,7 +59,7 @@ size_t span_file::write_internal(utki::span<const uint8_t> buf)
 	size_t num_bytes_written = std::min(buf.size_bytes(), size_t(this->data.end() - this->iter));
 	std::copy(buf.begin(), utki::next(buf.begin(), num_bytes_written), this->iter);
 	utki::next(this->iter, num_bytes_written);
-	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
+	ASSERT(utki::overlaps(this->data, &*this->iter) || this->iter == this->data.end())
 	return num_bytes_written;
 }
 
@@ -68,7 +68,7 @@ size_t span_file::seek_forward_internal(size_t num_bytes_to_seek) const
 	ASSERT(this->iter <= this->data.end())
 	num_bytes_to_seek = std::min(size_t(this->data.end() - this->iter), num_bytes_to_seek);
 	this->iter += num_bytes_to_seek;
-	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
+	ASSERT(utki::overlaps(this->data, &*this->iter) || this->iter == this->data.end())
 	return num_bytes_to_seek;
 }
 
@@ -77,7 +77,7 @@ size_t span_file::seek_backward_internal(size_t num_bytes_to_seek) const
 	ASSERT(this->iter >= this->data.begin())
 	num_bytes_to_seek = std::min(size_t(this->iter - this->data.begin()), num_bytes_to_seek);
 	this->iter -= num_bytes_to_seek;
-	ASSERT(this->data.overlaps(&*this->iter) || this->iter == this->data.end())
+	ASSERT(utki::overlaps(this->data, &*this->iter) || this->iter == this->data.end())
 	return num_bytes_to_seek;
 }
 
