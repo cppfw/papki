@@ -1,3 +1,9 @@
+libpapki (1.0.144) unstable; urgency=medium
+
+  * conan: rebuild
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 17 Nov 2024 20:35:46 +0200
+
 libpapki (1.0.143) unstable; urgency=medium
 
   * fs_file::make_dir(): create intermediate directories
