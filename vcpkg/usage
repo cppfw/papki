@@ -1,0 +1,4 @@
+papki provides CMake targets:
+
+find_package(papki CONFIG REQUIRED)
+target_link_libraries(main PRIVATE papki::papki)
