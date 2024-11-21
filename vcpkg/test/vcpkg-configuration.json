@@ -1,0 +1,18 @@
+{
+    "default-registry": {
+      "kind": "git",
+      "baseline": "45f6e57d3e10ad96b7db206cf7888f736ba5aa61",
+      "repository": "https://github.com/microsoft/vcpkg"
+    },
+    "registries": [
+      {
+        "kind": "git",
+        "repository": "https://github.com/cppfw/vcpkg-repo/",
+        "baseline": "58f36414f78c05036cf29d23e50197a4e46c59be",
+        "packages": [ "utki" ]
+      }
+    ],
+    "overlay-ports": [
+      "../overlay"
+    ]
+  }

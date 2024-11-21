@@ -6,6 +6,8 @@ set(name papki)
 
 project(${name})
 
+message(CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH})
+
 find_package(utki CONFIG REQUIRED)
 
 file(GLOB_RECURSE srcs "../src/${name}/*.cpp")
