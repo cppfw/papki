@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-include($ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
+set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 
 project(test)
 

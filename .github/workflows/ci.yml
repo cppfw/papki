@@ -394,7 +394,6 @@ jobs:
       - name: test vcpkg port
         run: |
           cd vcpkg/test
-          vcpkg install
           cmake .
           make
       - name: upload build log to artifacts
