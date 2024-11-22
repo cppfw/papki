@@ -29,7 +29,7 @@ target_include_directories(
     PRIVATE "../src_deps"
 )
 
-target_link_libraries(${name} PRIVATE utki::utki)
+target_link_libraries(${name} PUBLIC utki::utki)
 
 # install library header files preserving directory hierarchy
 install(
