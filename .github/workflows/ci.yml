@@ -394,6 +394,7 @@ jobs:
       - name: test vcpkg port
         run: |
           cd vcpkg/test
+          vcpkg install
           cmake .
           make
       - name: deploy vcpkg port
