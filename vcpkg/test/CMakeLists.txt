@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+include($ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
+
 project(test)
 
 find_package(utki CONFIG REQUIRED)
