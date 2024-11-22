@@ -391,6 +391,11 @@ jobs:
       - name: prepare vcpkg port
         run: |
           myci-vcpkg-prepare.sh --git-ref ${PACKAGE_VERSION}
+      - name: test vcpkg port
+        run: |
+          cd vcpkg/test
+          cmake .
+          make
       - name: deploy vcpkg port
         run: |
           myci-deploy-vcpkg.sh --repo cppfw/vcpkg-repo --port-dir vcpkg/overlay/${PACKAGE_NAME}
