@@ -402,6 +402,12 @@ jobs:
         with:
           name: vcpkg-cmake.log
           path: vcpkg-installation/buildtrees/${{ env.PACKAGE_NAME }}/install-x64-linux-dbg-out.log
+      - name: upload vcpkg_installed
+        if: always() # even if previous steps fail, this one needs to be run
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg_installed
+          path: vcpkg/test/vcpkg_installed
       - name: deploy vcpkg port
         run: |
           myci-deploy-vcpkg.sh --repo cppfw/vcpkg-repo --port-dir vcpkg/overlay/${PACKAGE_NAME}
