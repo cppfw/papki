@@ -375,7 +375,7 @@ jobs:
           repo: deb https://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
           keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
-          install: myci cmake git curl zip unzip tar
+          install: myci cmake git curl zip unzip tar nodejs
       - name: git clone
         uses: myci-actions/checkout@main
       - name: install vcpkg
@@ -397,6 +397,12 @@ jobs:
           vcpkg install
           cmake .
           make
+      - name: upload build log to artifacts
+        if: always() # even if previous steps fail, this one needs to be run
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg-cmake.log
+          path: vcpkg-installation/buildtrees/${{ env.PACKAGE_NAME }}/install-x64-linux-dbg-out.log
       - name: deploy vcpkg port
         run: |
           myci-deploy-vcpkg.sh --repo cppfw/vcpkg-repo --port-dir vcpkg/overlay/${PACKAGE_NAME}
