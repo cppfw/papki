@@ -33,7 +33,6 @@ target_link_libraries(
     ${name}
     PUBLIC
         utki::utki
-    PRIVATE
         ZLIB::ZLIB
 )
 
