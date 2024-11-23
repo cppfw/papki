@@ -7,7 +7,7 @@ set(name papki)
 project(${name})
 
 find_package(utki CONFIG REQUIRED)
-find_package(zlib CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 file(GLOB_RECURSE srcs "../src/${name}/*.cpp")
 file(GLOB_RECURSE deps_srcs "../src_deps/minizip/*.c")
