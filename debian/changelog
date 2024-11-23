@@ -1,3 +1,9 @@
+libpapki (1.0.145) unstable; urgency=medium
+
+  * vcpkgize
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 23 Nov 2024 16:11:23 +0200
+
 libpapki (1.0.144) unstable; urgency=medium
 
   * conan: rebuild
