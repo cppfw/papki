@@ -390,7 +390,7 @@ jobs:
         with: {name: PATH, value: "$PATH:$VCPKG_ROOT"}
       - name: prepare vcpkg port
         run: |
-          myci-vcpkg-prepare.sh --git-ref ${PACKAGE_VERSION}
+          myci-vcpkg-prepare.sh --git-ref ${{ github.sha }}
       - name: test vcpkg port
         run: |
           cd vcpkg/test
