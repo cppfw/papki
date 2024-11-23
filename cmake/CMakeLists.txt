@@ -33,12 +33,8 @@ target_link_libraries(
     ${name}
     PUBLIC
         utki::utki
-)
-
-target_link_libraries(
-    ${name}
     PRIVATE
-        z
+        ZLIB::ZLIB
 )
 
 # install library header files preserving directory hierarchy
