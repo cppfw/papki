@@ -38,7 +38,7 @@ target_link_libraries(
 target_link_libraries(
     ${name}
     PRIVATE
-        ZLIB::ZLIB
+        ZLIB
 )
 
 # install library header files preserving directory hierarchy
