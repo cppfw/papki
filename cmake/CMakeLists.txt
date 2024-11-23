@@ -33,24 +33,35 @@ target_link_libraries(
     ${name}
     PUBLIC
         utki::utki
+    PRIVATE
         ZLIB::ZLIB
 )
 
 # install library header files preserving directory hierarchy
 install(
-    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../src/${name}"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-    FILES_MATCHING PATTERN "*.hpp"
+    DIRECTORY
+        "${CMAKE_CURRENT_SOURCE_DIR}/../src/${name}"
+    DESTINATION
+        "${CMAKE_INSTALL_INCLUDEDIR}"
+    FILES_MATCHING PATTERN
+        "*.hpp"
 )
 
 install(
-    TARGETS ${name}
-    EXPORT ${name}-config # generate cmake configs
+    TARGETS
+        ${name}
+    EXPORT # generate cmake configs
+        ${name}-config
 )
 
 # install cmake configs
-install(EXPORT ${name}-config
-    FILE ${name}-config.cmake
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${name}
-    NAMESPACE ${name}::
+install(
+    EXPORT
+        ${name}-config
+    FILE
+        ${name}-config.cmake
+    DESTINATION
+        ${CMAKE_INSTALL_DATAROOTDIR}/${name}
+    NAMESPACE
+        ${name}::
 )
