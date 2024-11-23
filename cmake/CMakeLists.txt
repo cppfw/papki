@@ -7,7 +7,7 @@ set(name papki)
 project(${name})
 
 find_package(utki CONFIG REQUIRED)
-find_package(ZLIB CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 file(GLOB_RECURSE srcs "../src/${name}/*.cpp")
 file(GLOB_RECURSE deps_srcs "../src_deps/minizip/*.c")
@@ -25,14 +25,20 @@ set_target_properties(${name} PROPERTIES CXX_EXTENSIONS OFF)
 
 target_include_directories(
     ${name}
-    PRIVATE "../src_deps"
+    PRIVATE
+        "../src_deps"
 )
 
 target_link_libraries(
     ${name}
     PUBLIC
-    utki::utki
-    ZLIB::ZLIB
+        utki::utki
+)
+
+target_link_libraries(
+    ${name}
+    PRIVATE
+        ZLIB::ZLIB
 )
 
 # install library header files preserving directory hierarchy
