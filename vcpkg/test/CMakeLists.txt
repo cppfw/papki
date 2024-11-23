@@ -6,6 +6,7 @@ project(test)
 
 find_package(utki CONFIG REQUIRED)
 find_package(papki CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 add_executable(test main.cpp)
 
