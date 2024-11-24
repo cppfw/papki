@@ -27,6 +27,9 @@ target_include_directories(
     ${name}
     PRIVATE
         "../src_deps"
+    INTERFACE
+        $<BUILD_INTERFACE:>
+        $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(
