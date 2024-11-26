@@ -1,4 +1,7 @@
 papki provides CMake targets:
 
+find_package(utki CONFIG REQUIRED)
 find_package(papki CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
+
 target_link_libraries(main PRIVATE papki::papki)
