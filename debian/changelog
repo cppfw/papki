@@ -1,3 +1,9 @@
+libpapki (1.0.147) unstable; urgency=medium
+
+  * conan: macos
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 03 Dec 2024 11:01:50 +0200
+
 libpapki (1.0.146) unstable; urgency=medium
 
   * cmake: interface include
