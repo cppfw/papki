@@ -24,8 +24,6 @@ endif
 
 $(eval $(prorab-build-lib))
 
-$(eval $(call prorab-depend, $(prorab_this_name), $(this__libminizip)))
-
 this_src_dir := $(this_name)
 
 $(eval $(prorab-clang-format))

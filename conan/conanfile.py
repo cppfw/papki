@@ -81,6 +81,7 @@ class PapkiConan(ConanFile):
 		else:
 			copy(conanfile=self, pattern="*" + self.name + ".lib", dst=dst_lib_dir,     src="",          keep_path=False)
 			copy(conanfile=self, pattern="*.a",                    dst=dst_lib_dir,     src=src_rel_dir, keep_path=False)
+			# TODO: copy libminizip.a
 
 	def package_info(self):
 		self.cpp_info.libs = [self.name]
