@@ -17,7 +17,7 @@ void run(){
 		std::array<uint8_t, 4> buf = {1, 2, 3, 4};
 		auto b = utki::make_span(buf);
 		
-		papki::file::guard file_guard(f, papki::file::mode::create);
+		papki::file::guard file_guard(f, papki::mode::create);
 		
 		f.write(b);
 	}
@@ -25,7 +25,7 @@ void run(){
 	{
 		std::array<uint8_t, 4> b{};
 		
-		papki::file::guard file_guard(f, papki::file::mode::read);
+		papki::file::guard file_guard(f, papki::mode::read);
 		
 		f.read(utki::make_span(b));
 		

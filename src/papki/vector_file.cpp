@@ -34,7 +34,7 @@ SOFTWARE.
 
 using namespace papki;
 
-void vector_file::open_internal(mode mode)
+void vector_file::open_internal(papki::mode mode)
 {
 	this->idx = 0;
 }

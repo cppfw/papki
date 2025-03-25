@@ -34,9 +34,9 @@ SOFTWARE.
 
 using namespace papki;
 
-void span_file::open_internal(mode io_mode)
+void span_file::open_internal(papki::mode io_mode)
 {
-	if (this->is_ready_only && io_mode != mode::read) {
+	if (this->is_ready_only && io_mode != papki::mode::read) {
 		throw std::logic_error("could not open span_file for writing, the file is read only");
 	}
 	this->iter = this->data.begin();

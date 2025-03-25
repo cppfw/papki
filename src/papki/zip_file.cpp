@@ -42,7 +42,7 @@ voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 
 	switch (mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) {
 		case ZLIB_FILEFUNC_MODE_READ:
-			f->open(papki::file::mode::read);
+			f->open(papki::mode::read);
 			break;
 		default:
 			throw std::invalid_argument(
@@ -145,9 +145,9 @@ zip_file::~zip_file() noexcept
 	}
 }
 
-void zip_file::open_internal(mode mode)
+void zip_file::open_internal(papki::mode mode)
 {
-	if (mode != file::mode::read) {
+	if (mode != papki::mode::read) {
 		throw std::invalid_argument("illegal mode requested, only READ supported inside ZIP file");
 	}
 

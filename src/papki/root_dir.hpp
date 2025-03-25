@@ -83,7 +83,7 @@ private:
 		this->base_file->set_path(this->root_directory + this->path());
 	}
 
-	void open_internal(mode io_mode) override
+	void open_internal(papki::mode io_mode) override
 	{
 		this->base_file->open(io_mode);
 	}

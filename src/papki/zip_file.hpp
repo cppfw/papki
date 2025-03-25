@@ -53,7 +53,7 @@ public:
 
 	~zip_file() noexcept override;
 
-	void open_internal(papki::file::mode mode) override;
+	void open_internal(papki::mode mode) override;
 	void close_internal() const noexcept override;
 	size_t read_internal(utki::span<uint8_t> buf) const override;
 	bool exists() const override;

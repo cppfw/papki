@@ -55,7 +55,7 @@ SOFTWARE.
 
 using namespace papki;
 
-void fs_file::open_internal(mode mode)
+void fs_file::open_internal(papki::mode mode)
 {
 	if (this->is_dir()) {
 		throw std::logic_error("path refers to a directory, directories can't be opened");
@@ -63,11 +63,11 @@ void fs_file::open_internal(mode mode)
 
 	const char* mode_str = [&mode]() {
 		switch (mode) {
-			case file::mode::write:
+			case papki::mode::write:
 				return "r+b";
-			case file::mode::create:
+			case papki::mode::create:
 				return "w+b";
-			case file::mode::read:
+			case papki::mode::read:
 				return "rb";
 			default:
 				throw std::invalid_argument("unknown mode");

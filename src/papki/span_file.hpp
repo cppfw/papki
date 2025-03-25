@@ -85,7 +85,7 @@ public:
 	std::unique_ptr<file> spawn() override;
 
 protected:
-	void open_internal(mode io_mode) override;
+	void open_internal(papki::mode io_mode) override;
 
 	void close_internal() const noexcept override {}
 

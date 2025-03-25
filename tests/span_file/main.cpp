@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
 
 		papki::span_file file(span);
 
-		file.open(papki::file::mode::read);
+		file.open(papki::mode::read);
 
 		std::array<char, 3> buf{};
 		{

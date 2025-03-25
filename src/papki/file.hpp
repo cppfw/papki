@@ -44,6 +44,25 @@ SOFTWARE.
 namespace papki {
 
 /**
+ * @brief Modes of opening the file.
+ */
+enum class mode {
+	/**
+	 * @brief Open existing file for read only.
+	 */
+	read,
+	/**
+	 * @brief Open existing file for read and write.
+	 */
+	write,
+	/**
+	 * @brief Create new file and open it for read and write.
+	 * If file exists it will be replaced by empty file.
+	 */
+	create
+};
+
+/**
  * @brief Abstract interface to a file system.
  * This class represents an abstract interface to a file system.
  */
@@ -56,19 +75,11 @@ class file
 	mutable size_t current_pos = 0; // holds current position from file beginning
 
 public:
-	/**
-	 * @brief Modes of opening the file.
-	 */
-	// TODO: move to papki namespace
-	enum class mode {
-		read, /// Open existing file for read only.
-		write, /// Open existing file for read and write.
-		create /// Create new file and open it for read and write. If file exists it
-			   /// will be replaced by empty file.
-	};
+	// TODO: remove
+	using mode [[deprecated("use papki::mode")]] = papki::mode;
 
 protected:
-	mode io_mode = mode::read; // mode only matters when file is opened
+	papki::mode io_mode = papki::mode::read; // mode only matters when file is opened
 
 	/**
 	 * @brief Constructor.
@@ -224,7 +235,7 @@ public:
 	 * @param io_mode - file opening mode (reading/writing/create).
 	 * @throw std::logic_error - if file is already opened.
 	 */
-	void open(mode io_mode);
+	void open(papki::mode io_mode);
 
 	/**
 	 * @brief Open file for reading.
@@ -234,7 +245,7 @@ public:
 	void open() const
 	{
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
-		const_cast<file*>(this)->open(mode::read);
+		const_cast<file*>(this)->open(papki::mode::read);
 	}
 
 protected:
@@ -243,7 +254,7 @@ protected:
 	 * Derived class should override this function with its own implementation.
 	 * @param io_mode - opening mode.
 	 */
-	virtual void open_internal(mode io_mode) = 0;
+	virtual void open_internal(papki::mode io_mode) = 0;
 
 public:
 	/**
@@ -540,7 +551,10 @@ public:
 		const file& f;
 
 	public:
-		guard(const file& file, mode mode);
+		guard(
+			const file& file, //
+			papki::mode mode
+		);
 
 		guard(const file& file);
 

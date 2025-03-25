@@ -32,7 +32,7 @@ SOFTWARE.
 
 using namespace papki;
 
-void file::open(mode io_mode)
+void file::open(papki::mode io_mode)
 {
 	if (this->is_open()) {
 		throw std::logic_error("papki::file::open(): file is already opened");
@@ -43,8 +43,8 @@ void file::open(mode io_mode)
 	this->open_internal(io_mode);
 
 	// set open mode
-	if (io_mode == mode::create) {
-		this->io_mode = mode::write;
+	if (io_mode == papki::mode::create) {
+		this->io_mode = papki::mode::write;
 	} else {
 		this->io_mode = io_mode;
 	}
@@ -99,7 +99,7 @@ size_t file::write(utki::span<const uint8_t> buf)
 		throw std::logic_error("Cannot write, file is not opened");
 	}
 
-	if (this->io_mode != mode::write) {
+	if (this->io_mode != papki::mode::write) {
 		throw std::logic_error("file is opened, but not in write mode");
 	}
 
@@ -173,7 +173,7 @@ void file::rewind() const
 
 void file::rewind_internal() const
 {
-	mode m = this->io_mode;
+	papki::mode m = this->io_mode;
 	this->close();
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 	const_cast<file*>(this)->open(m);
@@ -231,12 +231,17 @@ bool file::exists() const
 	// try opening and closing the file to find out if it exists or not
 	ASSERT(!this->is_open())
 	try {
-		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
-		file::guard file_guard(const_cast<file&>(*this), file::mode::read);
+		file::guard file_guard(
+			*this, //
+			papki::mode::read
+		);
 	} catch (std::runtime_error&) {
-		return false; // file opening failed, assume the file does not exist
+		// file opening failed, assume the file does not exist
+		return false;
 	}
-	return true; // file open succeeded => file exists
+
+	// file open succeeded => file exists
+	return true;
 }
 
 uint64_t file::size() const
@@ -245,12 +250,12 @@ uint64_t file::size() const
 		throw std::logic_error("file must not be open when calling file::size() method");
 	}
 
-	file::guard file_guard(*this, file::mode::read);
+	file::guard file_guard(*this, papki::mode::read);
 
 	return this->seek_forward(~0);
 }
 
-file::guard::guard(const file& f, mode io_mode) :
+file::guard::guard(const file& f, papki::mode io_mode) :
 	f(f)
 {
 	if (this->f.is_open()) {

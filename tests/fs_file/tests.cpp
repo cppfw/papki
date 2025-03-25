@@ -22,7 +22,7 @@ void run(){
 		{
 			std::vector<uint8_t> buf(num_to_seek);
 			
-			papki::file::guard file_guard(f, papki::file::mode::read);
+			papki::file::guard file_guard(f, papki::mode::read);
 			
 			auto res = f.read(utki::make_span(buf));
 			utki::assert(res == buf.size(), SL);
@@ -32,7 +32,7 @@ void run(){
 		}
 		
 		{
-			papki::file::guard file_guard(f, papki::file::mode::read);
+			papki::file::guard file_guard(f, papki::mode::read);
 
 			f.file::seek_forward(num_to_seek);
 
@@ -45,7 +45,7 @@ void run(){
 		}
 
 		{
-			papki::file::guard file_guard(f, papki::file::mode::read);
+			papki::file::guard file_guard(f, papki::mode::read);
 
 			f.seek_forward(num_to_seek);
 
