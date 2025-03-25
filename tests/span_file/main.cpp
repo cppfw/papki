@@ -38,5 +38,39 @@ int main(int argc, char *argv[]){
 			utki::assert(uint8_t(*i) == *j, SL);
 		}
 	}
+
+	// test span_file spawning
+	{
+		const auto hw = "Hello world!";
+
+		auto span = utki::make_span(hw);
+
+		papki::span_file file(span);
+
+		file.open(papki::file::mode::read);
+
+		std::array<char, 3> buf{};
+		{
+			auto res = file.read(utki::to_uint8_t(utki::make_span(buf)));
+			utki::assert(res == buf.size(), SL);
+		}
+
+		auto file2 = file.spawn();
+		utki::assert(file2, SL);
+
+		auto res = file2->load();
+
+		file.close();
+
+		utki::assert(span.size() == res.size(), SL);
+		utki::assert(
+			utki::deep_equals(
+				span,
+				utki::make_span(res)
+			),
+			SL
+		);
+	}
+
 	return 0;
 }

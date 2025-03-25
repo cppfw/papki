@@ -59,6 +59,7 @@ public:
 	/**
 	 * @brief Modes of opening the file.
 	 */
+	// TODO: move to papki namespace
 	enum class mode {
 		read, /// Open existing file for read only.
 		write, /// Open existing file for read and write.

@@ -82,10 +82,7 @@ public:
 
 	~span_file() noexcept override = default;
 
-	std::unique_ptr<file> spawn() override
-	{
-		throw std::runtime_error("span_file::spawn(): spawning is not supported.");
-	}
+	std::unique_ptr<file> spawn() override;
 
 protected:
 	void open_internal(mode io_mode) override;
