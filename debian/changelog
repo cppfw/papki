@@ -1,3 +1,9 @@
+libpapki (1.0.149) unstable; urgency=medium
+
+  * implement span_file::spawn()
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 26 Mar 2025 00:39:40 +0200
+
 libpapki (1.0.148) unstable; urgency=medium
 
   * emscripten
