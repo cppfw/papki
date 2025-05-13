@@ -401,8 +401,7 @@ std::vector<std::string> fs_file::list_dir(size_t max_size) const
 		while (dirent* pent = readdir(pdir)) {
 			std::string s(pent->d_name);
 			if (s == "." || s == "..")
-				continue; // do not add ./ and ../ directories, we are not interested in
-						  // them
+				continue; // do not add ./ and ../ directories, we are not interested in them
 
 			struct stat fileStats;
 			if (stat((this->path() + s).c_str(), &fileStats) < 0) {
