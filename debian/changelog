@@ -1,3 +1,9 @@
+libpapki (1.0.150) unstable; urgency=medium
+
+  * conan: fix static lib only
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 13 May 2025 14:10:49 +0300
+
 libpapki (1.0.149) unstable; urgency=medium
 
   * implement span_file::spawn()
