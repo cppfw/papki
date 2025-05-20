@@ -77,7 +77,7 @@ bool file::is_dir() const noexcept
 	return false;
 }
 
-std::vector<std::string> file::list_dir(size_t max_entries) const
+std::vector<std::string> file::list_dir(size_t /* max_entries */) const
 {
 	throw std::runtime_error("file::list_dir(): not supported for this file instance");
 }
@@ -93,6 +93,11 @@ size_t file::read(utki::span<uint8_t> buf) const
 	return ret;
 }
 
+size_t file::read_internal(utki::span<uint8_t> /* buf */) const
+{
+	throw std::runtime_error("readInternal(): unsupported");
+}
+
 size_t file::write(utki::span<const uint8_t> buf)
 {
 	if (!this->is_open()) {
@@ -106,6 +111,11 @@ size_t file::write(utki::span<const uint8_t> buf)
 	size_t ret = this->write_internal(buf);
 	this->current_pos += ret;
 	return ret;
+}
+
+size_t file::write_internal(utki::span<const uint8_t> /* buf */)
+{
+	throw std::runtime_error("write_internal(): unsupported");
 }
 
 size_t file::seek_forward(size_t num_bytes_to_seek) const
@@ -152,7 +162,7 @@ size_t file::seek_backward(size_t num_bytes_to_seek) const
 	return ret;
 }
 
-size_t file::seek_backward_internal(size_t num_bytes_to_seek) const
+size_t file::seek_backward_internal(size_t /* num_bytes_to_seek */) const
 {
 	throw std::runtime_error("seek_backward() is unsupported");
 }

@@ -145,6 +145,7 @@ public:
 	}
 
 protected:
+	// TODO: pass string_view?
 	virtual void set_path_internal(std::string&& path_name) const
 	{
 		this->cur_path = std::move(path_name);
@@ -322,10 +323,7 @@ protected:
 	 * @param buf - buffer to fill with read data.
 	 * @return number of bytes actually read.
 	 */
-	virtual size_t read_internal(utki::span<uint8_t> buf) const
-	{
-		throw std::runtime_error("readInternal(): unsupported");
-	}
+	virtual size_t read_internal(utki::span<uint8_t> buf) const;
 
 public:
 	/**
@@ -377,10 +375,7 @@ protected:
 	 * @param buf - buffer containing the data to write.
 	 * @return number of bytes actually written.
 	 */
-	virtual size_t write_internal(utki::span<const uint8_t> buf)
-	{
-		throw std::runtime_error("write_internal(): unsupported");
-	}
+	virtual size_t write_internal(utki::span<const uint8_t> buf);
 
 public:
 	/**
