@@ -1,3 +1,9 @@
+libpapki (1.0.152) unstable; urgency=medium
+
+  * myci: ext deps
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 20 May 2025 23:21:26 +0300
+
 libpapki (1.0.151) unstable; urgency=medium
 
   * cmake: myci
