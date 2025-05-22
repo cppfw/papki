@@ -7,7 +7,7 @@
 #endif
 
 // NOLINTNEXTLINE(bugprone-exception-escape, "we want uncaught exceptions to fail the tests")
-int main(int argc, char *argv[]){
+int main(int /* argc */, const char** /* argv */){
 	test_papki_fs_file();
 
 	// test file size

@@ -35,7 +35,11 @@ using namespace papki;
 
 namespace {
 
-voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
+voidpf ZCALLBACK unzip_open(
+	voidpf opaque, //
+	const char* /* filename */,
+	int mode
+)
 {
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(opaque);
@@ -54,7 +58,10 @@ voidpf ZCALLBACK unzip_open(voidpf opaque, const char* filename, int mode)
 	return f;
 }
 
-int ZCALLBACK unzip_close(voidpf opaque, voidpf stream)
+int ZCALLBACK unzip_close(
+	voidpf /* opaque */, //
+	voidpf stream
+)
 {
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
@@ -62,7 +69,12 @@ int ZCALLBACK unzip_close(voidpf opaque, voidpf stream)
 	return 0;
 }
 
-uLong ZCALLBACK unzip_read(voidpf opaque, voidpf stream, void* buf, uLong size)
+uLong ZCALLBACK unzip_read(
+	voidpf /* opaque */, //
+	voidpf stream,
+	void* buf,
+	uLong size
+)
 {
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
@@ -70,7 +82,12 @@ uLong ZCALLBACK unzip_read(voidpf opaque, voidpf stream, void* buf, uLong size)
 	return uLong(f->read(utki::span<uint8_t>(reinterpret_cast<uint8_t*>(buf), size)));
 }
 
-uLong ZCALLBACK unzip_write(voidpf opaque, voidpf stream, const void* buf, uLong size)
+uLong ZCALLBACK unzip_write(
+	voidpf /* opaque */, //
+	voidpf /* stream */,
+	const void* /* buf */,
+	uLong /* size */
+)
 {
 	ASSERT(false, [](auto& o) {
 		o << "Writing ZIP files is not supported";
@@ -78,12 +95,20 @@ uLong ZCALLBACK unzip_write(voidpf opaque, voidpf stream, const void* buf, uLong
 	return 0;
 }
 
-int ZCALLBACK unzip_error(voidpf opaque, voidpf stream)
+int ZCALLBACK unzip_error(
+	voidpf /* opaque */, //
+	voidpf /* stream */
+)
 {
 	return 0; // no error
 }
 
-long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, unsigned long offset, int origin)
+long ZCALLBACK unzip_seek(
+	voidpf /* opaque */, //
+	voidpf stream,
+	unsigned long offset,
+	int origin
+)
 {
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);
@@ -106,7 +131,10 @@ long ZCALLBACK unzip_seek(voidpf opaque, voidpf stream, unsigned long offset, in
 	}
 }
 
-long ZCALLBACK unzip_tell(voidpf opaque, voidpf stream)
+long ZCALLBACK unzip_tell(
+	voidpf /* opaque */, //
+	voidpf stream
+)
 {
 	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	auto f = reinterpret_cast<papki::file*>(stream);

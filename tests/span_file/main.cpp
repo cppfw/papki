@@ -1,7 +1,7 @@
 #include "../../src/papki/span_file.hpp"
 
 // NOLINTNEXTLINE(bugprone-exception-escape, "we want uncaught exceptions to fail the tests")
-int main(int argc, char *argv[]){
+int main(int /* argc */, const char** /* argv */){
 	// test read only span_file
 	{
 		const auto hw = "Hello world!";

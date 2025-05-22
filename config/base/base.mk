@@ -1,4 +1,6 @@
 this_cxxflags += -Wall # enable all warnings
+this_cxxflags += -Wextra # enable all warnings
+this_cxxflags += -Wpedantic # enable all warnings
 this_cxxflags += -Wno-comment # enable all warnings
 this_cxxflags += -Wnon-virtual-dtor # warn if base class has non-virtual destructor
 this_cxxflags += -Werror # treat warnings as errors
