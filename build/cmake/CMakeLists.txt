@@ -7,8 +7,6 @@ project(${name})
 # Otherwise VCPKG does not set the CMAKE_PREFIX_PATH to find packages.
 find_package(myci CONFIG REQUIRED)
 
-find_package(ZLIB REQUIRED)
-
 set(srcs)
 myci_add_source_files(srcs
     DIRECTORY
@@ -29,11 +27,11 @@ myci_declare_library(${name}
         ${deps_srcs}
     PUBLIC_INCLUDE_DIRECTORIES
         ../../src
+    PRIVATE_INCLUDE_DIRECTORIES
         ../../src_deps
     INSTALL_INCLUDE_DIRECTORIES
         ../../src/${name}
     DEPENDENCIES
         utki
-    EXTERNAL_DEPENDENCIES
-        ZLIB::ZLIB
+        ZLIB
 )
