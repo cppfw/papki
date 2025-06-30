@@ -5,11 +5,12 @@ include prorab-clang-format.mk
 
 $(eval $(call prorab-config, ../config))
 
-this_name := papki
+this_src_dir := papki
+this_name := $(this_src_dir)$(this_dbg)
 
 this_soname := $(shell cat $(d)soname.txt)
 
-this_srcs := $(call prorab-src-dir, $(this_name))
+this_srcs := $(call prorab-src-dir, $(this_src_dir))
 
 this_cxxflags += -isystem ../src_deps
 
@@ -23,8 +24,6 @@ ifneq ($(os),macosx)
 endif
 
 $(eval $(prorab-build-lib))
-
-this_src_dir := $(this_name)
 
 $(eval $(prorab-clang-format))
 
