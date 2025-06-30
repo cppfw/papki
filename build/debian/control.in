@@ -16,21 +16,38 @@ Standards-Version: 3.9.2
 Package: libpapki$(soname)
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends:
+	${shlibs:Depends},
+	${misc:Depends}
 Description: cross-platform C++ file system library.
- File system abstraction library.
+	File system abstraction library.
+
+Package: libpapki-dbg$(soname)
+Section: libs
+Architecture: any
+Depends:
+	${shlibs:Depends},
+	${misc:Depends}
+Description: cross-platform C++ file system library.
+	Debug version of libpapki.
 
 Package: libpapki$(soname)-dbgsrc
 Section: debug
 Architecture: all
-Depends: libpapki$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
+Depends:
+	libpapki$(soname)-dbgsym (= ${binary:Version}),
+	libpapki-dbg$(soname)-dbgsym (= ${binary:Version}),
+	${misc:Depends}
 Description: debugging sources for libpapki$(soname) package.
 
 Package: libpapki-dev
 Section: libdevel
 Architecture: any
-Depends: libpapki$(soname) (= ${binary:Version}), ${misc:Depends},
-		libutki-dev
+Depends:
+	libpapki$(soname) (= ${binary:Version}),
+	libpapki-dbg$(soname) (= ${binary:Version}),
+	${misc:Depends},
+	libutki-dev
 Suggests: libpapki-doc
 Description: cross-platform C++ file system library.
  File system abstraction library.
