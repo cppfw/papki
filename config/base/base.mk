@@ -12,6 +12,8 @@ this_cxxflags += -g
 
 this_ldlibs += -lstdc++
 
+this_no_format_test := true
+
 ifeq ($(gprof), true)
     this_cxxflags += -pg
     this_ldflags += -pg
